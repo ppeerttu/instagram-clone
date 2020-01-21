@@ -1,0 +1,28 @@
+{
+  "name": "auth-service",
+  "version": "0.1.0",
+  "description": "Authentication microservice for the Instagram clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.3",
+    "google-protobuf": "^3.11.2",
+    "grpc": "^1.24.2",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.7.2",
+    "@types/node": "^13.1.8",
+    "grpc-tools": "^1.8.1",
+    "grpc_tools_node_protoc_ts": "^2.5.10",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
+  }
+}

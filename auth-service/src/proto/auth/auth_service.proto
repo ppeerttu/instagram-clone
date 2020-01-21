@@ -1,0 +1,40 @@
+
+syntax = "proto3";
+
+// Authentication service definition
+service Auth {
+
+    // Sign the user in, get proper tokens as response
+    rpc SignIn(UserCredentials) returns (JWTTokens) {}
+
+    // Get a new pair of access and refresh tokens
+    rpc RenewToken(RenewRequest) returns (JWTTokens) {}
+
+    // Get account details based on access token
+    rpc GetAccount(AccountRequest) returns (AccountInfo) {}
+}
+
+message UserCredentials {
+    string username = 1;
+    string password = 2;
+}
+
+message AccountInfo {
+    string id = 1;
+    string username = 2;
+    string createdAt = 3;
+    string updatedAt = 4;
+}
+
+message JWTTokens {
+    string accessToken = 1;
+    string refreshToken = 2;
+}
+
+message RenewRequest {
+    string refreshToken = 1;
+}
+
+message AccountRequest {
+    string accessToken = 1;
+}
