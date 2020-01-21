@@ -6,6 +6,52 @@
 
 import * as jspb from "google-protobuf";
 
+export class NewAccount extends jspb.Message { 
+    getUsername(): string;
+    setUsername(value: string): void;
+
+    getPassword(): string;
+    setPassword(value: string): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): NewAccount.AsObject;
+    static toObject(includeInstance: boolean, msg: NewAccount): NewAccount.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: NewAccount, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): NewAccount;
+    static deserializeBinaryFromReader(message: NewAccount, reader: jspb.BinaryReader): NewAccount;
+}
+
+export namespace NewAccount {
+    export type AsObject = {
+        username: string,
+        password: string,
+    }
+}
+
+export class SignUpResponse extends jspb.Message { 
+    getMessage(): string;
+    setMessage(value: string): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SignUpResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: SignUpResponse): SignUpResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SignUpResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SignUpResponse;
+    static deserializeBinaryFromReader(message: SignUpResponse, reader: jspb.BinaryReader): SignUpResponse;
+}
+
+export namespace SignUpResponse {
+    export type AsObject = {
+        message: string,
+    }
+}
+
 export class UserCredentials extends jspb.Message { 
     getUsername(): string;
     setUsername(value: string): void;
@@ -38,11 +84,11 @@ export class AccountInfo extends jspb.Message {
     getUsername(): string;
     setUsername(value: string): void;
 
-    getCreatedat(): string;
-    setCreatedat(value: string): void;
+    getCreatedAt(): string;
+    setCreatedAt(value: string): void;
 
-    getUpdatedat(): string;
-    setUpdatedat(value: string): void;
+    getUpdatedAt(): string;
+    setUpdatedAt(value: string): void;
 
 
     serializeBinary(): Uint8Array;
@@ -59,17 +105,17 @@ export namespace AccountInfo {
     export type AsObject = {
         id: string,
         username: string,
-        createdat: string,
-        updatedat: string,
+        createdAt: string,
+        updatedAt: string,
     }
 }
 
 export class JWTTokens extends jspb.Message { 
-    getAccesstoken(): string;
-    setAccesstoken(value: string): void;
+    getAccessToken(): string;
+    setAccessToken(value: string): void;
 
-    getRefreshtoken(): string;
-    setRefreshtoken(value: string): void;
+    getRefreshToken(): string;
+    setRefreshToken(value: string): void;
 
 
     serializeBinary(): Uint8Array;
@@ -84,14 +130,14 @@ export class JWTTokens extends jspb.Message {
 
 export namespace JWTTokens {
     export type AsObject = {
-        accesstoken: string,
-        refreshtoken: string,
+        accessToken: string,
+        refreshToken: string,
     }
 }
 
 export class RenewRequest extends jspb.Message { 
-    getRefreshtoken(): string;
-    setRefreshtoken(value: string): void;
+    getRefreshToken(): string;
+    setRefreshToken(value: string): void;
 
 
     serializeBinary(): Uint8Array;
@@ -106,13 +152,13 @@ export class RenewRequest extends jspb.Message {
 
 export namespace RenewRequest {
     export type AsObject = {
-        refreshtoken: string,
+        refreshToken: string,
     }
 }
 
 export class AccountRequest extends jspb.Message { 
-    getAccesstoken(): string;
-    setAccesstoken(value: string): void;
+    getAccessToken(): string;
+    setAccessToken(value: string): void;
 
 
     serializeBinary(): Uint8Array;
@@ -127,6 +173,6 @@ export class AccountRequest extends jspb.Message {
 
 export namespace AccountRequest {
     export type AsObject = {
-        accesstoken: string,
+        accessToken: string,
     }
 }

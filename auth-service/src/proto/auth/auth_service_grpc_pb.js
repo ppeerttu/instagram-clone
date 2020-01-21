@@ -37,6 +37,17 @@ function deserialize_JWTTokens(buffer_arg) {
   return auth_service_pb.JWTTokens.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_NewAccount(arg) {
+  if (!(arg instanceof auth_service_pb.NewAccount)) {
+    throw new Error('Expected argument of type NewAccount');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_NewAccount(buffer_arg) {
+  return auth_service_pb.NewAccount.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_RenewRequest(arg) {
   if (!(arg instanceof auth_service_pb.RenewRequest)) {
     throw new Error('Expected argument of type RenewRequest');
@@ -46,6 +57,17 @@ function serialize_RenewRequest(arg) {
 
 function deserialize_RenewRequest(buffer_arg) {
   return auth_service_pb.RenewRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_SignUpResponse(arg) {
+  if (!(arg instanceof auth_service_pb.SignUpResponse)) {
+    throw new Error('Expected argument of type SignUpResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_SignUpResponse(buffer_arg) {
+  return auth_service_pb.SignUpResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_UserCredentials(arg) {
@@ -60,8 +82,22 @@ function deserialize_UserCredentials(buffer_arg) {
 }
 
 
+// Authentication service definition
 var AuthService = exports.AuthService = {
-  signIn: {
+  // Sign up a new user account
+signUp: {
+    path: '/Auth/SignUp',
+    requestStream: false,
+    responseStream: false,
+    requestType: auth_service_pb.NewAccount,
+    responseType: auth_service_pb.SignUpResponse,
+    requestSerialize: serialize_NewAccount,
+    requestDeserialize: deserialize_NewAccount,
+    responseSerialize: serialize_SignUpResponse,
+    responseDeserialize: deserialize_SignUpResponse,
+  },
+  // Sign the user in, get proper tokens as response
+signIn: {
     path: '/Auth/SignIn',
     requestStream: false,
     responseStream: false,
@@ -72,7 +108,8 @@ var AuthService = exports.AuthService = {
     responseSerialize: serialize_JWTTokens,
     responseDeserialize: deserialize_JWTTokens,
   },
-  renewToken: {
+  // Get a new pair of access and refresh tokens
+renewToken: {
     path: '/Auth/RenewToken',
     requestStream: false,
     responseStream: false,
@@ -83,7 +120,8 @@ var AuthService = exports.AuthService = {
     responseSerialize: serialize_JWTTokens,
     responseDeserialize: deserialize_JWTTokens,
   },
-  getAccount: {
+  // Get account details based on access token
+getAccount: {
     path: '/Auth/GetAccount',
     requestStream: false,
     responseStream: false,

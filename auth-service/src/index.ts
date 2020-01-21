@@ -7,7 +7,7 @@ import { protoIndex } from "./proto";
 
 protoIndex();
 
-const port = 50051;
+const port = 3000;
 
 export const startServer = (): void => {
     const server = new grpc.Server();

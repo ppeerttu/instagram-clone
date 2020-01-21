@@ -27,7 +27,7 @@ function getProcessEnv(
         throw new Error(`Unable to find env variable ${value}`);
     }
     return val || fallback;
-};
+}
 
 
 const config = {

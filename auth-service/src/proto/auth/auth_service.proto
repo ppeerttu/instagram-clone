@@ -4,6 +4,9 @@ syntax = "proto3";
 // Authentication service definition
 service Auth {
 
+    // Sign up a new user account
+    rpc SignUp(NewAccount) returns (SignUpResponse) {}
+
     // Sign the user in, get proper tokens as response
     rpc SignIn(UserCredentials) returns (JWTTokens) {}
 
@@ -14,6 +17,15 @@ service Auth {
     rpc GetAccount(AccountRequest) returns (AccountInfo) {}
 }
 
+message NewAccount {
+    string username = 1;
+    string password = 2;
+}
+
+message SignUpResponse {
+    string message = 1;
+}
+
 message UserCredentials {
     string username = 1;
     string password = 2;
@@ -22,19 +34,19 @@ message UserCredentials {
 message AccountInfo {
     string id = 1;
     string username = 2;
-    string createdAt = 3;
-    string updatedAt = 4;
+    string created_at = 3;
+    string updated_at = 4;
 }
 
 message JWTTokens {
-    string accessToken = 1;
-    string refreshToken = 2;
+    string access_token = 1;
+    string refresh_token = 2;
 }
 
 message RenewRequest {
-    string refreshToken = 1;
+    string refresh_token = 1;
 }
 
 message AccountRequest {
-    string accessToken = 1;
+    string access_token = 1;
 }
