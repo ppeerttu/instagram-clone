@@ -9,8 +9,14 @@ import {
     UserCredentials,
 } from "../proto/auth/auth_service_pb";
 
+/**
+ * A handler for auth service.
+ */
 class AuthHandler implements IAuthServer {
 
+    /**
+     * Sign an account in.
+     */
     public signIn = (
         call: grpc.ServerUnaryCall<UserCredentials>,
         callback: grpc.sendUnaryData<JWTTokens>,
@@ -22,6 +28,9 @@ class AuthHandler implements IAuthServer {
         callback(null, response);
     }
 
+    /**
+     * Renew a refresh token into new pair of access and refresh tokens.
+     */
     public renewToken = (
         call: grpc.ServerUnaryCall<RenewRequest>,
         callback: grpc.sendUnaryData<JWTTokens>,
@@ -33,6 +42,9 @@ class AuthHandler implements IAuthServer {
         callback(null, response);
     }
 
+    /**
+     * Get account information based on given access token.
+     */
     public getAccount = (
         call: grpc.ServerUnaryCall<AccountRequest>,
         callback: grpc.sendUnaryData<AccountInfo>,

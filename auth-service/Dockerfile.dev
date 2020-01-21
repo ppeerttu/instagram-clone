@@ -1,0 +1,12 @@
+FROM node:12-alpine
+
+# Setup working directory
+WORKDIR /app
+
+# Copy package.json and related files
+COPY package*.json ./
+
+# Install dependencies on the container
+RUN npm install
+
+# NOTE: Rest of the files should be bind as volume

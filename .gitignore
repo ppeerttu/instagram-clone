@@ -2,5 +2,9 @@
 .npm*
 node_modules
 
+# Env variables
+*.env
+!example*.env
+
 # OS X
 .DS_Store
