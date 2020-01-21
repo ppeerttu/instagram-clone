@@ -25,4 +25,6 @@ To get started with the development, follow these steps:
 5. The `nodemon` package is currently using `ts-node` in order to run TypeScript and will restart the server whenever any code changes
     * This might require some fine-tuning later
 
+## Changing the proto interface
 
+Whenever you change the `.proto` files, run `sh scripts/protoc.sh` in order to re-generate proper JavaScript and type definitions for TypeScript. This enables full type support when programming the gRPC handlers.
