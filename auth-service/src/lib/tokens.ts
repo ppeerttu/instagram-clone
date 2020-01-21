@@ -25,12 +25,10 @@ export const createRefreshToken = (account: IAccount, aud = config.audience) => 
         // From AWS Cognito; purpose of this token
         token_use: "refresh",
     };
+    // Default algorithm is HS256
     return jwt.sign(
         payload,
         config.refreshToken.secret,
-        {
-            algorithm: "RS256",
-        },
     );
 };
 
@@ -54,11 +52,9 @@ export const createAccessToken = (account: IAccount, aud = config.audience) => {
         // username here
         username: account.username,
     };
+    // Default algorithm is HS256
     return jwt.sign(
         payload,
         config.accessToken.secret,
-        {
-            algorithm: "RS256",
-        },
     );
 };

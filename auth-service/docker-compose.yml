@@ -18,7 +18,8 @@ services:
       NODE_ENV: development
       POSTGRES_HOST: auth-db-dev
     env_file:
-      .db.env
+      - .db.env
+      - .auth.env
 
   auth-db:
     container_name: auth-db-dev

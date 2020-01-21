@@ -22,8 +22,8 @@ export const startServer = (): void => {
                 sequelize.close();
                 return console.error(err);
             }
-            console.log(`gRPC listening on ${portNum}`);
-        }
+            console.log(`auth-service gRPC listening on ${portNum}`);
+        },
     );
 
     server.start();

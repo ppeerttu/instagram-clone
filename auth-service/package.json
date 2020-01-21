@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.3",
+    "bcrypt": "^3.0.7",
     "google-protobuf": "^3.11.2",
     "grpc": "^1.24.2",
     "jsonwebtoken": "^8.5.1",
@@ -23,6 +24,7 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "^3.5.29",
     "@types/google-protobuf": "^3.7.2",
     "@types/jsonwebtoken": "^8.3.6",

@@ -1,5 +1,10 @@
+import bcrypt from "bcrypt";
 import grpc from "grpc";
+import jwt from "jsonwebtoken";
 
+import { config } from "../config/auth";
+import { createAccessToken, createRefreshToken } from "../lib/tokens";
+import { Account } from "../models/Account";
 import { AuthService, IAuthServer } from "../proto/auth/auth_service_grpc_pb";
 import {
     AccountInfo,
@@ -10,8 +15,6 @@ import {
     SignUpResponse,
     UserCredentials,
 } from "../proto/auth/auth_service_pb";
-
-import { Account } from "../models/Account";
 
 /**
  * A handler for auth service.
@@ -35,17 +38,22 @@ class AuthHandler implements IAuthServer {
                 const response = new SignUpResponse();
                 if (exists) {
                     response.setMessage(`Username ${username} is already taken`);
-                } else {
-                    return Account.create({
-                        username,
-                        passwordHash: call.request.getPassword(),
-                    })
-                        .then((account) => {
-                            response.setMessage(`Created user ${account.username}`);
-                            return response;
-                        });
+                    return response;
                 }
-                return response;
+                return bcrypt.hash(
+                    call.request.getPassword(),
+                    12, // The more rounds, the longer it takes to hash
+                )
+                    .then((passwordHash) => {
+                        return Account.create({
+                            username,
+                            passwordHash,
+                        });
+                    })
+                    .then((account) => {
+                        response.setMessage(`Created user ${account.username}`);
+                        return response;
+                    });
             })
             .then((response) => {
                 callback(null, response);
@@ -63,11 +71,34 @@ class AuthHandler implements IAuthServer {
         call: grpc.ServerUnaryCall<UserCredentials>,
         callback: grpc.sendUnaryData<JWTTokens>,
     ): void => {
-        const response = new JWTTokens();
-        response.setAccessToken("access");
-        response.setRefreshToken("refresh");
-        console.info(`Signing in user ${call.request.getUsername()}`);
-        callback(null, response);
+        const username = call.request.getUsername();
+        const password = call.request.getPassword();
+
+        Account.findOne({ where: { username }})
+            .then((account) => {
+                if (!account) {
+                    return null;
+                }
+                return bcrypt.compare(password, account.passwordHash)
+                    .then((matches) => {
+                        if (!matches) {
+                            return null;
+                        }
+                        return account;
+                    });
+            })
+            .then((authenticatedAccount) => {
+                const tokens = new JWTTokens();
+                if (authenticatedAccount) {
+                    tokens.setAccessToken(createAccessToken(authenticatedAccount));
+                    tokens.setRefreshToken(createRefreshToken(authenticatedAccount));
+                }
+                callback(null, tokens);
+            })
+            .catch((err) => {
+                console.error(err);
+                return callback(null, new JWTTokens());
+            });
     }
 
     /**
@@ -77,10 +108,8 @@ class AuthHandler implements IAuthServer {
         call: grpc.ServerUnaryCall<RenewRequest>,
         callback: grpc.sendUnaryData<JWTTokens>,
     ): void => {
-        console.info("Received refresh token:", call.request.getRefreshToken());
         const response = new JWTTokens();
-        response.setAccessToken("access");
-        response.setRefreshToken("refresh");
+        // TODO: Implement the logic for renewing tokens
         callback(null, response);
     }
 
@@ -91,13 +120,37 @@ class AuthHandler implements IAuthServer {
         call: grpc.ServerUnaryCall<AccountRequest>,
         callback: grpc.sendUnaryData<AccountInfo>,
     ): void => {
-        console.info("Getting account info for token:", call.request.getAccessToken());
-        const response = new AccountInfo();
-        response.setId("1");
-        response.setUsername("johndoe");
-        response.setCreatedAt(new Date().toJSON());
-        response.setUpdatedAt(new Date().toJSON());
-        callback(null, response);
+        const accessToken = call.request.getAccessToken();
+
+        // This could be done synchronously as well
+        jwt.verify(
+            accessToken,
+            config.accessToken.secret,
+            (error, decoded: any) => {
+                if (error) {
+                    console.error(error);
+                    callback(null, new AccountInfo());
+                    return;
+                }
+
+                Account.findByPk(decoded.sub)
+                    .then((account) => {
+                        const response = new AccountInfo();
+                        if (!account) {
+                            return callback(null, response);
+                        }
+                        response.setId(account.id);
+                        response.setUsername(account.username);
+                        response.setCreatedAt(account.createdAt.toJSON());
+                        response.setUpdatedAt(account.updatedAt.toJSON());
+                        callback(null, response);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        return callback(null, new AccountInfo());
+                    });
+            },
+        );
     }
 }
 

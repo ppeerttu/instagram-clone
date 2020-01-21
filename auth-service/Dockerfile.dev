@@ -3,10 +3,16 @@ FROM node:12-alpine
 # Setup working directory
 WORKDIR /app
 
+# Install dependencies for bcrypt
+RUN apk --no-cache add --virtual bcrypt-build-deps build-base python
+
 # Copy package.json and related files
 COPY package*.json ./
 
 # Install dependencies on the container
-RUN npm install
+RUN npm install --quiet
+RUN npm rebuild bcrypt --build-from-source
+
+RUN apk del bcrypt-build-deps
 
 # NOTE: Rest of the files should be bind as volume
