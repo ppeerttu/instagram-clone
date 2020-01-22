@@ -31,6 +31,49 @@ export namespace NewAccount {
     }
 }
 
+export class SignInResponse extends jspb.Message { 
+
+    hasTokens(): boolean;
+    clearTokens(): void;
+    getTokens(): JWTTokens | undefined;
+    setTokens(value?: JWTTokens): void;
+
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): AuthErrorStatus;
+    setError(value: AuthErrorStatus): void;
+
+
+    getStatusCase(): SignInResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SignInResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: SignInResponse): SignInResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SignInResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SignInResponse;
+    static deserializeBinaryFromReader(message: SignInResponse, reader: jspb.BinaryReader): SignInResponse;
+}
+
+export namespace SignInResponse {
+    export type AsObject = {
+        tokens?: JWTTokens.AsObject,
+        error: AuthErrorStatus,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    TOKENS = 1,
+
+    ERROR = 2,
+
+    }
+
+}
+
 export class SignUpResponse extends jspb.Message { 
     getMessage(): string;
     setMessage(value: string): void;
@@ -175,4 +218,10 @@ export namespace AccountRequest {
     export type AsObject = {
         accessToken: string,
     }
+}
+
+export enum AuthErrorStatus {
+    SERVER_ERROR = 0,
+    NOT_FOUND = 1,
+    BAD_CREDENTIALS = 2,
 }

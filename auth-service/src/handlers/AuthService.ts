@@ -14,6 +14,8 @@ import {
     RenewRequest,
     SignUpResponse,
     UserCredentials,
+    SignInResponse,
+    AuthErrorStatus,
 } from "../proto/auth/auth_service_pb";
 
 /**
@@ -69,19 +71,24 @@ class AuthHandler implements IAuthServer {
      */
     public signIn = (
         call: grpc.ServerUnaryCall<UserCredentials>,
-        callback: grpc.sendUnaryData<JWTTokens>,
+        callback: grpc.sendUnaryData<SignInResponse>,
     ): void => {
         const username = call.request.getUsername();
         const password = call.request.getPassword();
-
+        
+        let response: SignInResponse = new SignInResponse();
         Account.findOne({ where: { username }})
             .then((account) => {
                 if (!account) {
+                    response.setError(AuthErrorStatus.NOT_FOUND); 
+                    callback(null, response);
                     return null;
                 }
                 return bcrypt.compare(password, account.passwordHash)
                     .then((matches) => {
                         if (!matches) {
+                            response.setError(AuthErrorStatus.BAD_CREDENTIALS);
+                            callback(null, response);
                             return null;
                         }
                         return account;
@@ -93,11 +100,13 @@ class AuthHandler implements IAuthServer {
                     tokens.setAccessToken(createAccessToken(authenticatedAccount));
                     tokens.setRefreshToken(createRefreshToken(authenticatedAccount));
                 }
-                callback(null, tokens);
+                response.setTokens(tokens);
+                callback(null, response);
             })
             .catch((err) => {
                 console.error(err);
-                return callback(null, new JWTTokens());
+                response.setError(AuthErrorStatus.SERVER_ERROR);
+                return callback(null, response);
             });
     }
 

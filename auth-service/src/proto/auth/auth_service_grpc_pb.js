@@ -59,6 +59,17 @@ function deserialize_RenewRequest(buffer_arg) {
   return auth_service_pb.RenewRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_SignInResponse(arg) {
+  if (!(arg instanceof auth_service_pb.SignInResponse)) {
+    throw new Error('Expected argument of type SignInResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_SignInResponse(buffer_arg) {
+  return auth_service_pb.SignInResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_SignUpResponse(arg) {
   if (!(arg instanceof auth_service_pb.SignUpResponse)) {
     throw new Error('Expected argument of type SignUpResponse');
@@ -102,11 +113,11 @@ signIn: {
     requestStream: false,
     responseStream: false,
     requestType: auth_service_pb.UserCredentials,
-    responseType: auth_service_pb.JWTTokens,
+    responseType: auth_service_pb.SignInResponse,
     requestSerialize: serialize_UserCredentials,
     requestDeserialize: deserialize_UserCredentials,
-    responseSerialize: serialize_JWTTokens,
-    responseDeserialize: deserialize_JWTTokens,
+    responseSerialize: serialize_SignInResponse,
+    responseDeserialize: deserialize_SignInResponse,
   },
   // Get a new pair of access and refresh tokens
 renewToken: {

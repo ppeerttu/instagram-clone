@@ -8,7 +8,7 @@ service Auth {
     rpc SignUp(NewAccount) returns (SignUpResponse) {}
 
     // Sign the user in, get proper tokens as response
-    rpc SignIn(UserCredentials) returns (JWTTokens) {}
+    rpc SignIn(UserCredentials) returns (SignInResponse) {}
 
     // Get a new pair of access and refresh tokens
     rpc RenewToken(RenewRequest) returns (JWTTokens) {}
@@ -20,6 +20,19 @@ service Auth {
 message NewAccount {
     string username = 1;
     string password = 2;
+}
+
+message SignInResponse {
+    oneof status {
+        JWTTokens tokens = 1;
+        AuthErrorStatus error = 2;
+    }
+}
+
+enum AuthErrorStatus {
+    SERVER_ERROR = 0;
+    NOT_FOUND = 1;
+    BAD_CREDENTIALS = 2;
 }
 
 message SignUpResponse {
