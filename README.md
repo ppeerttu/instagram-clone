@@ -8,6 +8,7 @@ Group project for Distributed Systems course at the University of Oulu.
 |---------------------------------|-----------------|-------------------------------------------------|
 | Perttu Kärnä                    | 2465119         | [ppeerttu](https://github.com/ppeerttu)         |
 | Guanchen LI                     | 2627656         | [Ivan-Lee99](https://github.com/Ivan-Lee99)     |
+| Juho Kantola                    | 2519793         | [knatola](https://github.com/knatola)         |
 
 ## Project description
 
