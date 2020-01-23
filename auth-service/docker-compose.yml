@@ -17,6 +17,8 @@ services:
     environment:
       NODE_ENV: development
       POSTGRES_HOST: auth-db-dev
+    networks:
+      - ig-clone-dev
     env_file:
       - .db.env
       - .auth.env
@@ -26,8 +28,15 @@ services:
     image: postgres:11-alpine
     volumes:
       - auth-data-dev:/var/lib/postgresql/data
+    networks:
+      - ig-clone-dev
     env_file:
       - .db.env
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
 
 volumes:
   auth-data-dev:

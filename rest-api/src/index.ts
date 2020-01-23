@@ -13,7 +13,6 @@ const router = new Router();
 const logger = pino();
 
 const authController = new AuthController();
-
 authController.bind(router);
 
 app
