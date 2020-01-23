@@ -2,11 +2,14 @@
   "name": "auth-service",
   "version": "0.1.0",
   "description": "Authentication microservice for the Instagram clone",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc -p .",
     "prestart": "npx sequelize db:migrate",
-    "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/index.ts"
+    "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/index.ts",
+    "prestart:prod": "npx sequelize db:migrate",
+    "start:prod": "node ./src/index.js"
   },
   "author": "",
   "license": "ISC",

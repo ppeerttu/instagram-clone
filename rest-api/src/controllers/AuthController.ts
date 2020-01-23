@@ -2,10 +2,10 @@ import { ParameterizedContext } from "koa";
 import { body, validationResults, IValidationContext } from "koa-req-validation";
 import Router, { IRouterContext } from "koa-router";
 
-import { IController } from "../Controller";
-import { RequestError } from "../../lib/RequestError";
-import { AuthServiceClient } from "../../client/AuthServiceClient";
-import { AuthServiceError } from "../../client/errors/AuthServiceError";
+import { IController } from "./Controller";
+import { RequestError } from "../lib/RequestError";
+import { AuthServiceClient } from "../client/AuthServiceClient";
+import { AuthServiceError } from "../client/errors/AuthServiceError";
 
 /**
  * Authentication REST API controller.
