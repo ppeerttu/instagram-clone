@@ -9,10 +9,12 @@ import { AuthService, IAuthServer } from "../proto/auth/auth_service_grpc_pb";
 import {
     AccountInfo,
     AccountRequest,
+    AuthErrorStatus,
     JWTTokens,
     NewAccount,
     RenewRequest,
     SignUpResponse,
+    SignInResponse,
     UserCredentials,
 } from "../proto/auth/auth_service_pb";
 
@@ -69,19 +71,21 @@ class AuthHandler implements IAuthServer {
      */
     public signIn = (
         call: grpc.ServerUnaryCall<UserCredentials>,
-        callback: grpc.sendUnaryData<JWTTokens>,
+        callback: grpc.sendUnaryData<SignInResponse>,
     ): void => {
         const username = call.request.getUsername();
         const password = call.request.getPassword();
-
+        const response: SignInResponse = new SignInResponse();
         Account.findOne({ where: { username }})
             .then((account) => {
                 if (!account) {
+                    response.setError(AuthErrorStatus.NOT_FOUND);
                     return null;
                 }
                 return bcrypt.compare(password, account.passwordHash)
                     .then((matches) => {
                         if (!matches) {
+                            response.setError(AuthErrorStatus.BAD_CREDENTIALS);
                             return null;
                         }
                         return account;
@@ -92,12 +96,14 @@ class AuthHandler implements IAuthServer {
                 if (authenticatedAccount) {
                     tokens.setAccessToken(createAccessToken(authenticatedAccount));
                     tokens.setRefreshToken(createRefreshToken(authenticatedAccount));
+                    response.setTokens(tokens);
                 }
-                callback(null, tokens);
+                callback(null, response);
             })
             .catch((err) => {
                 console.error(err);
-                return callback(null, new JWTTokens());
+                response.setError(AuthErrorStatus.SERVER_ERROR);
+                return callback(null, response);
             });
     }
 
