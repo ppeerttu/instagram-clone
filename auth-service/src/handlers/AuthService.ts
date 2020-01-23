@@ -9,13 +9,13 @@ import { AuthService, IAuthServer } from "../proto/auth/auth_service_grpc_pb";
 import {
     AccountInfo,
     AccountRequest,
+    AuthErrorStatus,
     JWTTokens,
     NewAccount,
     RenewRequest,
     SignUpResponse,
-    UserCredentials,
     SignInResponse,
-    AuthErrorStatus,
+    UserCredentials,
 } from "../proto/auth/auth_service_pb";
 
 /**
@@ -75,20 +75,17 @@ class AuthHandler implements IAuthServer {
     ): void => {
         const username = call.request.getUsername();
         const password = call.request.getPassword();
-        
-        let response: SignInResponse = new SignInResponse();
+        const response: SignInResponse = new SignInResponse();
         Account.findOne({ where: { username }})
             .then((account) => {
                 if (!account) {
-                    response.setError(AuthErrorStatus.NOT_FOUND); 
-                    callback(null, response);
+                    response.setError(AuthErrorStatus.NOT_FOUND);
                     return null;
                 }
                 return bcrypt.compare(password, account.passwordHash)
                     .then((matches) => {
                         if (!matches) {
                             response.setError(AuthErrorStatus.BAD_CREDENTIALS);
-                            callback(null, response);
                             return null;
                         }
                         return account;
@@ -99,8 +96,8 @@ class AuthHandler implements IAuthServer {
                 if (authenticatedAccount) {
                     tokens.setAccessToken(createAccessToken(authenticatedAccount));
                     tokens.setRefreshToken(createRefreshToken(authenticatedAccount));
+                    response.setTokens(tokens);
                 }
-                response.setTokens(tokens);
                 callback(null, response);
             })
             .catch((err) => {
