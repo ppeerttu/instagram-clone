@@ -20,9 +20,10 @@ To get started with the development, follow these steps:
 2. Populate environment variable files
     * Create `.auth.env` and `.db.env` out of [example.auth.env](example.auth.env) and [example.db.env](example.db.env)
 3. Create a data volume for local development: `docker volume create auth-data-dev`
-4. Launch the containers by running `docker-compose up`
+4. Create a network for local development: `docker network create ig-clone-dev`
+5. Launch the containers by running `docker-compose up`
     * gRPC port is `3000` and fixed right now
-5. The `nodemon` package is currently using `ts-node` in order to run TypeScript and will restart the server whenever any code changes
+6. The `nodemon` package is currently using `ts-node` in order to run TypeScript and will restart the server whenever any code changes
     * This might require some fine-tuning later
 
 ## Changing the proto interface

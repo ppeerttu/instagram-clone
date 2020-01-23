@@ -5,7 +5,7 @@ import Router, { IRouterContext } from "koa-router";
 import middlewareLogger from "koa-pino-logger";
 import pino from "pino";
 
-import { AuthController } from "./routes/public/AuthController";
+import { AuthController } from "./controllers/AuthController";
 import { RequestError } from "./lib/RequestError";
 
 const app = new Koa();
