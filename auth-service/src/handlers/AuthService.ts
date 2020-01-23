@@ -3,7 +3,7 @@ import grpc from "grpc";
 import jwt from "jsonwebtoken";
 
 import { config } from "../config/auth";
-import { createAccessToken, createRefreshToken } from "../lib/tokens";
+import { createAccessToken, createRefreshToken, verifyToken } from "../lib/tokens";
 import { Account } from "../models/Account";
 import { AuthService, IAuthServer } from "../proto/auth/auth_service_grpc_pb";
 import {
@@ -13,8 +13,9 @@ import {
     JWTTokens,
     NewAccount,
     RenewRequest,
-    SignUpResponse,
+    RenewResponse,
     SignInResponse,
+    SignUpResponse,
     UserCredentials,
 } from "../proto/auth/auth_service_pb";
 
@@ -110,12 +111,38 @@ class AuthHandler implements IAuthServer {
     /**
      * Renew a refresh token into new pair of access and refresh tokens.
      */
-    public renewToken = (
+    public renewToken = async (
         call: grpc.ServerUnaryCall<RenewRequest>,
-        callback: grpc.sendUnaryData<JWTTokens>,
-    ): void => {
-        const response = new JWTTokens();
-        // TODO: Implement the logic for renewing tokens
+        callback: grpc.sendUnaryData<RenewResponse>,
+    ): Promise<void> => {
+        const response = new RenewResponse();
+        const refreshToken = call.request.getRefreshToken();
+        try {
+            const payload = await verifyToken(refreshToken, config.refreshToken.secret);
+            const tokens = new JWTTokens();
+            const account = await Account.findByPk(payload.sub);
+            if (account) {
+                const newAccessToken = createAccessToken(account, config.audience);
+                const newRefreshToken = createRefreshToken(account, config.audience);
+                tokens.setAccessToken(newAccessToken);
+                tokens.setRefreshToken(newRefreshToken);
+                response.setTokens(tokens);
+            } else {
+                response.setError(AuthErrorStatus.NOT_FOUND);
+            }
+        } catch (e) {
+            switch (e.name) {
+                case "JsonWebTokenError":
+                    response.setError(AuthErrorStatus.INVALID_TOKEN);
+                    break;
+                case "TokenExpiredError":
+                    response.setError(AuthErrorStatus.EXPIRED_TOKEN);
+                    break;
+                default:
+                    console.error("Error verifying refresh token, cause:", e);
+                    response.setError(AuthErrorStatus.SERVER_ERROR);
+            }
+        }
         callback(null, response);
     }
 

@@ -32,14 +32,14 @@ interface IAuthService_ISignIn extends grpc.MethodDefinition<auth_service_pb.Use
     responseSerialize: grpc.serialize<auth_service_pb.SignInResponse>;
     responseDeserialize: grpc.deserialize<auth_service_pb.SignInResponse>;
 }
-interface IAuthService_IRenewToken extends grpc.MethodDefinition<auth_service_pb.RenewRequest, auth_service_pb.JWTTokens> {
+interface IAuthService_IRenewToken extends grpc.MethodDefinition<auth_service_pb.RenewRequest, auth_service_pb.RenewResponse> {
     path: string; // "/.Auth/RenewToken"
     requestStream: boolean; // false
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<auth_service_pb.RenewRequest>;
     requestDeserialize: grpc.deserialize<auth_service_pb.RenewRequest>;
-    responseSerialize: grpc.serialize<auth_service_pb.JWTTokens>;
-    responseDeserialize: grpc.deserialize<auth_service_pb.JWTTokens>;
+    responseSerialize: grpc.serialize<auth_service_pb.RenewResponse>;
+    responseDeserialize: grpc.deserialize<auth_service_pb.RenewResponse>;
 }
 interface IAuthService_IGetAccount extends grpc.MethodDefinition<auth_service_pb.AccountRequest, auth_service_pb.AccountInfo> {
     path: string; // "/.Auth/GetAccount"
@@ -56,7 +56,7 @@ export const AuthService: IAuthService;
 export interface IAuthServer {
     signUp: grpc.handleUnaryCall<auth_service_pb.NewAccount, auth_service_pb.SignUpResponse>;
     signIn: grpc.handleUnaryCall<auth_service_pb.UserCredentials, auth_service_pb.SignInResponse>;
-    renewToken: grpc.handleUnaryCall<auth_service_pb.RenewRequest, auth_service_pb.JWTTokens>;
+    renewToken: grpc.handleUnaryCall<auth_service_pb.RenewRequest, auth_service_pb.RenewResponse>;
     getAccount: grpc.handleUnaryCall<auth_service_pb.AccountRequest, auth_service_pb.AccountInfo>;
 }
 
@@ -67,9 +67,9 @@ export interface IAuthClient {
     signIn(request: auth_service_pb.UserCredentials, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
     signIn(request: auth_service_pb.UserCredentials, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
     signIn(request: auth_service_pb.UserCredentials, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
-    renewToken(request: auth_service_pb.RenewRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
-    renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
-    renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
+    renewToken(request: auth_service_pb.RenewRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
+    renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
+    renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
     getAccount(request: auth_service_pb.AccountRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;
     getAccount(request: auth_service_pb.AccountRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;
     getAccount(request: auth_service_pb.AccountRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;
@@ -83,9 +83,9 @@ export class AuthClient extends grpc.Client implements IAuthClient {
     public signIn(request: auth_service_pb.UserCredentials, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
     public signIn(request: auth_service_pb.UserCredentials, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
     public signIn(request: auth_service_pb.UserCredentials, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.SignInResponse) => void): grpc.ClientUnaryCall;
-    public renewToken(request: auth_service_pb.RenewRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
-    public renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
-    public renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.JWTTokens) => void): grpc.ClientUnaryCall;
+    public renewToken(request: auth_service_pb.RenewRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
+    public renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
+    public renewToken(request: auth_service_pb.RenewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.RenewResponse) => void): grpc.ClientUnaryCall;
     public getAccount(request: auth_service_pb.AccountRequest, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;
     public getAccount(request: auth_service_pb.AccountRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;
     public getAccount(request: auth_service_pb.AccountRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_service_pb.AccountInfo) => void): grpc.ClientUnaryCall;

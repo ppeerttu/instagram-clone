@@ -58,3 +58,15 @@ export const createAccessToken = (account: IAccount, aud = config.audience) => {
         config.accessToken.secret,
     );
 };
+
+export const verifyToken = (token: string, secret: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, secret, async (err, decoded: any) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(decoded);
+            }
+        });
+    });
+};
