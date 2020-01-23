@@ -4,7 +4,12 @@ import Router, { IRouterContext } from "koa-router";
 
 import { IController } from "../Controller";
 import { RequestError } from "../../lib/RequestError";
+import { AuthServiceClient } from "../../client/AuthServiceClient";
+import { AuthServiceError } from "../../client/errors/AuthServiceError";
 
+/**
+ * Authentication REST API controller.
+ */
 export class AuthController implements IController {
 
 
@@ -21,6 +26,12 @@ export class AuthController implements IController {
             .withMessage("The password has to be between 1 and 55 characters long")
             .run()
     ];
+
+    /**
+     * Auth service client
+     * @todo Inject this somehow?
+     */
+    private authService = new AuthServiceClient();
 
     bind = (router: Router, basePath = "/auth"): void => {
         // TODO: bind routes
@@ -43,6 +54,18 @@ export class AuthController implements IController {
             throw new RequestError(422, { errors: results.array() });
         }
         const { username, password } = ctx.request.body;
-        ctx.log.info(`User trying to sign in with username ${username} and password ${password}`);
+
+        try {
+            const response = await this.authService.signIn(username, password);
+            ctx.body = response;
+            ctx.status = 200;
+        } catch (e) {
+            if (e instanceof AuthServiceError) {
+                throw new RequestError(401, e.reason);
+            }
+            // e is probably ServiceError, report that the service is not healthy
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
     }
 }
