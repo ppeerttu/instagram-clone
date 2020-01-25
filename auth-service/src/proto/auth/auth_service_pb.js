@@ -17,6 +17,7 @@ goog.exportSymbol('proto.AuthErrorStatus', null, global);
 goog.exportSymbol('proto.JWTTokens', null, global);
 goog.exportSymbol('proto.NewAccount', null, global);
 goog.exportSymbol('proto.RenewRequest', null, global);
+goog.exportSymbol('proto.RenewResponse', null, global);
 goog.exportSymbol('proto.SignInResponse', null, global);
 goog.exportSymbol('proto.SignUpResponse', null, global);
 goog.exportSymbol('proto.UserCredentials', null, global);
@@ -1271,6 +1272,232 @@ proto.RenewRequest.prototype.setRefreshToken = function(value) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.RenewResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.RenewResponse.oneofGroups_);
+};
+goog.inherits(proto.RenewResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.RenewResponse.displayName = 'proto.RenewResponse';
+}
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.RenewResponse.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.RenewResponse.StatusCase = {
+  STATUS_NOT_SET: 0,
+  TOKENS: 1,
+  ERROR: 2
+};
+
+/**
+ * @return {proto.RenewResponse.StatusCase}
+ */
+proto.RenewResponse.prototype.getStatusCase = function() {
+  return /** @type {proto.RenewResponse.StatusCase} */(jspb.Message.computeOneofCase(this, proto.RenewResponse.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.RenewResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.RenewResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.RenewResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.RenewResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    tokens: (f = msg.getTokens()) && proto.JWTTokens.toObject(includeInstance, f),
+    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.RenewResponse}
+ */
+proto.RenewResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.RenewResponse;
+  return proto.RenewResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.RenewResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.RenewResponse}
+ */
+proto.RenewResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.JWTTokens;
+      reader.readMessage(value,proto.JWTTokens.deserializeBinaryFromReader);
+      msg.setTokens(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.AuthErrorStatus} */ (reader.readEnum());
+      msg.setError(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.RenewResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.RenewResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.RenewResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.RenewResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTokens();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.JWTTokens.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.AuthErrorStatus} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional JWTTokens tokens = 1;
+ * @return {?proto.JWTTokens}
+ */
+proto.RenewResponse.prototype.getTokens = function() {
+  return /** @type{?proto.JWTTokens} */ (
+    jspb.Message.getWrapperField(this, proto.JWTTokens, 1));
+};
+
+
+/** @param {?proto.JWTTokens|undefined} value */
+proto.RenewResponse.prototype.setTokens = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.RenewResponse.oneofGroups_[0], value);
+};
+
+
+proto.RenewResponse.prototype.clearTokens = function() {
+  this.setTokens(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.RenewResponse.prototype.hasTokens = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional AuthErrorStatus error = 2;
+ * @return {!proto.AuthErrorStatus}
+ */
+proto.RenewResponse.prototype.getError = function() {
+  return /** @type {!proto.AuthErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.AuthErrorStatus} value */
+proto.RenewResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.RenewResponse.oneofGroups_[0], value);
+};
+
+
+proto.RenewResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 2, proto.RenewResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.RenewResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.AccountRequest = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1408,7 +1635,9 @@ proto.AccountRequest.prototype.setAccessToken = function(value) {
 proto.AuthErrorStatus = {
   SERVER_ERROR: 0,
   NOT_FOUND: 1,
-  BAD_CREDENTIALS: 2
+  BAD_CREDENTIALS: 2,
+  INVALID_TOKEN: 3,
+  EXPIRED_TOKEN: 4
 };
 
 goog.object.extend(exports, proto);
