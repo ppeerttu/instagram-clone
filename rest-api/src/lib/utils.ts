@@ -10,9 +10,7 @@ export function getProcessEnv(
     fallback: string | null = null,
 ): string {
     if (typeof value !== "string") {
-        throw new TypeError(
-            `Expected value to be string but received: ${value}`,
-        );
+        throw new TypeError(`Expected value to be string but received: ${value}`           );
     }
     const val = process.env[value];
     if (!val && !fallback) {
@@ -21,3 +19,13 @@ export function getProcessEnv(
     return val || fallback as string;
 }
 
+/**
+ * Delay executon for given period of time.
+ *
+ * @param ms Time in milliseconds
+ */
+export async function delay(ms: number) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve(), ms);
+    });
+}

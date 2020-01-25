@@ -1,16 +1,17 @@
-import { AuthClient } from "./generated/auth_service_grpc_pb";
-import { UserCredentials, AuthErrorStatus } from "./generated/auth_service_pb";
+import { AuthClient } from "../generated/auth_service_grpc_pb";
+import { UserCredentials, AuthErrorStatus } from "../generated/auth_service_pb";
 import { credentials } from "grpc";
-import { IJWTTokens } from "./models";
-import { AuthServiceError } from "./errors/AuthServiceError";
-import { config } from "../config/grpc";
+import { IJWTTokens } from "../models";
+import { AuthServiceError } from "./AuthServiceError";
+import { AuthService } from "./AuthService";
+import { config } from "../../config/grpc";
 
 const authClient = new AuthClient(config.authService, credentials.createInsecure());
 
 /**
  * A client for consuming the external authentication service.
  */
-export class AuthServiceClient {
+export class AuthServiceClient implements AuthService {
 
     /**
      * Sign the user in.
