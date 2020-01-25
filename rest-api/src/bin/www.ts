@@ -1,46 +1,24 @@
 import { createTerminus } from "@godaddy/terminus";
 import http from "http";
+import pino from "pino";
 
 import { ServiceDiscovery } from "../lib/ServiceDiscovery";
 import { delay } from "../lib/utils";
 import Server from "../Server";
+import { AuthServiceClient } from "../client/auth";
 
 const MAX_RE_REGITER_COUNT = 5;
 const INITIAL_RE_REGISTER_INTERVAL = 5000;
 
-// Create the Koa application
-const { app, logger } = Server.bootstrap();
-const server = http.createServer(app.callback());
 const serviceDiscovery = ServiceDiscovery.getInstance();
+const logger = pino();
+const authClient = new AuthServiceClient();
 
-// Terminus handles shutdowns grafecully
-createTerminus(
-    server,
-    {
-        onSignal: () => {
-            logger.info("Received signal, starting cleanup...");
-            const promises = serviceDiscovery.isRegistered()
-                ? [serviceDiscovery.deregister()]
-                : [];
-            return Promise.all(promises);
-        },
-        onShutdown: () => {
-            logger.info("Cleanup finished, shutting down...");
-            return Promise.resolve();
-        },
-        healthChecks: {
-            "/health": () => {
-                const healthy = serviceDiscovery.isRegistered();
-                if (!healthy) {
-                    return Promise.reject(new Error("Not registered"));
-                }
-                return Promise.resolve();
-            },
-        },
-        signals: ["SIGTERM", "SIGINT", "SIGUSR1", "SIGUSR2"],
-        timeout: 5000,
-    }
-);
+const application = new Server(logger);
+application.configure();
+application.bindRoutes(authClient);
+
+const server = http.createServer(application.app.callback());
 
 server.on("error", (error: any) => {
     if (error.syscall !== "listen") {
@@ -83,6 +61,35 @@ server.on("listening", () => {
             logger.error(err, "Service registration to consul failed");
         });
 });
+
+// Terminus handles shutdowns grafecully
+createTerminus(
+    server,
+    {
+        onSignal: () => {
+            logger.info("Received signal, starting cleanup...");
+            const promises = serviceDiscovery.isRegistered()
+                ? [serviceDiscovery.deregister()]
+                : [];
+            return Promise.all(promises);
+        },
+        onShutdown: () => {
+            logger.info("Cleanup finished, shutting down...");
+            return Promise.resolve();
+        },
+        healthChecks: {
+            "/health": () => {
+                const healthy = serviceDiscovery.isRegistered();
+                if (!healthy) {
+                    return Promise.reject(new Error("Not registered"));
+                }
+                return Promise.resolve();
+            },
+        },
+        signals: ["SIGTERM", "SIGINT", "SIGUSR1", "SIGUSR2"],
+        timeout: 5000,
+    }
+);
 
 /**
  * Get server port number from `process.env`.

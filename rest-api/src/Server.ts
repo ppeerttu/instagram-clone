@@ -6,14 +6,26 @@ import pino from "pino";
 
 import { AuthController } from "./controllers/AuthController";
 import { RequestError } from "./lib/RequestError";
-import { AuthServiceClient } from "./client/auth/AuthServiceClient";
+import { AuthService } from "./client/auth";
 
+/**
+ * Class containing the application server logic
+ */
 export default class Server {
 
+    /**
+     * Koa instance
+     */
     public readonly app: Koa;
 
+    /**
+     * Router instance
+     */
     public readonly router: Router;
 
+    /**
+     * Logger of the application server
+     */
     public readonly logger: pino.Logger;
 
     constructor(logger: pino.Logger) {
@@ -54,21 +66,15 @@ export default class Server {
 
     /**
      * Bind controller routes into the application.
+     *
+     * @param authService Implementation for `AuthService`
      */
-    public bindRoutes() {
-        const authController = new AuthController(new AuthServiceClient());
+    public bindRoutes(authService: AuthService) {
+        const authController = new AuthController(authService);
         authController.bind(this.router);
 
         this.app
             .use(this.router.routes())
             .use(this.router.allowedMethods());
-    }
-
-
-    public static bootstrap(): Server {
-        const app = new Server(pino());
-        app.configure();
-        app.bindRoutes();
-        return app;
     }
 }
