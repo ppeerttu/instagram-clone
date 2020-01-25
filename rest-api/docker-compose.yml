@@ -22,5 +22,5 @@ services:
     environment:
       NODE_ENV: development
       SERVER_PORT: 3000
-      AUTH_SERVICE: "auth-service-dev:3000"
+      AUTH_SERVICE: auth-service
       CONSUL_HOST: consul-dev

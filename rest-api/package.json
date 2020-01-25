@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/bin/www.ts | ./node_modules/.bin/pino-pretty -c -t",
     "build": "npx tsc -p .",
-    "start:prod": "node ./src/index.js"
+    "start:prod": "node ./src/bin/www.js"
   },
   "author": "",
   "license": "ISC",

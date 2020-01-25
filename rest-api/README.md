@@ -19,6 +19,19 @@ In order to quickly get your hands dirty, follow these steps:
    * In order to connect to `auth-service`, launch that first
 4. The server should be up and running either in port `4000` or some other in case your not using Docker
 
+## Environment variables
+
+When running with `docker-compose`, injecting environment variables is rather simple. The variables are always defined in the `docker-compose.yml` file. Some variables may be injecetd from `.env` files. In case you are running the service without Docker, you have to define the variables in some other manner.
+
+| Name                | Example value [default]  | Description                 |
+|---------------------|-----------------------------|-----------------------------|
+| `NODE_ENV`          | `development`               | Current running environment |
+| `SERVER_PORT`       | `3000`                      | Port the application server will listen to |
+| `CONSUL_HOST`       | `consul-dev`                | Hostname of the Consul instance |
+| `CONSUL_CLIENT_NAME`| [`rest-api`]                | Name of this service when registering to Consul |
+| `AUTH_SERVICE`      | `auth-service`              | Name of the authentication service in Consul (not a name of a single instance) |
+
+
 
 [koa-site]:https://koajs.com/
 

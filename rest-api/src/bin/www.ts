@@ -2,6 +2,7 @@ import { createTerminus } from "@godaddy/terminus";
 import http from "http";
 import pino from "pino";
 
+import { config } from "../config/server";
 import { ServiceDiscovery } from "../lib/ServiceDiscovery";
 import { delay } from "../lib/utils";
 import Server from "../Server";
@@ -13,6 +14,7 @@ const INITIAL_RE_REGISTER_INTERVAL = 5000;
 const serviceDiscovery = ServiceDiscovery.getInstance();
 const logger = pino();
 const authClient = new AuthServiceClient();
+authClient.bindWatch(serviceDiscovery);
 
 const application = new Server(logger);
 application.configure();
@@ -92,19 +94,6 @@ createTerminus(
 );
 
 /**
- * Get server port number from `process.env`.
- *
- * @param defaultPort The default port number
- */
-function getServerPort(defaultPort = 4000): number {
-    const port = parseInt(process.env.SERVER_PORT || "", 10);
-    if (isNaN(port)) {
-        return defaultPort;
-    }
-    return port;
-}
-
-/**
  * Handle failure heartbeat with consul.
  *
  * @param err The error
@@ -154,4 +143,4 @@ async function reRegisterServiceDiscovery(count = 1): Promise<void> {
     logger.info("Re-registration successful");
 }
 
-server.listen(getServerPort());
+server.listen(config.port);

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { hostname } from "os";
 
 import { config } from "../config/consul";
+import { config as serverConfig } from "../config/server";
 
 /**
  * Service discovery singleton class.
@@ -91,7 +92,7 @@ export class ServiceDiscovery {
             name: this.serviceName,
             id: this.instanceId,
             address: hostname(),
-            port: 4000,
+            port: serverConfig.port,
             check: {
                 ttl: `${this.heartbeatSeconds}s`,
             }
@@ -121,6 +122,23 @@ export class ServiceDiscovery {
                 this.registered = false;
                 return resolve();
             });
+        });
+    }
+
+    /**
+     * Get a consul watcher for given service.
+     *
+     * @param service The service to watch
+     * @param passing Whether to restrict the watch to only passing instances
+     */
+    public getWatcher(service: string, passing = true) {
+        const options: consul.Health.ServiceOptions = {
+            service,
+            passing,
+        };
+        return this.consul.watch({
+            method: this.consul.health.service,
+            options,
         });
     }
 
