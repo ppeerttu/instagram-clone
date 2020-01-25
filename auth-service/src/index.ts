@@ -1,4 +1,5 @@
 import grpc from "grpc";
+import redis from "redis";
 
 import sequelize from "./config/sequelize";
 import authHandler from "./handlers/AuthService";
@@ -10,7 +11,16 @@ protoIndex();
 const port = 3000;
 
 export const startServer = (): void => {
+    console.log("Starting server...");
     const server = new grpc.Server();
+    const redisClient = redis.createClient(6379, "0.0.0.0");
+
+    redisClient.on("connect", () => {
+        console.log("Redis client connected");
+    });
+    redisClient.on("error", (err) => {
+        console.error("Redis client got error " + err);
+    });
 
     server.addService(authHandler.AuthService, new authHandler.AuthHandler());
 

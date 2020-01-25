@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import grpc from "grpc";
 import jwt from "jsonwebtoken";
+// import { RedisClient } from "redis";
 
 import { config } from "../config/auth";
 import { createAccessToken, createRefreshToken, verifyToken } from "../lib/tokens";
@@ -23,6 +24,12 @@ import {
  * A handler for auth service.
  */
 class AuthHandler implements IAuthServer {
+
+    // private redisClient: RedisClient;
+
+    constructor() {
+        // this.redisClient = client;
+    }
 
     /**
      * Sign an account in.
