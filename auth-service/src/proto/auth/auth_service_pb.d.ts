@@ -199,6 +199,49 @@ export namespace RenewRequest {
     }
 }
 
+export class RenewResponse extends jspb.Message { 
+
+    hasTokens(): boolean;
+    clearTokens(): void;
+    getTokens(): JWTTokens | undefined;
+    setTokens(value?: JWTTokens): void;
+
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): AuthErrorStatus;
+    setError(value: AuthErrorStatus): void;
+
+
+    getStatusCase(): RenewResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): RenewResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: RenewResponse): RenewResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: RenewResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): RenewResponse;
+    static deserializeBinaryFromReader(message: RenewResponse, reader: jspb.BinaryReader): RenewResponse;
+}
+
+export namespace RenewResponse {
+    export type AsObject = {
+        tokens?: JWTTokens.AsObject,
+        error: AuthErrorStatus,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    TOKENS = 1,
+
+    ERROR = 2,
+
+    }
+
+}
+
 export class AccountRequest extends jspb.Message { 
     getAccessToken(): string;
     setAccessToken(value: string): void;
@@ -224,4 +267,6 @@ export enum AuthErrorStatus {
     SERVER_ERROR = 0,
     NOT_FOUND = 1,
     BAD_CREDENTIALS = 2,
+    INVALID_TOKEN = 3,
+    EXPIRED_TOKEN = 4,
 }

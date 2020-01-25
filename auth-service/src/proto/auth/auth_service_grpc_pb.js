@@ -26,17 +26,6 @@ function deserialize_AccountRequest(buffer_arg) {
   return auth_service_pb.AccountRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_JWTTokens(arg) {
-  if (!(arg instanceof auth_service_pb.JWTTokens)) {
-    throw new Error('Expected argument of type JWTTokens');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_JWTTokens(buffer_arg) {
-  return auth_service_pb.JWTTokens.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_NewAccount(arg) {
   if (!(arg instanceof auth_service_pb.NewAccount)) {
     throw new Error('Expected argument of type NewAccount');
@@ -57,6 +46,17 @@ function serialize_RenewRequest(arg) {
 
 function deserialize_RenewRequest(buffer_arg) {
   return auth_service_pb.RenewRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_RenewResponse(arg) {
+  if (!(arg instanceof auth_service_pb.RenewResponse)) {
+    throw new Error('Expected argument of type RenewResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_RenewResponse(buffer_arg) {
+  return auth_service_pb.RenewResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_SignInResponse(arg) {
@@ -125,11 +125,11 @@ renewToken: {
     requestStream: false,
     responseStream: false,
     requestType: auth_service_pb.RenewRequest,
-    responseType: auth_service_pb.JWTTokens,
+    responseType: auth_service_pb.RenewResponse,
     requestSerialize: serialize_RenewRequest,
     requestDeserialize: deserialize_RenewRequest,
-    responseSerialize: serialize_JWTTokens,
-    responseDeserialize: deserialize_JWTTokens,
+    responseSerialize: serialize_RenewResponse,
+    responseDeserialize: deserialize_RenewResponse,
   },
   // Get account details based on access token
 getAccount: {
