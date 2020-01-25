@@ -3,6 +3,7 @@ import { hostname } from "os";
 import { v4 as uuidv4 } from "uuid";
 
 import { config } from "../config/consul";
+import { config as serverConfig } from "../config/server";
 
 /**
  * Singleton class for service discovery functionality.
@@ -74,7 +75,7 @@ export class ServiceDiscovery {
             name: this.serviceName,
             id: this.instanceId,
             address: hostname(),
-            port: 4000,
+            port: serverConfig.grpcPort,
             check: {
                 ttl: `${this.heartbeatSeconds}s`,
             },
