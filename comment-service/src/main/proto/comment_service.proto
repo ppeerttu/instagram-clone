@@ -1,0 +1,59 @@
+syntax = "proto3";
+option java_package = "com.instagram_clone.comment_service";
+option java_multiple_files = true;
+option java_outer_classname = "CommentService";
+
+package Comment;
+
+// Comment service definition
+service Comments {
+
+  // Create new comment
+  rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse) {}
+
+  // Get comment
+  rpc GetComment(GetCommentRequest) returns (GetCommentResponse) {}
+}
+
+message CreateCommentRequest {
+  string comment = 1;
+  string user_id = 2;
+  string image_id = 3;
+}
+
+message CreateCommentResponse {
+  oneof status {
+    Comment comment = 1;
+    CreateCommentErrorStatus error = 2;
+  }
+}
+
+message GetCommentRequest {
+  string commentId = 1;
+}
+
+message GetCommentResponse {
+  oneof status {
+    Comment comment = 1;
+    GetCommentErrorStatus error = 2;
+  }
+}
+
+enum CreateCommentErrorStatus {
+  CREATE_SERVER_ERROR = 0;
+}
+
+enum GetCommentErrorStatus {
+  GET_SERVER_ERROR = 0;
+  NOT_FOUND = 1;
+}
+
+message Comment {
+  string id = 1;
+  string content = 2;
+  string user_id = 3;
+  string image_id = 4;
+  string created_at = 5;
+}
+
+

@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  comment-service:
+    container_name: comment-service-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - "3001:3001"
+
+  mongodb:
+    image: "mongo"
+    container_name: mongo-dev
+    environment:
+      - MONGO_INITDB_DATABASE=comments
+      - MONGO_INITDB_ROOT_USERNAME=dev
+      - MONGO_INITDB_ROOT_PASSWORD=dev
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - comment-data-dev:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  comment-data-dev:
+    external: true
