@@ -49,6 +49,11 @@ networks:
     external:
       name: ig-clone-dev
 
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
+
 volumes:
   auth-data-dev:
     external: true
