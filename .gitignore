@@ -8,3 +8,10 @@ node_modules
 
 # OS X
 .DS_Store
+
+# idea
+.idea
+.editorconfig
+
+# java build
+*/target/*
