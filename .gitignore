@@ -9,6 +9,9 @@ node_modules
 # OS X
 .DS_Store
 
+# Editor files
+.vscode
+
 # idea
 .idea
 .editorconfig

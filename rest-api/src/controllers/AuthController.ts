@@ -4,8 +4,8 @@ import Router, { IRouterContext } from "koa-router";
 
 import { IController } from "./Controller";
 import { RequestError } from "../lib/RequestError";
-import { AuthServiceClient } from "../client/AuthServiceClient";
-import { AuthServiceError } from "../client/errors/AuthServiceError";
+import { AuthServiceError } from "../client/auth/AuthServiceError";
+import { AuthService } from "../client/auth";
 
 /**
  * Authentication REST API controller.
@@ -29,9 +29,12 @@ export class AuthController implements IController {
 
     /**
      * Auth service client
-     * @todo Inject this somehow?
      */
-    private authService = new AuthServiceClient();
+    private authService: AuthService;
+
+    public constructor(authService: AuthService) {
+        this.authService = authService;
+    }
 
     bind = (router: Router, basePath = "/auth"): void => {
         // TODO: bind routes

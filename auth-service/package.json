@@ -16,6 +16,7 @@
   "dependencies": {
     "@grpc/proto-loader": "^0.5.3",
     "bcrypt": "^3.0.7",
+    "consul": "^0.37.0",
     "google-protobuf": "^3.11.2",
     "grpc": "^1.24.2",
     "jsonwebtoken": "^8.5.1",
@@ -29,9 +30,11 @@
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "^3.5.29",
+    "@types/consul": "^0.23.34",
     "@types/google-protobuf": "^3.7.2",
     "@types/jsonwebtoken": "^8.3.6",
     "@types/node": "^13.1.8",
+    "@types/uuid": "^3.4.6",
     "@types/validator": "^12.0.1",
     "grpc-tools": "^1.8.1",
     "grpc_tools_node_protoc_ts": "^2.5.10",

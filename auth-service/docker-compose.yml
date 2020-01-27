@@ -17,6 +17,8 @@ services:
     environment:
       NODE_ENV: development
       POSTGRES_HOST: auth-db-dev
+      CONSUL_HOST: consul-dev
+      GRPC_PORT: 3000
     networks:
       - ig-clone-dev
     env_file:

@@ -5,17 +5,19 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/index.ts | ./node_modules/.bin/pino-pretty -c -t",
+    "start": "./node_modules/.bin/nodemon --exec 'ts-node' src/bin/www.ts | ./node_modules/.bin/pino-pretty -c -t",
     "build": "npx tsc -p .",
-    "start:prod": "node ./src/index.js"
+    "start:prod": "node ./src/bin/www.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/consul": "^0.23.34",
     "@types/google-protobuf": "^3.7.2",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-pino-logger": "^2.1.6",
     "@types/node": "^13.1.8",
+    "@types/uuid": "^3.4.6",
     "@types/validator": "^10.11.3",
     "grpc-tools": "^1.8.1",
     "grpc_tools_node_protoc_ts": "^2.5.10",
@@ -26,6 +28,8 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
+    "@godaddy/terminus": "^4.3.1",
+    "consul": "^0.37.0",
     "google-protobuf": "^3.11.2",
     "grpc": "^1.24.2",
     "koa": "^2.11.0",
@@ -34,6 +38,7 @@
     "koa-req-validation": "^0.7.0",
     "koa-router": "^8.0.6",
     "pino": "^5.16.0",
+    "uuid": "^3.4.0",
     "validator": "^10.11.0"
   }
 }
