@@ -1,0 +1,218 @@
+syntax = "proto3";
+option java_package = "com.instagram_clone.image_service";
+option java_multiple_files = true;
+option java_outer_classname = "ImageService";
+
+package Image;
+
+// Service that is exposed via gRPC
+service Images {
+
+  // Create a new image
+  rpc CreateImage(CreateImageRequest) returns (CreateImageResponse) {}
+
+  // Delete an image
+  rpc DeleteImage(DeleteImageRequest) returns (DeleteImageResponse) {}
+
+  // Get a single image (metadata)
+  rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
+
+  // Get image data
+  rpc GetImageData(GetImageDataRequest) returns (GetImageDataResponse) {}
+
+  // Get user's images
+  rpc GetUserImages(GetUserImagesRequest) returns (GetUserImagesResponse) {}
+
+  // Search for images based on hash tags or user tags
+  rpc SearchImages (SearchImagesRequest) returns (SearchImagesResponse) {}
+}
+
+// =====================
+// Create image
+// =====================
+
+message CreateImageRequest {
+  string caption = 1;
+  string creator_id = 2;
+  bytes data = 3;
+}
+
+message CreateImageResponse {
+  oneof status {
+    Image image = 1;
+    CreateImageErrorStatus error = 2;
+  }
+}
+
+enum CreateImageErrorStatus {
+  CREATE_IMAGE_SERVER_ERROR = 0;
+  CONTENT_TOO_LONG = 1;
+  CREATOR_NOT_FOUND = 2;
+  INVALID_DATA = 3;
+  CAPTION_TOO_LONG = 4;
+}
+
+// =====================
+// Delete image
+// =====================
+
+message DeleteImageRequest {
+  string id = 1;
+}
+
+message DeleteImageResponse {
+  DeleteImageStatus status = 1;
+}
+
+enum DeleteImageStatus {
+  DELETE_IMAGE_SERVER_ERROR = 0;
+  DELETABLE_NOT_FOUND = 1;
+  OK = 2;
+}
+
+// =====================
+// Get image
+// =====================
+
+message GetImageRequest {
+  string image_id = 1;
+}
+
+message GetImageResponse {
+  oneof status {
+    Image image = 1;
+    GetImageErrorStatus error = 2;
+  }
+}
+
+enum GetImageErrorStatus {
+  GET_IMAGE_SERVER_ERROR = 0;
+  IMAGE_NOT_FOUND = 1;
+}
+
+// =====================
+// Get image data
+// =====================
+
+message GetImageDataRequest {
+  string image_id = 1;
+}
+
+message GetImageDataResponse {
+  oneof status {
+    bytes data = 1;
+    GetImageErrorStatus error = 2;
+  }
+}
+
+// =====================
+// Get user's images
+// =====================
+
+message GetUserImagesRequest {
+  string user_id = 1;
+}
+
+message GetUserImagesResponse {
+  oneof status {
+    UserImagePage page = 1;
+    GetUserImagesErrorStatus error = 2;
+  }
+}
+
+enum GetUserImagesErrorStatus {
+  GET_USER_IMAGES_SERVER_ERROR = 0;
+  USER_NOT_FOUND = 1;
+}
+
+// =====================
+// Search for images by hash tag or user tag
+// =====================
+
+message SearchImagesRequest {
+  oneof search {
+    string hash_tag = 1;
+    string user_tag = 2;
+  }
+}
+
+message SearchImagesResponse {
+  oneof status {
+    ImageSearchPage page = 1;
+    SearchImagesErrorStatus error = 2;
+  }
+}
+
+enum SearchImagesErrorStatus {
+  SEARCH_IMAGES_SERVER_ERROR = 0;
+  EMPTY_SEARCH = 1; // Empty search string
+}
+
+
+// =====================
+// Models
+// =====================
+
+message ImageSearchPage {
+
+  // Search either by user tag or hash tag
+  oneof search {
+    string hash_tag = 1;
+    string user_tag = 2;
+  }
+
+  // Page size (e.g. 20); guaranteed maximum of retrieved images
+  int32 size = 3;
+
+  // Page number (e.g. 2)
+  int32 page = 4;
+
+  // Total count of results for the given search
+  int32 total_count = 5;
+
+  // Array of images; less than or equal to "size"
+  repeated Image images = 6;
+}
+
+message UserImagePage {
+
+  // ID of the user
+  string user_id = 1;
+
+  // Page size (e.g. 20); guaranteed maximum of retrieved images
+  int32 size = 2;
+
+  // Page number (e.g. 2)
+  int32 page = 3;
+
+  // Total count of images for the user (e.g. 284)
+  int32 total_count = 4;
+
+  // Array of images; less or equal to "size"
+  repeated Image images = 5;
+}
+
+message Image {
+
+  // ID of the image
+  string id = 1;
+
+  // Type of the image, e.g. img/png or img/jpeg
+  string type = 2;
+
+  // Width in pixels
+  int32 width = 3;
+
+  // Height in pixels
+  int32 height = 4;
+
+  // Image poster ID
+  string user_id = 5;
+
+  // Image caption
+  string caption = 6;
+
+  // Created at timestamp
+  string created_at = 7;
+}
+
