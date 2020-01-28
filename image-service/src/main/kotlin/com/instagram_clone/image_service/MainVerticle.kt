@@ -1,5 +1,10 @@
 package com.instagram_clone.image_service
 
+import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.config.ConfigConstants
+import com.instagram_clone.image_service.service.ImageServiceGrpcImpl
+import com.instagram_clone.image_service.service.ImageMetaServiceMockImpl
+import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Context
 import io.vertx.core.Promise
@@ -7,8 +12,6 @@ import io.vertx.core.Vertx
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
 import io.vertx.grpc.VertxServerBuilder
-
-const val PORT = 3000
 
 class MainVerticle : AbstractVerticle() {
 
@@ -20,13 +23,27 @@ class MainVerticle : AbstractVerticle() {
   }
 
   override fun start(startPromise: Promise<Void>) {
-    val rpcServer = VertxServerBuilder
-      .forAddress(vertx, "0.0.0.0", PORT)
-      .build()
+    ConfigRetriever.create(vertx).getConfig { ar ->
+      if (ar.failed()) {
+        logger.error("Error retrieving config:", ar.cause())
+        startPromise.complete()
+      } else {
+        val json = ar.result()
+        val config = AppConfig.getInstance(json)
 
-    rpcServer.start {
-      logger.info("gRPC server listening on port $PORT")
-      startPromise.complete()
+        val imageMetaService = ImageMetaServiceMockImpl()
+        val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(imageMetaService, vertx)
+
+        val rpcServer = VertxServerBuilder
+          .forAddress(vertx, config.host, config.port)
+          .addService(grpcService)
+          .build()
+
+        rpcServer.start {
+          logger.info("gRPC server listening on port ${config.port}")
+          startPromise.complete()
+        }
+      }
     }
   }
 }
