@@ -1,12 +1,14 @@
 import Koa, { ParameterizedContext } from "koa";
 import bodyParser from "koa-bodyparser";
 import middlewareLogger from "koa-pino-logger";
-import Router, { IRouterContext } from "koa-router";
+import Router, { RouterContext } from "@koa/router";
 import pino from "pino";
 
 import { AuthController } from "./controllers/AuthController";
 import { RequestError } from "./lib/RequestError";
 import { AuthService } from "./client/auth";
+import { ImageService } from "./client/images/ImageService";
+import { ImageController } from "./controllers/ImageController";
 
 /**
  * Class containing the application server logic
@@ -41,7 +43,7 @@ export default class Server {
         this.app
             .use(middlewareLogger())
             .use(bodyParser())
-            .use(async (ctx: ParameterizedContext<IRouterContext>, next) => {
+            .use(async (ctx: ParameterizedContext<RouterContext>, next) => {
                 try {
                     await next();
                 } catch (e) {
@@ -69,9 +71,14 @@ export default class Server {
      *
      * @param authService Implementation for `AuthService`
      */
-    public bindRoutes(authService: AuthService) {
+    public bindRoutes(
+        authService: AuthService,
+        imageService: ImageService,
+    ) {
         const authController = new AuthController(authService);
         authController.bind(this.router);
+        const imageController = new ImageController(imageService);
+        imageController.bind(this.router);
 
         this.app
             .use(this.router.routes())

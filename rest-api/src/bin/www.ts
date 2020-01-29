@@ -7,6 +7,7 @@ import { ServiceDiscovery } from "../lib/ServiceDiscovery";
 import { delay } from "../lib/utils";
 import Server from "../Server";
 import { AuthServiceClient } from "../client/auth";
+import { ImageServiceClient } from "../client/images/ImageServiceClient";
 
 const MAX_RE_REGITER_COUNT = 5;
 const INITIAL_RE_REGISTER_INTERVAL = 5000;
@@ -14,11 +15,12 @@ const INITIAL_RE_REGISTER_INTERVAL = 5000;
 const serviceDiscovery = ServiceDiscovery.getInstance();
 const logger = pino();
 const authClient = new AuthServiceClient();
+const imageClient = new ImageServiceClient();
 authClient.bindWatch(serviceDiscovery);
 
 const application = new Server(logger);
 application.configure();
-application.bindRoutes(authClient);
+application.bindRoutes(authClient, imageClient);
 
 const server = http.createServer(application.app.callback());
 
