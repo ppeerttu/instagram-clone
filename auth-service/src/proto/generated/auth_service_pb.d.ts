@@ -1,4 +1,4 @@
-// package: 
+// package: Auth
 // file: auth_service.proto
 
 /* tslint:disable */
