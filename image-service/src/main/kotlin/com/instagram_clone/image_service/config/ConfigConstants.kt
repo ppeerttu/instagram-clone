@@ -8,12 +8,12 @@ object ConfigConstants {
   /**
    * Application gRPC host
    */
-  @JvmField val HOST = "HOST"
+  @JvmField val HOST = "GRPC_HOST"
 
   /**
    * Application gRPC port
    */
-  @JvmField val PORT = "PORT"
+  @JvmField val PORT = "GRPC_PORT"
 
   /**
    * Directory for storing image files

@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  image-service:
+    container_name: image-service-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - "./data:/app/data"
+    networks:
+      - ig-clone-dev
+    environment:
+      - GRPC_HOST=0.0.0.0
+      - GRPC_PORT=3000
+
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
