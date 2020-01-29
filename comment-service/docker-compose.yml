@@ -8,12 +8,24 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+    networks:
+      - ig-clone-dev
     ports:
       - "3001:3001"
+    environment:
+      - MONGO_USER=dev
+      - MONGO_PASSWORD=dev
+      - MONGO_HOST=mongo-dev
+      - MONGO_DB_NAME=comments
+      - MONGO_PORT=27017
+      - GRPC_HOST=0.0.0.0
+      - GRPC_PORT=3001
 
   mongodb:
     image: "mongo"
     container_name: mongo-dev
+    networks:
+      - ig-clone-dev
     environment:
       - MONGO_INITDB_DATABASE=comments
       - MONGO_INITDB_ROOT_USERNAME=dev
@@ -23,6 +35,11 @@ services:
       - comment-data-dev:/data/db
     ports:
       - "27017:27017"
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
 
 volumes:
   comment-data-dev:
