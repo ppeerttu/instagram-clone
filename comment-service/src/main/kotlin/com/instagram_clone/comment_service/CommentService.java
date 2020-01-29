@@ -3,8 +3,8 @@
 
 package com.instagram_clone.comment_service;
 
-public final class HelloWorldProto {
-  private HelloWorldProto() {}
+public final class CommentService {
+  private CommentService() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -67,8 +67,8 @@ public final class HelloWorldProto {
       ".CreateCommentRequest\032\036.Comment.CreateCo" +
       "mmentResponse\"\000\022G\n\nGetComment\022\032.Comment." +
       "GetCommentRequest\032\033.Comment.GetCommentRe" +
-      "sponse\"\000B8\n#com.instagram_clone.comment_",
-      "serviceB\017HelloWorldProtoP\001b\006proto3"
+      "sponse\"\000B7\n#com.instagram_clone.comment_",
+      "serviceB\016CommentServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

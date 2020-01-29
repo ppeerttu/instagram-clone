@@ -90,12 +90,12 @@ public  final class Comment extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_Comment_descriptor;
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_Comment_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_Comment_fieldAccessorTable
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_Comment_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             com.instagram_clone.comment_service.Comment.class, com.instagram_clone.comment_service.Comment.Builder.class);
   }
@@ -467,12 +467,12 @@ public  final class Comment extends
       com.instagram_clone.comment_service.CommentOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_Comment_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_Comment_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_Comment_fieldAccessorTable
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_Comment_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.instagram_clone.comment_service.Comment.class, com.instagram_clone.comment_service.Comment.Builder.class);
     }
@@ -509,7 +509,7 @@ public  final class Comment extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_Comment_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_Comment_descriptor;
     }
 
     public com.instagram_clone.comment_service.Comment getDefaultInstanceForType() {

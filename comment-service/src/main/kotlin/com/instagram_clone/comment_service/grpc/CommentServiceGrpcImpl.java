@@ -1,14 +1,15 @@
-package com.instagram_clone.comment_service.service;
+package com.instagram_clone.comment_service.grpc;
 
 import com.instagram_clone.comment_service.*;
 import com.instagram_clone.comment_service.data.CommentMapperKt;
 import com.instagram_clone.comment_service.data.CommentWrapper;
 import com.instagram_clone.comment_service.exception.NotFoundException;
+import com.instagram_clone.comment_service.service.CommentService;
 import io.grpc.stub.StreamObserver;
 
 public class CommentServiceGrpcImpl extends CommentsGrpc.CommentsImplBase {
 
-  CommentService service;
+  com.instagram_clone.comment_service.service.CommentService service;
 
   public CommentServiceGrpcImpl(CommentService service) {
     this.service = service;
