@@ -66,7 +66,7 @@ public enum CreateCommentErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.HelloWorldProto.getDescriptor().getEnumTypes().get(0);
+    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(0);
   }
 
   private static final CreateCommentErrorStatus[] VALUES = values();

@@ -4,17 +4,17 @@
 package com.instagram_clone.comment_service;
 
 /**
- * Protobuf type {@code Comment.GetCommentResponse}
+ * Protobuf type {@code Comment.CreateCommentResponse}
  */
-public  final class GetCommentResponse extends
+public  final class CreateCommentResponse extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:Comment.GetCommentResponse)
-    GetCommentResponseOrBuilder {
-  // Use GetCommentResponse.newBuilder() to construct.
-  private GetCommentResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:Comment.CreateCommentResponse)
+    CreateCommentResponseOrBuilder {
+  // Use CreateCommentResponse.newBuilder() to construct.
+  private CreateCommentResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private GetCommentResponse() {
+  private CreateCommentResponse() {
   }
 
   @java.lang.Override
@@ -22,7 +22,7 @@ public  final class GetCommentResponse extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private GetCommentResponse(
+  private CreateCommentResponse(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -75,14 +75,14 @@ public  final class GetCommentResponse extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_GetCommentResponse_descriptor;
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentResponse_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_GetCommentResponse_fieldAccessorTable
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentResponse_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.instagram_clone.comment_service.GetCommentResponse.class, com.instagram_clone.comment_service.GetCommentResponse.Builder.class);
+            com.instagram_clone.comment_service.CreateCommentResponse.class, com.instagram_clone.comment_service.CreateCommentResponse.Builder.class);
   }
 
   private int statusCase_ = 0;
@@ -145,7 +145,7 @@ public  final class GetCommentResponse extends
 
   public static final int ERROR_FIELD_NUMBER = 2;
   /**
-   * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+   * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
    */
   public int getErrorValue() {
     if (statusCase_ == 2) {
@@ -154,15 +154,15 @@ public  final class GetCommentResponse extends
     return 0;
   }
   /**
-   * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+   * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
    */
-  public com.instagram_clone.comment_service.GetCommentErrorStatus getError() {
+  public com.instagram_clone.comment_service.CreateCommentErrorStatus getError() {
     if (statusCase_ == 2) {
-      com.instagram_clone.comment_service.GetCommentErrorStatus result = com.instagram_clone.comment_service.GetCommentErrorStatus.valueOf(
+      com.instagram_clone.comment_service.CreateCommentErrorStatus result = com.instagram_clone.comment_service.CreateCommentErrorStatus.valueOf(
           (java.lang.Integer) status_);
-      return result == null ? com.instagram_clone.comment_service.GetCommentErrorStatus.UNRECOGNIZED : result;
+      return result == null ? com.instagram_clone.comment_service.CreateCommentErrorStatus.UNRECOGNIZED : result;
     }
-    return com.instagram_clone.comment_service.GetCommentErrorStatus.GET_SERVER_ERROR;
+    return com.instagram_clone.comment_service.CreateCommentErrorStatus.CREATE_SERVER_ERROR;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -208,10 +208,10 @@ public  final class GetCommentResponse extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.instagram_clone.comment_service.GetCommentResponse)) {
+    if (!(obj instanceof com.instagram_clone.comment_service.CreateCommentResponse)) {
       return super.equals(obj);
     }
-    com.instagram_clone.comment_service.GetCommentResponse other = (com.instagram_clone.comment_service.GetCommentResponse) obj;
+    com.instagram_clone.comment_service.CreateCommentResponse other = (com.instagram_clone.comment_service.CreateCommentResponse) obj;
 
     boolean result = true;
     result = result && getStatusCase().equals(
@@ -256,69 +256,69 @@ public  final class GetCommentResponse extends
     return hash;
   }
 
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(byte[] data)
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(java.io.InputStream input)
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseDelimitedFrom(java.io.InputStream input)
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseDelimitedFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.comment_service.GetCommentResponse parseFrom(
+  public static com.instagram_clone.comment_service.CreateCommentResponse parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -330,7 +330,7 @@ public  final class GetCommentResponse extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.instagram_clone.comment_service.GetCommentResponse prototype) {
+  public static Builder newBuilder(com.instagram_clone.comment_service.CreateCommentResponse prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -345,25 +345,25 @@ public  final class GetCommentResponse extends
     return builder;
   }
   /**
-   * Protobuf type {@code Comment.GetCommentResponse}
+   * Protobuf type {@code Comment.CreateCommentResponse}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:Comment.GetCommentResponse)
-      com.instagram_clone.comment_service.GetCommentResponseOrBuilder {
+      // @@protoc_insertion_point(builder_implements:Comment.CreateCommentResponse)
+      com.instagram_clone.comment_service.CreateCommentResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_GetCommentResponse_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_GetCommentResponse_fieldAccessorTable
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.instagram_clone.comment_service.GetCommentResponse.class, com.instagram_clone.comment_service.GetCommentResponse.Builder.class);
+              com.instagram_clone.comment_service.CreateCommentResponse.class, com.instagram_clone.comment_service.CreateCommentResponse.Builder.class);
     }
 
-    // Construct using com.instagram_clone.comment_service.GetCommentResponse.newBuilder()
+    // Construct using com.instagram_clone.comment_service.CreateCommentResponse.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -387,23 +387,23 @@ public  final class GetCommentResponse extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_GetCommentResponse_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentResponse_descriptor;
     }
 
-    public com.instagram_clone.comment_service.GetCommentResponse getDefaultInstanceForType() {
-      return com.instagram_clone.comment_service.GetCommentResponse.getDefaultInstance();
+    public com.instagram_clone.comment_service.CreateCommentResponse getDefaultInstanceForType() {
+      return com.instagram_clone.comment_service.CreateCommentResponse.getDefaultInstance();
     }
 
-    public com.instagram_clone.comment_service.GetCommentResponse build() {
-      com.instagram_clone.comment_service.GetCommentResponse result = buildPartial();
+    public com.instagram_clone.comment_service.CreateCommentResponse build() {
+      com.instagram_clone.comment_service.CreateCommentResponse result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public com.instagram_clone.comment_service.GetCommentResponse buildPartial() {
-      com.instagram_clone.comment_service.GetCommentResponse result = new com.instagram_clone.comment_service.GetCommentResponse(this);
+    public com.instagram_clone.comment_service.CreateCommentResponse buildPartial() {
+      com.instagram_clone.comment_service.CreateCommentResponse result = new com.instagram_clone.comment_service.CreateCommentResponse(this);
       if (statusCase_ == 1) {
         if (commentBuilder_ == null) {
           result.status_ = status_;
@@ -446,16 +446,16 @@ public  final class GetCommentResponse extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.instagram_clone.comment_service.GetCommentResponse) {
-        return mergeFrom((com.instagram_clone.comment_service.GetCommentResponse)other);
+      if (other instanceof com.instagram_clone.comment_service.CreateCommentResponse) {
+        return mergeFrom((com.instagram_clone.comment_service.CreateCommentResponse)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.instagram_clone.comment_service.GetCommentResponse other) {
-      if (other == com.instagram_clone.comment_service.GetCommentResponse.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.instagram_clone.comment_service.CreateCommentResponse other) {
+      if (other == com.instagram_clone.comment_service.CreateCommentResponse.getDefaultInstance()) return this;
       switch (other.getStatusCase()) {
         case COMMENT: {
           mergeComment(other.getComment());
@@ -481,11 +481,11 @@ public  final class GetCommentResponse extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.instagram_clone.comment_service.GetCommentResponse parsedMessage = null;
+      com.instagram_clone.comment_service.CreateCommentResponse parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.instagram_clone.comment_service.GetCommentResponse) e.getUnfinishedMessage();
+        parsedMessage = (com.instagram_clone.comment_service.CreateCommentResponse) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -641,7 +641,7 @@ public  final class GetCommentResponse extends
     }
 
     /**
-     * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+     * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
      */
     public int getErrorValue() {
       if (statusCase_ == 2) {
@@ -650,7 +650,7 @@ public  final class GetCommentResponse extends
       return 0;
     }
     /**
-     * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+     * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
      */
     public Builder setErrorValue(int value) {
       statusCase_ = 2;
@@ -659,20 +659,20 @@ public  final class GetCommentResponse extends
       return this;
     }
     /**
-     * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+     * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
      */
-    public com.instagram_clone.comment_service.GetCommentErrorStatus getError() {
+    public com.instagram_clone.comment_service.CreateCommentErrorStatus getError() {
       if (statusCase_ == 2) {
-        com.instagram_clone.comment_service.GetCommentErrorStatus result = com.instagram_clone.comment_service.GetCommentErrorStatus.valueOf(
+        com.instagram_clone.comment_service.CreateCommentErrorStatus result = com.instagram_clone.comment_service.CreateCommentErrorStatus.valueOf(
             (java.lang.Integer) status_);
-        return result == null ? com.instagram_clone.comment_service.GetCommentErrorStatus.UNRECOGNIZED : result;
+        return result == null ? com.instagram_clone.comment_service.CreateCommentErrorStatus.UNRECOGNIZED : result;
       }
-      return com.instagram_clone.comment_service.GetCommentErrorStatus.GET_SERVER_ERROR;
+      return com.instagram_clone.comment_service.CreateCommentErrorStatus.CREATE_SERVER_ERROR;
     }
     /**
-     * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+     * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
      */
-    public Builder setError(com.instagram_clone.comment_service.GetCommentErrorStatus value) {
+    public Builder setError(com.instagram_clone.comment_service.CreateCommentErrorStatus value) {
       if (value == null) {
         throw new NullPointerException();
       }
@@ -682,7 +682,7 @@ public  final class GetCommentResponse extends
       return this;
     }
     /**
-     * <code>.Comment.GetCommentErrorStatus error = 2;</code>
+     * <code>.Comment.CreateCommentErrorStatus error = 2;</code>
      */
     public Builder clearError() {
       if (statusCase_ == 2) {
@@ -703,39 +703,39 @@ public  final class GetCommentResponse extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:Comment.GetCommentResponse)
+    // @@protoc_insertion_point(builder_scope:Comment.CreateCommentResponse)
   }
 
-  // @@protoc_insertion_point(class_scope:Comment.GetCommentResponse)
-  private static final com.instagram_clone.comment_service.GetCommentResponse DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:Comment.CreateCommentResponse)
+  private static final com.instagram_clone.comment_service.CreateCommentResponse DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.instagram_clone.comment_service.GetCommentResponse();
+    DEFAULT_INSTANCE = new com.instagram_clone.comment_service.CreateCommentResponse();
   }
 
-  public static com.instagram_clone.comment_service.GetCommentResponse getDefaultInstance() {
+  public static com.instagram_clone.comment_service.CreateCommentResponse getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<GetCommentResponse>
-      PARSER = new com.google.protobuf.AbstractParser<GetCommentResponse>() {
-    public GetCommentResponse parsePartialFrom(
+  private static final com.google.protobuf.Parser<CreateCommentResponse>
+      PARSER = new com.google.protobuf.AbstractParser<CreateCommentResponse>() {
+    public CreateCommentResponse parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GetCommentResponse(input, extensionRegistry);
+        return new CreateCommentResponse(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<GetCommentResponse> parser() {
+  public static com.google.protobuf.Parser<CreateCommentResponse> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<GetCommentResponse> getParserForType() {
+  public com.google.protobuf.Parser<CreateCommentResponse> getParserForType() {
     return PARSER;
   }
 
-  public com.instagram_clone.comment_service.GetCommentResponse getDefaultInstanceForType() {
+  public com.instagram_clone.comment_service.CreateCommentResponse getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

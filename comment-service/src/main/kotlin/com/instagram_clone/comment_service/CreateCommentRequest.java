@@ -76,12 +76,12 @@ public  final class CreateCommentRequest extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_CreateCommentRequest_descriptor;
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentRequest_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_CreateCommentRequest_fieldAccessorTable
+    return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             com.instagram_clone.comment_service.CreateCommentRequest.class, com.instagram_clone.comment_service.CreateCommentRequest.Builder.class);
   }
@@ -365,12 +365,12 @@ public  final class CreateCommentRequest extends
       com.instagram_clone.comment_service.CreateCommentRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_CreateCommentRequest_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_CreateCommentRequest_fieldAccessorTable
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.instagram_clone.comment_service.CreateCommentRequest.class, com.instagram_clone.comment_service.CreateCommentRequest.Builder.class);
     }
@@ -403,7 +403,7 @@ public  final class CreateCommentRequest extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.instagram_clone.comment_service.HelloWorldProto.internal_static_Comment_CreateCommentRequest_descriptor;
+      return com.instagram_clone.comment_service.CommentService.internal_static_Comment_CreateCommentRequest_descriptor;
     }
 
     public com.instagram_clone.comment_service.CreateCommentRequest getDefaultInstanceForType() {
