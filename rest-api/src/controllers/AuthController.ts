@@ -1,6 +1,6 @@
 import { ParameterizedContext } from "koa";
 import { body, validationResults, IValidationContext } from "koa-req-validation";
-import Router, { IRouterContext } from "koa-router";
+import Router, { RouterContext } from "@koa/router";
 
 import { IController } from "./Controller";
 import { RequestError } from "../lib/RequestError";
@@ -50,7 +50,7 @@ export class AuthController implements IController {
      * sign the user in.
      */
     private signIn = async (
-        ctx: ParameterizedContext<IValidationContext, IRouterContext>
+        ctx: ParameterizedContext<IValidationContext, RouterContext>
     ) => {
         const results = validationResults(ctx);
         if (results.hasErrors()) {

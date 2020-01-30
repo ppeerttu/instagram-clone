@@ -1,5 +1,7 @@
-
 syntax = "proto3";
+
+
+package Auth;
 
 // Authentication service definition
 service Auth {

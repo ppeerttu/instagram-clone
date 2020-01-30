@@ -1,4 +1,3 @@
-import consul from "consul";
 import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
@@ -6,64 +5,49 @@ import { UserCredentials, AuthErrorStatus } from "../generated/auth_service_pb";
 import { IJWTTokens } from "../models";
 import { AuthServiceError } from "./AuthServiceError";
 import { AuthService } from "./AuthService";
-import { ServiceDiscovery } from "../../lib/ServiceDiscovery";
 import { config } from "../../config/grpc";
+import { GrpcClient } from "../GrpcClient";
 
 /**
  * A client for consuming the external authentication service.
  */
-export class AuthServiceClient implements AuthService {
+export class AuthServiceClient extends GrpcClient implements AuthService {
+
+    protected serviceName: string = config.authService;
 
     /**
      * The actual gRPC client instance
      */
-    private client!: AuthClient;
+    private client: AuthClient | null = null;
 
-    /**
-     * Known auth-service endpoints
-     */
-    private knownEndpoints: string[] = [];
+    protected updateClient() {
+        // Pick new remote endpoint for gRPC client
+        const endpoint = this.getNewEndpoint();
+        if (!endpoint) {
+            this.client = null;
+            return;
+        }
+        // We should already have this endpoint assigned to the client
+        if (endpoint === this.currentEndpoint && this.client) {
+            return;
+        }
+        this.client = new AuthClient(
+            endpoint,
+            credentials.createInsecure(),
+        );
+        this.currentEndpoint = endpoint;
+        return;
+    }
 
-    /**
-     * Watcher instance for watching changes in auth-service
-     */
-    private watcher: consul.Watch | null = null;
 
     /**
      * Tear down the client.
      */
     public tearDown() {
-        if (this.watcher) {
-            this.watcher.removeAllListeners();
-            this.watcher.end();
-        }
+        super.tearDown();
         if (this.client) {
             this.client.close();
         }
-    }
-
-    /**
-     * Bind a watcher to the client in order to know where the services are available.
-     *
-     * @param sd The service discovery
-     */
-    public bindWatch(sd: ServiceDiscovery) {
-        this.watcher = sd.getWatcher(config.authService);
-        this.watcher.on("change", (data) => {
-            if (Array.isArray(data)) {
-                const newEndpoints = [];
-                for (const entry of data) {
-                    newEndpoints.push(
-                        `${entry.Service.Address}:${entry.Service.Port}`,
-                    );
-                }
-                this.knownEndpoints = newEndpoints;
-            }
-        });
-
-        this.watcher.on("error", (err) => {
-            console.error(err);
-        });
     }
 
     /**
@@ -78,10 +62,15 @@ export class AuthServiceClient implements AuthService {
         creds.setUsername(username);
         creds.setPassword(password);
 
-        this.prepareClient();
+        this.updateClient();
+        const client = this.client;
+
+        if (!client) {
+            throw new Error(`No known endpoints for service ${this.serviceName}`);
+        }
 
         return new Promise<IJWTTokens>((resolve, reject) => {
-            this.client.signIn(creds, (e, response) => {
+            this.client!.signIn(creds, (e, response) => {
                 if (e) {
                     return reject(e);
                 }
@@ -111,27 +100,5 @@ export class AuthServiceClient implements AuthService {
                 }
             });
         });
-    }
-
-    /**
-     * Prepare the gRPC client.
-     */
-    private prepareClient() {
-        const endpoints = this.knownEndpoints;
-        if (endpoints.length < 1) {
-            throw new Error("No known endpoints for auth-service");
-        }
-        // No reason to change the endpoint
-        if (endpoints.length === 1 && this.client) {
-            return;
-        }
-        const endpoint = this.knownEndpoints[
-            Math.floor(Math.random() * endpoints.length)
-        ];
-        this.client = new AuthClient(
-            endpoint,
-            credentials.createInsecure(),
-        );
-        return;
     }
 }

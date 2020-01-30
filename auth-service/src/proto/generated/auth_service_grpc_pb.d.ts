@@ -1,4 +1,4 @@
-// package: 
+// package: Auth
 // file: auth_service.proto
 
 /* tslint:disable */
@@ -15,7 +15,7 @@ interface IAuthService extends grpc.ServiceDefinition<grpc.UntypedServiceImpleme
 }
 
 interface IAuthService_ISignUp extends grpc.MethodDefinition<auth_service_pb.NewAccount, auth_service_pb.SignUpResponse> {
-    path: string; // "/.Auth/SignUp"
+    path: string; // "/Auth.Auth/SignUp"
     requestStream: boolean; // false
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<auth_service_pb.NewAccount>;
@@ -24,7 +24,7 @@ interface IAuthService_ISignUp extends grpc.MethodDefinition<auth_service_pb.New
     responseDeserialize: grpc.deserialize<auth_service_pb.SignUpResponse>;
 }
 interface IAuthService_ISignIn extends grpc.MethodDefinition<auth_service_pb.UserCredentials, auth_service_pb.SignInResponse> {
-    path: string; // "/.Auth/SignIn"
+    path: string; // "/Auth.Auth/SignIn"
     requestStream: boolean; // false
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<auth_service_pb.UserCredentials>;
@@ -33,7 +33,7 @@ interface IAuthService_ISignIn extends grpc.MethodDefinition<auth_service_pb.Use
     responseDeserialize: grpc.deserialize<auth_service_pb.SignInResponse>;
 }
 interface IAuthService_IRenewToken extends grpc.MethodDefinition<auth_service_pb.RenewRequest, auth_service_pb.RenewResponse> {
-    path: string; // "/.Auth/RenewToken"
+    path: string; // "/Auth.Auth/RenewToken"
     requestStream: boolean; // false
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<auth_service_pb.RenewRequest>;
@@ -42,7 +42,7 @@ interface IAuthService_IRenewToken extends grpc.MethodDefinition<auth_service_pb
     responseDeserialize: grpc.deserialize<auth_service_pb.RenewResponse>;
 }
 interface IAuthService_IGetAccount extends grpc.MethodDefinition<auth_service_pb.AccountRequest, auth_service_pb.AccountInfo> {
-    path: string; // "/.Auth/GetAccount"
+    path: string; // "/Auth.Auth/GetAccount"
     requestStream: boolean; // false
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<auth_service_pb.AccountRequest>;

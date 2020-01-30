@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/auth";
 import { createAccessToken, createRefreshToken, verifyToken } from "../lib/tokens";
 import { Account } from "../models/Account";
-import { AuthService, IAuthServer } from "../proto/auth/auth_service_grpc_pb";
+import { AuthService, IAuthServer } from "../proto/generated/auth_service_grpc_pb";
 import {
     AccountInfo,
     AccountRequest,
@@ -17,7 +17,7 @@ import {
     SignInResponse,
     SignUpResponse,
     UserCredentials,
-} from "../proto/auth/auth_service_pb";
+} from "../proto/generated/auth_service_pb";
 
 /**
  * A handler for auth service.
