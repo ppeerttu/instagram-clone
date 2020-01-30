@@ -66,7 +66,7 @@ public enum DeleteCommentErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(0);
+    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(2);
   }
 
   private static final DeleteCommentErrorStatus[] VALUES = values();

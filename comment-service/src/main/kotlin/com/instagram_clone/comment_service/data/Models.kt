@@ -11,5 +11,7 @@ data class CommentWrapper(
   val userId: String = "",
   val imageId: String = "",
   val content: String = "",
-  val createdAt: String = ""
+  val createdAt: String = "",
+  val tags: List<String> = mutableListOf(),
+  val userTags: List<String> = mutableListOf()
 )

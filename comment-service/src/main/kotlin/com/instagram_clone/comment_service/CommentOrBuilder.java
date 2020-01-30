@@ -56,4 +56,42 @@ public interface CommentOrBuilder extends
    */
   com.google.protobuf.ByteString
       getCreatedAtBytes();
+
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  java.util.List<java.lang.String>
+      getTagsList();
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  int getTagsCount();
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  java.lang.String getTags(int index);
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  com.google.protobuf.ByteString
+      getTagsBytes(int index);
+
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  java.util.List<java.lang.String>
+      getUserTagsList();
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  int getUserTagsCount();
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  java.lang.String getUserTags(int index);
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  com.google.protobuf.ByteString
+      getUserTagsBytes(int index);
 }

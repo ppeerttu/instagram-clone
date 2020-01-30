@@ -7,6 +7,11 @@ import com.instagram_clone.comment_service.exception.NotFoundException;
 import com.instagram_clone.comment_service.service.CommentService;
 import io.grpc.stub.StreamObserver;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 public class CommentServiceGrpcImpl extends CommentsGrpc.CommentsImplBase {
 
   com.instagram_clone.comment_service.service.CommentService service;
@@ -20,7 +25,10 @@ public class CommentServiceGrpcImpl extends CommentsGrpc.CommentsImplBase {
     String content = request.getComment();
     String imageId = request.getImageId();
     String userId = request.getUserId();
-    service.createComment(content, imageId, userId).setHandler(ar -> {
+    List<String> tags = request.getTagsList();
+    List<String> userTags = request.getUserTagsList();
+
+    service.createComment(content, imageId, userId, tags, userTags).setHandler(ar -> {
       if (ar.succeeded()) {
         CommentWrapper wrapper = ar.result();
         Comment comment = CommentMapperKt.mapFromWrapper(wrapper);
@@ -58,6 +66,42 @@ public class CommentServiceGrpcImpl extends CommentsGrpc.CommentsImplBase {
         builder.setCommentId(deletedId);
       } else {
         builder.setError(DeleteCommentErrorStatus.DELETE_NOT_FOUND);
+      }
+      responseObserver.onNext(builder.build());
+      responseObserver.onCompleted();
+    });
+  }
+
+  @Override
+  public void getCommentsByTag(GetCommentsByTagRequest request, StreamObserver<GetCommentsByTagResponse> responseObserver) {
+    String tag = request.getTag();
+    GetCommentsByTagResponse.Builder builder = GetCommentsByTagResponse.newBuilder();
+    service.getCommentsByHashTag(tag).setHandler(ar -> {
+      if (ar.succeeded()) {
+        List<CommentWrapper> returnList = ar.result();
+        List<Comment> mapped = returnList.stream().map(CommentMapperKt::mapFromWrapper)
+          .collect(Collectors.toList());
+        builder.setComments(CommentList.newBuilder().addAllComments(mapped).build());
+      } else {
+        builder.setError(GetCommentsByTagErrorStatus.GET_BY_TAG_SERVER_ERROR);
+      }
+      responseObserver.onNext(builder.build());
+      responseObserver.onCompleted();
+    });
+  }
+
+  @Override
+  public void getCommentsByUserTag(GetCommentsByUserTagRequest request, StreamObserver<GetCommentsByUserTagResponse> responseObserver) {
+    String tag = request.getTag();
+    GetCommentsByUserTagResponse.Builder builder = GetCommentsByUserTagResponse.newBuilder();
+    service.getCommentsByUserTag(tag).setHandler(ar -> {
+      if (ar.succeeded()) {
+        List<CommentWrapper> returnList = ar.result();
+        List<Comment> mapped = returnList.stream().map(CommentMapperKt::mapFromWrapper)
+          .collect(Collectors.toList());
+        builder.setComments(CommentList.newBuilder().addAllComments(mapped).build());
+      } else {
+        builder.setError(GetCommentsByTagErrorStatus.GET_BY_TAG_SERVER_ERROR);
       }
       responseObserver.onNext(builder.build());
       responseObserver.onCompleted();

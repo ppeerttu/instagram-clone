@@ -9,13 +9,18 @@ import java.util.List;
 
 public interface CommentService {
 
-  public Future<CommentWrapper> createComment(String content, String userId, String imageId);
+  public Future<CommentWrapper> createComment(
+    String content,
+    String userId,
+    String imageId,
+    List<String> tags,
+    List<String> userTags);
 
   public Future<CommentWrapper> getComment(String id);
 
   public Future<String> deleteComment(String id);
 
-  public List<CommentWrapper> getCommentsByHashTag(String hashTag);
+  public Future<List<CommentWrapper>> getCommentsByHashTag(String hashTag);
 
-  public List<CommentWrapper> getCommentsByCommentHashTag(String hashTag);
+  public Future<List<CommentWrapper>> getCommentsByUserTag(String tag);
 }

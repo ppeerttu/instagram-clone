@@ -20,6 +20,8 @@ public  final class Comment extends
     userId_ = "";
     imageId_ = "";
     createdAt_ = "";
+    tags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @java.lang.Override
@@ -77,6 +79,24 @@ public  final class Comment extends
             createdAt_ = s;
             break;
           }
+          case 50: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+              tags_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000020;
+            }
+            tags_.add(s);
+            break;
+          }
+          case 58: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+              userTags_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000040;
+            }
+            userTags_.add(s);
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -85,6 +105,12 @@ public  final class Comment extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+        tags_ = tags_.getUnmodifiableView();
+      }
+      if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+        userTags_ = userTags_.getUnmodifiableView();
+      }
       makeExtensionsImmutable();
     }
   }
@@ -100,6 +126,7 @@ public  final class Comment extends
             com.instagram_clone.comment_service.Comment.class, com.instagram_clone.comment_service.Comment.Builder.class);
   }
 
+  private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object id_;
   /**
@@ -270,6 +297,64 @@ public  final class Comment extends
     }
   }
 
+  public static final int TAGS_FIELD_NUMBER = 6;
+  private com.google.protobuf.LazyStringList tags_;
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getTagsList() {
+    return tags_;
+  }
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  public int getTagsCount() {
+    return tags_.size();
+  }
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  public java.lang.String getTags(int index) {
+    return tags_.get(index);
+  }
+  /**
+   * <code>repeated string tags = 6;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTagsBytes(int index) {
+    return tags_.getByteString(index);
+  }
+
+  public static final int USERTAGS_FIELD_NUMBER = 7;
+  private com.google.protobuf.LazyStringList userTags_;
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getUserTagsList() {
+    return userTags_;
+  }
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  public int getUserTagsCount() {
+    return userTags_.size();
+  }
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  public java.lang.String getUserTags(int index) {
+    return userTags_.get(index);
+  }
+  /**
+   * <code>repeated string userTags = 7;</code>
+   */
+  public com.google.protobuf.ByteString
+      getUserTagsBytes(int index) {
+    return userTags_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -297,6 +382,12 @@ public  final class Comment extends
     if (!getCreatedAtBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 5, createdAt_);
     }
+    for (int i = 0; i < tags_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, tags_.getRaw(i));
+    }
+    for (int i = 0; i < userTags_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, userTags_.getRaw(i));
+    }
   }
 
   public int getSerializedSize() {
@@ -318,6 +409,22 @@ public  final class Comment extends
     }
     if (!getCreatedAtBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, createdAt_);
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < tags_.size(); i++) {
+        dataSize += computeStringSizeNoTag(tags_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getTagsList().size();
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < userTags_.size(); i++) {
+        dataSize += computeStringSizeNoTag(userTags_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getUserTagsList().size();
     }
     memoizedSize = size;
     return size;
@@ -345,6 +452,10 @@ public  final class Comment extends
         .equals(other.getImageId());
     result = result && getCreatedAt()
         .equals(other.getCreatedAt());
+    result = result && getTagsList()
+        .equals(other.getTagsList());
+    result = result && getUserTagsList()
+        .equals(other.getUserTagsList());
     return result;
   }
 
@@ -365,6 +476,14 @@ public  final class Comment extends
     hash = (53 * hash) + getImageId().hashCode();
     hash = (37 * hash) + CREATED_AT_FIELD_NUMBER;
     hash = (53 * hash) + getCreatedAt().hashCode();
+    if (getTagsCount() > 0) {
+      hash = (37 * hash) + TAGS_FIELD_NUMBER;
+      hash = (53 * hash) + getTagsList().hashCode();
+    }
+    if (getUserTagsCount() > 0) {
+      hash = (37 * hash) + USERTAGS_FIELD_NUMBER;
+      hash = (53 * hash) + getUserTagsList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -504,6 +623,10 @@ public  final class Comment extends
 
       createdAt_ = "";
 
+      tags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000040);
       return this;
     }
 
@@ -526,11 +649,24 @@ public  final class Comment extends
 
     public com.instagram_clone.comment_service.Comment buildPartial() {
       com.instagram_clone.comment_service.Comment result = new com.instagram_clone.comment_service.Comment(this);
+      int from_bitField0_ = bitField0_;
+      int to_bitField0_ = 0;
       result.id_ = id_;
       result.content_ = content_;
       result.userId_ = userId_;
       result.imageId_ = imageId_;
       result.createdAt_ = createdAt_;
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        tags_ = tags_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000020);
+      }
+      result.tags_ = tags_;
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        userTags_ = userTags_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000040);
+      }
+      result.userTags_ = userTags_;
+      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -592,6 +728,26 @@ public  final class Comment extends
         createdAt_ = other.createdAt_;
         onChanged();
       }
+      if (!other.tags_.isEmpty()) {
+        if (tags_.isEmpty()) {
+          tags_ = other.tags_;
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          ensureTagsIsMutable();
+          tags_.addAll(other.tags_);
+        }
+        onChanged();
+      }
+      if (!other.userTags_.isEmpty()) {
+        if (userTags_.isEmpty()) {
+          userTags_ = other.userTags_;
+          bitField0_ = (bitField0_ & ~0x00000040);
+        } else {
+          ensureUserTagsIsMutable();
+          userTags_.addAll(other.userTags_);
+        }
+        onChanged();
+      }
       onChanged();
       return this;
     }
@@ -617,6 +773,7 @@ public  final class Comment extends
       }
       return this;
     }
+    private int bitField0_;
 
     private java.lang.Object id_ = "";
     /**
@@ -959,6 +1116,194 @@ public  final class Comment extends
   checkByteStringIsUtf8(value);
       
       createdAt_ = value;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList tags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureTagsIsMutable() {
+      if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+        tags_ = new com.google.protobuf.LazyStringArrayList(tags_);
+        bitField0_ |= 0x00000020;
+       }
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getTagsList() {
+      return tags_.getUnmodifiableView();
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public int getTagsCount() {
+      return tags_.size();
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public java.lang.String getTags(int index) {
+      return tags_.get(index);
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTagsBytes(int index) {
+      return tags_.getByteString(index);
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public Builder setTags(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTagsIsMutable();
+      tags_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public Builder addTags(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTagsIsMutable();
+      tags_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public Builder addAllTags(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureTagsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, tags_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public Builder clearTags() {
+      tags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string tags = 6;</code>
+     */
+    public Builder addTagsBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureTagsIsMutable();
+      tags_.add(value);
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureUserTagsIsMutable() {
+      if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+        userTags_ = new com.google.protobuf.LazyStringArrayList(userTags_);
+        bitField0_ |= 0x00000040;
+       }
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getUserTagsList() {
+      return userTags_.getUnmodifiableView();
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public int getUserTagsCount() {
+      return userTags_.size();
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public java.lang.String getUserTags(int index) {
+      return userTags_.get(index);
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserTagsBytes(int index) {
+      return userTags_.getByteString(index);
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public Builder setUserTags(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureUserTagsIsMutable();
+      userTags_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public Builder addUserTags(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureUserTagsIsMutable();
+      userTags_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public Builder addAllUserTags(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureUserTagsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, userTags_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public Builder clearUserTags() {
+      userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000040);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string userTags = 7;</code>
+     */
+    public Builder addUserTagsBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureUserTagsIsMutable();
+      userTags_.add(value);
       onChanged();
       return this;
     }

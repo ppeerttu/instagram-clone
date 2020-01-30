@@ -16,9 +16,13 @@ public class CommentServiceMockImpl implements CommentService {
   private final Map<String, CommentWrapper> store = new HashMap<>();
 
   @Override
-  public Future<CommentWrapper> createComment(String content, String userId, String imageId) {
+  public Future<CommentWrapper> createComment(String content,
+                                              String userId,
+                                              String imageId,
+                                              List<String> tags,
+                                              List<String> userTags) {
     Promise<CommentWrapper> promise = Promise.promise();
-    CommentWrapper newComment = CommentMapperKt.mapComment(content, userId, imageId);
+    CommentWrapper newComment = CommentMapperKt.mapComment(content, userId, imageId, tags, userTags);
     store.put(newComment.getId(), newComment);
     promise.fail(new NotFoundException("test"));
     promise.complete(newComment);
@@ -50,12 +54,16 @@ public class CommentServiceMockImpl implements CommentService {
   }
 
   @Override
-  public List<CommentWrapper> getCommentsByHashTag(String hashTag) {
-    return new ArrayList<>(store.values());
+  public Future<List<CommentWrapper>> getCommentsByHashTag(String hashTag) {
+    Promise<List<CommentWrapper>> promise = Promise.promise();
+    promise.complete(new ArrayList<>(store.values()));
+    return promise.future();
   }
 
   @Override
-  public List<CommentWrapper> getCommentsByCommentHashTag(String hashTag) {
-    return new ArrayList<>(store.values());
+  public Future<List<CommentWrapper>> getCommentsByUserTag(String hashTag) {
+    Promise<List<CommentWrapper>> promise = Promise.promise();
+    promise.complete(new ArrayList<>(store.values()));
+    return promise.future();
   }
 }
