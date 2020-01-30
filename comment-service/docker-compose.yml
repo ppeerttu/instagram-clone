@@ -1,27 +1,27 @@
 version: "3"
 
 services:
-  comment-service:
-    container_name: comment-service-dev
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - mongodb
-    networks:
-      - ig-clone-dev
-    ports:
-      - "3001:3001"
-    environment:
-      - MONGO_USER=dev
-      - MONGO_PASSWORD=dev
-      - MONGO_HOST=mongo-dev
-      - MONGO_DB_NAME=comments
-      - MONGO_PORT=27017
-      - GRPC_HOST=0.0.0.0
-      - GRPC_PORT=3001
-      - CONSUL_HOST=consul-dev
-      - CONSUL_PORT=8500
+#  comment-service:
+#    container_name: comment-service-dev
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - mongodb
+#    networks:
+#      - ig-clone-dev
+#    ports:
+#      - "3001:3001"
+#    environment:
+#      - MONGO_USER=dev
+#      - MONGO_PASSWORD=dev
+#      - MONGO_HOST=mongo-dev
+#      - MONGO_DB_NAME=comments
+#      - MONGO_PORT=27017
+#      - GRPC_HOST=0.0.0.0
+#      - GRPC_PORT=3001
+#      - CONSUL_HOST=consul-dev
+#      - CONSUL_PORT=8500
 
   mongodb:
     image: "mongo"

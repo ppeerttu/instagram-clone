@@ -20,24 +20,48 @@ public class CommentServiceGrpcImpl extends CommentsGrpc.CommentsImplBase {
     String content = request.getComment();
     String imageId = request.getImageId();
     String userId = request.getUserId();
-    CommentWrapper wrap = service.createComment(content, imageId, userId);
-    Comment comment = CommentMapperKt.mapFromWrapper(wrap);
-    buildResponse(comment, responseObserver);
+    service.createComment(content, imageId, userId).setHandler(ar -> {
+      if (ar.succeeded()) {
+        CommentWrapper wrapper = ar.result();
+        Comment comment = CommentMapperKt.mapFromWrapper(wrapper);
+        buildResponse(comment, responseObserver);
+      } else {
+
+      }
+    });
   }
 
   @Override
   public void getComment(GetCommentRequest request, StreamObserver<GetCommentResponse> responseObserver) {
     String id = request.getCommentId();
     GetCommentResponse.Builder builder = GetCommentResponse.newBuilder();
-    try {
-      CommentWrapper wrap = service.getComment(id);
-      Comment comment = CommentMapperKt.mapFromWrapper(wrap);
-      builder.setComment(comment);
-    } catch (NotFoundException e) {
-      builder.setError(GetCommentErrorStatus.NOT_FOUND);
-    }
-    responseObserver.onNext(builder.build());
-    responseObserver.onCompleted();
+    service.getComment(id).setHandler(ar -> {
+      if (ar.succeeded()) {
+        Comment comment = CommentMapperKt.mapFromWrapper(ar.result());
+        builder.setComment(comment);
+      } else {
+        builder.setError(GetCommentErrorStatus.GET_NOT_FOUND);
+      }
+      responseObserver.onNext(builder.build());
+      responseObserver.onCompleted();
+
+    });
+  }
+
+  @Override
+  public void deleteComment(DeleteCommentRequest request, StreamObserver<DeleteCommentResponse> responseObserver) {
+    String id = request.getCommentId();
+    DeleteCommentResponse.Builder builder = DeleteCommentResponse.newBuilder();
+    service.deleteComment(id).setHandler(ar -> {
+      if (ar.succeeded()) {
+        String deletedId = ar.result();
+        builder.setCommentId(deletedId);
+      } else {
+        builder.setError(DeleteCommentErrorStatus.DELETE_NOT_FOUND);
+      }
+      responseObserver.onNext(builder.build());
+      responseObserver.onCompleted();
+    });
   }
 
   private void buildResponse(Comment comment, StreamObserver<CreateCommentResponse> responseObserver) {

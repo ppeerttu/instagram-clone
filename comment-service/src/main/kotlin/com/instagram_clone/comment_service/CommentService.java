@@ -35,6 +35,16 @@ public final class CommentService {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Comment_GetCommentResponse_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Comment_DeleteCommentRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Comment_DeleteCommentRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Comment_DeleteCommentResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Comment_DeleteCommentResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Comment_Comment_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -57,18 +67,25 @@ public final class CommentService {
       "ommentRequest\022\021\n\tcommentId\030\001 \001(\t\"t\n\022GetC" +
       "ommentResponse\022#\n\007comment\030\001 \001(\0132\020.Commen" +
       "t.CommentH\000\022/\n\005error\030\002 \001(\0162\036.Comment.Get" +
-      "CommentErrorStatusH\000B\010\n\006status\"]\n\007Commen",
-      "t\022\n\n\002id\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_i" +
-      "d\030\003 \001(\t\022\020\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030" +
-      "\005 \001(\t*3\n\030CreateCommentErrorStatus\022\027\n\023CRE" +
-      "ATE_SERVER_ERROR\020\000*<\n\025GetCommentErrorSta" +
-      "tus\022\024\n\020GET_SERVER_ERROR\020\000\022\r\n\tNOT_FOUND\020\001" +
-      "2\245\001\n\010Comments\022P\n\rCreateComment\022\035.Comment" +
-      ".CreateCommentRequest\032\036.Comment.CreateCo" +
-      "mmentResponse\"\000\022G\n\nGetComment\022\032.Comment." +
-      "GetCommentRequest\032\033.Comment.GetCommentRe" +
-      "sponse\"\000B7\n#com.instagram_clone.comment_",
-      "serviceB\016CommentServiceP\001b\006proto3"
+      "CommentErrorStatusH\000B\010\n\006status\")\n\024Delete",
+      "CommentRequest\022\021\n\tcommentId\030\001 \001(\t\"j\n\025Del" +
+      "eteCommentResponse\022\023\n\tcommentId\030\001 \001(\tH\000\022" +
+      "2\n\005error\030\002 \001(\0162!.Comment.DeleteCommentEr" +
+      "rorStatusH\000B\010\n\006status\"]\n\007Comment\022\n\n\002id\030\001" +
+      " \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\022\020" +
+      "\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030\005 \001(\t*0\n\030" +
+      "DeleteCommentErrorStatus\022\024\n\020DELETE_NOT_F" +
+      "OUND\020\000*3\n\030CreateCommentErrorStatus\022\027\n\023CR" +
+      "EATE_SERVER_ERROR\020\000*@\n\025GetCommentErrorSt" +
+      "atus\022\024\n\020GET_SERVER_ERROR\020\000\022\021\n\rGET_NOT_FO",
+      "UND\020\0012\367\001\n\010Comments\022P\n\rCreateComment\022\035.Co" +
+      "mment.CreateCommentRequest\032\036.Comment.Cre" +
+      "ateCommentResponse\"\000\022G\n\nGetComment\022\032.Com" +
+      "ment.GetCommentRequest\032\033.Comment.GetComm" +
+      "entResponse\"\000\022P\n\rDeleteComment\022\035.Comment" +
+      ".DeleteCommentRequest\032\036.Comment.DeleteCo" +
+      "mmentResponse\"\000B7\n#com.instagram_clone.c" +
+      "omment_serviceB\016CommentServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -106,8 +123,20 @@ public final class CommentService {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentResponse_descriptor,
         new java.lang.String[] { "Comment", "Error", "Status", });
-    internal_static_Comment_Comment_descriptor =
+    internal_static_Comment_DeleteCommentRequest_descriptor =
       getDescriptor().getMessageTypes().get(4);
+    internal_static_Comment_DeleteCommentRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Comment_DeleteCommentRequest_descriptor,
+        new java.lang.String[] { "CommentId", });
+    internal_static_Comment_DeleteCommentResponse_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_Comment_DeleteCommentResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Comment_DeleteCommentResponse_descriptor,
+        new java.lang.String[] { "CommentId", "Error", "Status", });
+    internal_static_Comment_Comment_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_Comment_Comment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_Comment_descriptor,

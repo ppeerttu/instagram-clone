@@ -6,7 +6,7 @@ import java.util.*
 
 fun mapComment(content: String, userId: String, imageId: String) : CommentWrapper {
   return CommentWrapper(
-    UUID.randomUUID().toString().replace("-", ""),
+    UUID.randomUUID().toString(),
     userId,
     imageId,
     content,
