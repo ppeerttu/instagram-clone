@@ -9,12 +9,14 @@ services:
     ports:
       - "3002:3000"
     volumes:
-      - "./data:/app/data"
+      - "./data:/app/image-data"
     networks:
       - ig-clone-dev
     environment:
       - GRPC_HOST=0.0.0.0
       - GRPC_PORT=3000
+      - CONSUL_HOST=consul-dev
+      - CONSUL_PORT=8500
 
 
 networks:

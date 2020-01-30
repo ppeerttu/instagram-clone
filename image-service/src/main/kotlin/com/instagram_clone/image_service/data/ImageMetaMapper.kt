@@ -12,9 +12,11 @@ import java.util.*
 fun mapImageMeta(caption: String, userId: String, buf: BufferedImage): ImageMeta {
   val width = buf.width
   val height = buf.height
+
   val type = when (buf.type) {
     BufferedImage.TYPE_INT_RGB -> "img/jpg"
     BufferedImage.TYPE_INT_ARGB -> "img/png"
+    BufferedImage.TYPE_4BYTE_ABGR -> "img/png"
     else -> throw InvalidDataException("Given image type ${buf.type} is not supported")
   }
   return mapImageMeta(

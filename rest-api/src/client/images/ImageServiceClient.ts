@@ -19,6 +19,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         // Pick new remote endpoint for gRPC client
         const endpoint = this.getNewEndpoint();
         if (!endpoint) {
+            this.currentEndpoint = null;
             this.client = null;
             return;
         }

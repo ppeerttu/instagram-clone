@@ -8,12 +8,14 @@ import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.data.fromImageMeta
 import com.instagram_clone.image_service.data.mapImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
+import com.instagram_clone.image_service.exception.InvalidDataException
 import io.grpc.stub.StreamObserver
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.file.AsyncFile
 import io.vertx.core.file.FileSystem
 import io.vertx.core.file.impl.AsyncFileImpl
 import io.vertx.core.file.impl.FileSystemImpl
+import io.vertx.core.logging.LoggerFactory
 import io.vertx.kotlin.core.Vertx
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
@@ -33,6 +35,8 @@ class ImageServiceGrpcImpl(
    * Application configuration values
    */
   private val appConfig = AppConfig.getInstance()
+
+  private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
 
   /**
    * Create a new image based on given meta-data and image byte data.
@@ -71,7 +75,12 @@ class ImageServiceGrpcImpl(
       .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
         val builder = CreateImageResponse.newBuilder()
         if (it.succeeded()) {
-          builder.image = fromImageMeta(meta)
+          try {
+            builder.image = fromImageMeta(meta)
+          } catch (e: InvalidDataException) {
+            logger.warn("Failed to generate metadata for image: ${e.message}")
+            builder.error = CreateImageErrorStatus.INVALID_DATA
+          }
         } else {
           builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
         }

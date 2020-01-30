@@ -17,6 +17,7 @@ const logger = pino();
 const authClient = new AuthServiceClient();
 const imageClient = new ImageServiceClient();
 authClient.bindWatch(serviceDiscovery);
+imageClient.bindWatch(serviceDiscovery);
 
 const application = new Server(logger);
 application.configure();

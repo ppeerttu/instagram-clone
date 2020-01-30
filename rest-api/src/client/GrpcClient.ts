@@ -60,7 +60,6 @@ export abstract class GrpcClient {
                 );
             }
             this.knownEndpoints = newEndpoints;
-
             // Update the client if we notice that currently picked has gone away
             if (!this.currentEndpoint || !newEndpoints.includes(this.currentEndpoint)) {
                 this.updateClient();

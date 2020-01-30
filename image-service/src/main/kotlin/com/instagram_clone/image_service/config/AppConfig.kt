@@ -10,13 +10,13 @@ class AppConfig private constructor(json: JsonObject) {
   /**
    * gRPC server host
    */
-  var host: String
+  var grpcHost: String
     private set
 
   /**
    * gRPC server port
    */
-  var port: Int = 0
+  var grpcPort: Int = 0
     private set
 
   /**
@@ -25,11 +25,24 @@ class AppConfig private constructor(json: JsonObject) {
   var imageDataDir: String
     private set
 
+  /**
+   * Consul host
+   */
+  var consulHost: String
+    private set
+
+  /**
+   * Consul port
+   */
+  var consulPort: Int = 0
+    private set
 
   init {
-    host = json.getString(ConfigConstants.HOST)
-    port = json.getInteger(ConfigConstants.PORT)
+    grpcHost = json.getString(ConfigConstants.GRPC_HOST)
+    grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
     imageDataDir = json.getString(ConfigConstants.IMAGE_DATA_DIR)
+    consulHost = json.getString(ConfigConstants.CONSUL_HOST)
+    consulPort = json.getInteger(ConfigConstants.CONSUL_PORT)
   }
 
   companion object {
