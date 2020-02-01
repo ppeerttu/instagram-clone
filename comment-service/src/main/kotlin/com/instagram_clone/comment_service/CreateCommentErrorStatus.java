@@ -12,6 +12,10 @@ public enum CreateCommentErrorStatus
    * <code>CREATE_SERVER_ERROR = 0;</code>
    */
   CREATE_SERVER_ERROR(0),
+  /**
+   * <code>CREATE_INVALID_PARAMETER = 1;</code>
+   */
+  CREATE_INVALID_PARAMETER(1),
   UNRECOGNIZED(-1),
   ;
 
@@ -19,6 +23,10 @@ public enum CreateCommentErrorStatus
    * <code>CREATE_SERVER_ERROR = 0;</code>
    */
   public static final int CREATE_SERVER_ERROR_VALUE = 0;
+  /**
+   * <code>CREATE_INVALID_PARAMETER = 1;</code>
+   */
+  public static final int CREATE_INVALID_PARAMETER_VALUE = 1;
 
 
   public final int getNumber() {
@@ -40,6 +48,7 @@ public enum CreateCommentErrorStatus
   public static CreateCommentErrorStatus forNumber(int value) {
     switch (value) {
       case 0: return CREATE_SERVER_ERROR;
+      case 1: return CREATE_INVALID_PARAMETER;
       default: return null;
     }
   }

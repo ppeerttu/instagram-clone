@@ -12,6 +12,10 @@ public enum DeleteCommentErrorStatus
    * <code>DELETE_NOT_FOUND = 0;</code>
    */
   DELETE_NOT_FOUND(0),
+  /**
+   * <code>DELETE_SERVER_ERROR = 1;</code>
+   */
+  DELETE_SERVER_ERROR(1),
   UNRECOGNIZED(-1),
   ;
 
@@ -19,6 +23,10 @@ public enum DeleteCommentErrorStatus
    * <code>DELETE_NOT_FOUND = 0;</code>
    */
   public static final int DELETE_NOT_FOUND_VALUE = 0;
+  /**
+   * <code>DELETE_SERVER_ERROR = 1;</code>
+   */
+  public static final int DELETE_SERVER_ERROR_VALUE = 1;
 
 
   public final int getNumber() {
@@ -40,6 +48,7 @@ public enum DeleteCommentErrorStatus
   public static DeleteCommentErrorStatus forNumber(int value) {
     switch (value) {
       case 0: return DELETE_NOT_FOUND;
+      case 1: return DELETE_SERVER_ERROR;
       default: return null;
     }
   }

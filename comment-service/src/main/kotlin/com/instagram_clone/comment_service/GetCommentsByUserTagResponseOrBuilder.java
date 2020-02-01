@@ -17,13 +17,13 @@ public interface GetCommentsByUserTagResponseOrBuilder extends
   com.instagram_clone.comment_service.CommentListOrBuilder getCommentsOrBuilder();
 
   /**
-   * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+   * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
    */
   int getErrorValue();
   /**
-   * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+   * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
    */
-  com.instagram_clone.comment_service.GetCommentsByTagErrorStatus getError();
+  com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus getError();
 
   public com.instagram_clone.comment_service.GetCommentsByUserTagResponse.StatusCase getStatusCase();
 }

@@ -104,33 +104,35 @@ public final class CommentService {
       "tsByTagErrorStatusH\000B\010\n\006status\"1\n\013Commen" +
       "tList\022\"\n\010comments\030\001 \003(\0132\020.Comment.Commen",
       "t\"*\n\033GetCommentsByUserTagRequest\022\013\n\003tag\030" +
-      "\001 \001(\t\"\211\001\n\034GetCommentsByUserTagResponse\022(" +
+      "\001 \001(\t\"\215\001\n\034GetCommentsByUserTagResponse\022(" +
       "\n\010comments\030\001 \001(\0132\024.Comment.CommentListH\000" +
-      "\0225\n\005error\030\002 \001(\0162$.Comment.GetCommentsByT" +
-      "agErrorStatusH\000B\010\n\006status\"}\n\007Comment\022\n\n\002" +
-      "id\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id\030\003 \001" +
-      "(\t\022\020\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030\005 \001(\t" +
-      "\022\014\n\004tags\030\006 \003(\t\022\020\n\010userTags\030\007 \003(\t*:\n\033GetC" +
-      "ommentsByTagErrorStatus\022\033\n\027GET_BY_TAG_SE" +
-      "RVER_ERROR\020\000*C\n\037GetCommentsByUserTagErro",
-      "rStatus\022 \n\034GET_BY_USER_TAG_SERVER_ERROR\020" +
-      "\000*0\n\030DeleteCommentErrorStatus\022\024\n\020DELETE_" +
-      "NOT_FOUND\020\000*3\n\030CreateCommentErrorStatus\022" +
-      "\027\n\023CREATE_SERVER_ERROR\020\000*@\n\025GetCommentEr" +
-      "rorStatus\022\024\n\020GET_SERVER_ERROR\020\000\022\021\n\rGET_N" +
-      "OT_FOUND\020\0012\271\003\n\010Comments\022P\n\rCreateComment" +
-      "\022\035.Comment.CreateCommentRequest\032\036.Commen" +
-      "t.CreateCommentResponse\"\000\022G\n\nGetComment\022" +
-      "\032.Comment.GetCommentRequest\032\033.Comment.Ge" +
-      "tCommentResponse\"\000\022P\n\rDeleteComment\022\035.Co",
-      "mment.DeleteCommentRequest\032\036.Comment.Del" +
-      "eteCommentResponse\"\000\022Y\n\020GetCommentsByTag" +
-      "\022 .Comment.GetCommentsByTagRequest\032!.Com" +
-      "ment.GetCommentsByTagResponse\"\000\022e\n\024GetCo" +
-      "mmentsByUserTag\022$.Comment.GetCommentsByU" +
-      "serTagRequest\032%.Comment.GetCommentsByUse" +
-      "rTagResponse\"\000B7\n#com.instagram_clone.co" +
-      "mment_serviceB\016CommentServiceP\001b\006proto3"
+      "\0229\n\005error\030\002 \001(\0162(.Comment.GetCommentsByU" +
+      "serTagErrorStatusH\000B\010\n\006status\"}\n\007Comment" +
+      "\022\n\n\002id\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id" +
+      "\030\003 \001(\t\022\020\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030\005" +
+      " \001(\t\022\014\n\004tags\030\006 \003(\t\022\020\n\010userTags\030\007 \003(\t*:\n\033" +
+      "GetCommentsByTagErrorStatus\022\033\n\027GET_BY_TA" +
+      "G_SERVER_ERROR\020\000*C\n\037GetCommentsByUserTag",
+      "ErrorStatus\022 \n\034GET_BY_USER_TAG_SERVER_ER" +
+      "ROR\020\000*I\n\030DeleteCommentErrorStatus\022\024\n\020DEL" +
+      "ETE_NOT_FOUND\020\000\022\027\n\023DELETE_SERVER_ERROR\020\001" +
+      "*Q\n\030CreateCommentErrorStatus\022\027\n\023CREATE_S" +
+      "ERVER_ERROR\020\000\022\034\n\030CREATE_INVALID_PARAMETE" +
+      "R\020\001*@\n\025GetCommentErrorStatus\022\024\n\020GET_SERV" +
+      "ER_ERROR\020\000\022\021\n\rGET_NOT_FOUND\020\0012\271\003\n\010Commen" +
+      "ts\022P\n\rCreateComment\022\035.Comment.CreateComm" +
+      "entRequest\032\036.Comment.CreateCommentRespon" +
+      "se\"\000\022G\n\nGetComment\022\032.Comment.GetCommentR",
+      "equest\032\033.Comment.GetCommentResponse\"\000\022P\n" +
+      "\rDeleteComment\022\035.Comment.DeleteCommentRe" +
+      "quest\032\036.Comment.DeleteCommentResponse\"\000\022" +
+      "Y\n\020GetCommentsByTag\022 .Comment.GetComment" +
+      "sByTagRequest\032!.Comment.GetCommentsByTag" +
+      "Response\"\000\022e\n\024GetCommentsByUserTag\022$.Com" +
+      "ment.GetCommentsByUserTagRequest\032%.Comme" +
+      "nt.GetCommentsByUserTagResponse\"\000B7\n#com" +
+      ".instagram_clone.comment_serviceB\016Commen" +
+      "tServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

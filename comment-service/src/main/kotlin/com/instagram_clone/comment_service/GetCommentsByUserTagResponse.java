@@ -145,7 +145,7 @@ public  final class GetCommentsByUserTagResponse extends
 
   public static final int ERROR_FIELD_NUMBER = 2;
   /**
-   * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+   * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
    */
   public int getErrorValue() {
     if (statusCase_ == 2) {
@@ -154,15 +154,15 @@ public  final class GetCommentsByUserTagResponse extends
     return 0;
   }
   /**
-   * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+   * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
    */
-  public com.instagram_clone.comment_service.GetCommentsByTagErrorStatus getError() {
+  public com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus getError() {
     if (statusCase_ == 2) {
-      com.instagram_clone.comment_service.GetCommentsByTagErrorStatus result = com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.valueOf(
+      com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus result = com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.valueOf(
           (java.lang.Integer) status_);
-      return result == null ? com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.UNRECOGNIZED : result;
+      return result == null ? com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.UNRECOGNIZED : result;
     }
-    return com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.GET_BY_TAG_SERVER_ERROR;
+    return com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.GET_BY_USER_TAG_SERVER_ERROR;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -641,7 +641,7 @@ public  final class GetCommentsByUserTagResponse extends
     }
 
     /**
-     * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+     * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
      */
     public int getErrorValue() {
       if (statusCase_ == 2) {
@@ -650,7 +650,7 @@ public  final class GetCommentsByUserTagResponse extends
       return 0;
     }
     /**
-     * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+     * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
      */
     public Builder setErrorValue(int value) {
       statusCase_ = 2;
@@ -659,20 +659,20 @@ public  final class GetCommentsByUserTagResponse extends
       return this;
     }
     /**
-     * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+     * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
      */
-    public com.instagram_clone.comment_service.GetCommentsByTagErrorStatus getError() {
+    public com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus getError() {
       if (statusCase_ == 2) {
-        com.instagram_clone.comment_service.GetCommentsByTagErrorStatus result = com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.valueOf(
+        com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus result = com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.valueOf(
             (java.lang.Integer) status_);
-        return result == null ? com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.UNRECOGNIZED : result;
+        return result == null ? com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.UNRECOGNIZED : result;
       }
-      return com.instagram_clone.comment_service.GetCommentsByTagErrorStatus.GET_BY_TAG_SERVER_ERROR;
+      return com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus.GET_BY_USER_TAG_SERVER_ERROR;
     }
     /**
-     * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+     * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
      */
-    public Builder setError(com.instagram_clone.comment_service.GetCommentsByTagErrorStatus value) {
+    public Builder setError(com.instagram_clone.comment_service.GetCommentsByUserTagErrorStatus value) {
       if (value == null) {
         throw new NullPointerException();
       }
@@ -682,7 +682,7 @@ public  final class GetCommentsByUserTagResponse extends
       return this;
     }
     /**
-     * <code>.Comment.GetCommentsByTagErrorStatus error = 2;</code>
+     * <code>.Comment.GetCommentsByUserTagErrorStatus error = 2;</code>
      */
     public Builder clearError() {
       if (statusCase_ == 2) {

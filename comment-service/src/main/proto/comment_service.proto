@@ -87,7 +87,7 @@ message GetCommentsByUserTagRequest {
 message GetCommentsByUserTagResponse {
   oneof status {
     CommentList comments = 1;
-    GetCommentsByTagErrorStatus error = 2;
+    GetCommentsByUserTagErrorStatus error = 2;
   }
 }
 
@@ -97,10 +97,12 @@ enum GetCommentsByUserTagErrorStatus {
 
 enum DeleteCommentErrorStatus {
   DELETE_NOT_FOUND = 0;
+  DELETE_SERVER_ERROR = 1;
 }
 
 enum CreateCommentErrorStatus {
   CREATE_SERVER_ERROR = 0;
+  CREATE_INVALID_PARAMETER = 1;
 }
 
 enum GetCommentErrorStatus {
