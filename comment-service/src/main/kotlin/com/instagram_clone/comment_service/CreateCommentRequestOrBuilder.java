@@ -36,4 +36,42 @@ public interface CreateCommentRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getImageIdBytes();
+
+  /**
+   * <code>repeated string tags = 4;</code>
+   */
+  java.util.List<java.lang.String>
+      getTagsList();
+  /**
+   * <code>repeated string tags = 4;</code>
+   */
+  int getTagsCount();
+  /**
+   * <code>repeated string tags = 4;</code>
+   */
+  java.lang.String getTags(int index);
+  /**
+   * <code>repeated string tags = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getTagsBytes(int index);
+
+  /**
+   * <code>repeated string user_tags = 5;</code>
+   */
+  java.util.List<java.lang.String>
+      getUserTagsList();
+  /**
+   * <code>repeated string user_tags = 5;</code>
+   */
+  int getUserTagsCount();
+  /**
+   * <code>repeated string user_tags = 5;</code>
+   */
+  java.lang.String getUserTags(int index);
+  /**
+   * <code>repeated string user_tags = 5;</code>
+   */
+  com.google.protobuf.ByteString
+      getUserTagsBytes(int index);
 }

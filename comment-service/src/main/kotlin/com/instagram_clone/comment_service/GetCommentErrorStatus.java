@@ -13,9 +13,9 @@ public enum GetCommentErrorStatus
    */
   GET_SERVER_ERROR(0),
   /**
-   * <code>NOT_FOUND = 1;</code>
+   * <code>GET_NOT_FOUND = 1;</code>
    */
-  NOT_FOUND(1),
+  GET_NOT_FOUND(1),
   UNRECOGNIZED(-1),
   ;
 
@@ -24,9 +24,9 @@ public enum GetCommentErrorStatus
    */
   public static final int GET_SERVER_ERROR_VALUE = 0;
   /**
-   * <code>NOT_FOUND = 1;</code>
+   * <code>GET_NOT_FOUND = 1;</code>
    */
-  public static final int NOT_FOUND_VALUE = 1;
+  public static final int GET_NOT_FOUND_VALUE = 1;
 
 
   public final int getNumber() {
@@ -48,7 +48,7 @@ public enum GetCommentErrorStatus
   public static GetCommentErrorStatus forNumber(int value) {
     switch (value) {
       case 0: return GET_SERVER_ERROR;
-      case 1: return NOT_FOUND;
+      case 1: return GET_NOT_FOUND;
       default: return null;
     }
   }
@@ -75,7 +75,7 @@ public enum GetCommentErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(1);
+    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(4);
   }
 
   private static final GetCommentErrorStatus[] VALUES = values();

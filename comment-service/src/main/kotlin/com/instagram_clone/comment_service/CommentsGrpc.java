@@ -113,6 +113,87 @@ public final class CommentsGrpc {
      return getGetCommentMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.instagram_clone.comment_service.DeleteCommentRequest,
+      com.instagram_clone.comment_service.DeleteCommentResponse> getDeleteCommentMethod;
+
+  public static io.grpc.MethodDescriptor<com.instagram_clone.comment_service.DeleteCommentRequest,
+      com.instagram_clone.comment_service.DeleteCommentResponse> getDeleteCommentMethod() {
+    io.grpc.MethodDescriptor<com.instagram_clone.comment_service.DeleteCommentRequest, com.instagram_clone.comment_service.DeleteCommentResponse> getDeleteCommentMethod;
+    if ((getDeleteCommentMethod = CommentsGrpc.getDeleteCommentMethod) == null) {
+      synchronized (CommentsGrpc.class) {
+        if ((getDeleteCommentMethod = CommentsGrpc.getDeleteCommentMethod) == null) {
+          CommentsGrpc.getDeleteCommentMethod = getDeleteCommentMethod = 
+              io.grpc.MethodDescriptor.<com.instagram_clone.comment_service.DeleteCommentRequest, com.instagram_clone.comment_service.DeleteCommentResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Comment.Comments", "DeleteComment"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.DeleteCommentRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.DeleteCommentResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new CommentsMethodDescriptorSupplier("DeleteComment"))
+                  .build();
+          }
+        }
+     }
+     return getDeleteCommentMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByTagRequest,
+      com.instagram_clone.comment_service.GetCommentsByTagResponse> getGetCommentsByTagMethod;
+
+  public static io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByTagRequest,
+      com.instagram_clone.comment_service.GetCommentsByTagResponse> getGetCommentsByTagMethod() {
+    io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByTagRequest, com.instagram_clone.comment_service.GetCommentsByTagResponse> getGetCommentsByTagMethod;
+    if ((getGetCommentsByTagMethod = CommentsGrpc.getGetCommentsByTagMethod) == null) {
+      synchronized (CommentsGrpc.class) {
+        if ((getGetCommentsByTagMethod = CommentsGrpc.getGetCommentsByTagMethod) == null) {
+          CommentsGrpc.getGetCommentsByTagMethod = getGetCommentsByTagMethod = 
+              io.grpc.MethodDescriptor.<com.instagram_clone.comment_service.GetCommentsByTagRequest, com.instagram_clone.comment_service.GetCommentsByTagResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Comment.Comments", "GetCommentsByTag"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.GetCommentsByTagRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.GetCommentsByTagResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new CommentsMethodDescriptorSupplier("GetCommentsByTag"))
+                  .build();
+          }
+        }
+     }
+     return getGetCommentsByTagMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByUserTagRequest,
+      com.instagram_clone.comment_service.GetCommentsByUserTagResponse> getGetCommentsByUserTagMethod;
+
+  public static io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByUserTagRequest,
+      com.instagram_clone.comment_service.GetCommentsByUserTagResponse> getGetCommentsByUserTagMethod() {
+    io.grpc.MethodDescriptor<com.instagram_clone.comment_service.GetCommentsByUserTagRequest, com.instagram_clone.comment_service.GetCommentsByUserTagResponse> getGetCommentsByUserTagMethod;
+    if ((getGetCommentsByUserTagMethod = CommentsGrpc.getGetCommentsByUserTagMethod) == null) {
+      synchronized (CommentsGrpc.class) {
+        if ((getGetCommentsByUserTagMethod = CommentsGrpc.getGetCommentsByUserTagMethod) == null) {
+          CommentsGrpc.getGetCommentsByUserTagMethod = getGetCommentsByUserTagMethod = 
+              io.grpc.MethodDescriptor.<com.instagram_clone.comment_service.GetCommentsByUserTagRequest, com.instagram_clone.comment_service.GetCommentsByUserTagResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Comment.Comments", "GetCommentsByUserTag"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.GetCommentsByUserTagRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.comment_service.GetCommentsByUserTagResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new CommentsMethodDescriptorSupplier("GetCommentsByUserTag"))
+                  .build();
+          }
+        }
+     }
+     return getGetCommentsByUserTagMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -170,6 +251,36 @@ public final class CommentsGrpc {
       asyncUnimplementedUnaryCall(getGetCommentMethod(), responseObserver);
     }
 
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public void deleteComment(com.instagram_clone.comment_service.DeleteCommentRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.DeleteCommentResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getDeleteCommentMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public void getCommentsByTag(com.instagram_clone.comment_service.GetCommentsByTagRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByTagResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetCommentsByTagMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public void getCommentsByUserTag(com.instagram_clone.comment_service.GetCommentsByUserTagRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByUserTagResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetCommentsByUserTagMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -186,6 +297,27 @@ public final class CommentsGrpc {
                 com.instagram_clone.comment_service.GetCommentRequest,
                 com.instagram_clone.comment_service.GetCommentResponse>(
                   this, METHODID_GET_COMMENT)))
+          .addMethod(
+            getDeleteCommentMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.instagram_clone.comment_service.DeleteCommentRequest,
+                com.instagram_clone.comment_service.DeleteCommentResponse>(
+                  this, METHODID_DELETE_COMMENT)))
+          .addMethod(
+            getGetCommentsByTagMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.instagram_clone.comment_service.GetCommentsByTagRequest,
+                com.instagram_clone.comment_service.GetCommentsByTagResponse>(
+                  this, METHODID_GET_COMMENTS_BY_TAG)))
+          .addMethod(
+            getGetCommentsByUserTagMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.instagram_clone.comment_service.GetCommentsByUserTagRequest,
+                com.instagram_clone.comment_service.GetCommentsByUserTagResponse>(
+                  this, METHODID_GET_COMMENTS_BY_USER_TAG)))
           .build();
     }
   }
@@ -232,6 +364,39 @@ public final class CommentsGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetCommentMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public void deleteComment(com.instagram_clone.comment_service.DeleteCommentRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.DeleteCommentResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDeleteCommentMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public void getCommentsByTag(com.instagram_clone.comment_service.GetCommentsByTagRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByTagResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCommentsByTagMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public void getCommentsByUserTag(com.instagram_clone.comment_service.GetCommentsByUserTagRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByUserTagResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCommentsByUserTagMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -273,6 +438,36 @@ public final class CommentsGrpc {
     public com.instagram_clone.comment_service.GetCommentResponse getComment(com.instagram_clone.comment_service.GetCommentRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetCommentMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public com.instagram_clone.comment_service.DeleteCommentResponse deleteComment(com.instagram_clone.comment_service.DeleteCommentRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getDeleteCommentMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public com.instagram_clone.comment_service.GetCommentsByTagResponse getCommentsByTag(com.instagram_clone.comment_service.GetCommentsByTagRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetCommentsByTagMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public com.instagram_clone.comment_service.GetCommentsByUserTagResponse getCommentsByUserTag(com.instagram_clone.comment_service.GetCommentsByUserTagRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetCommentsByUserTagMethod(), getCallOptions(), request);
     }
   }
 
@@ -318,6 +513,39 @@ public final class CommentsGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetCommentMethod(), getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.comment_service.DeleteCommentResponse> deleteComment(
+        com.instagram_clone.comment_service.DeleteCommentRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDeleteCommentMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.comment_service.GetCommentsByTagResponse> getCommentsByTag(
+        com.instagram_clone.comment_service.GetCommentsByTagRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetCommentsByTagMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.comment_service.GetCommentsByUserTagResponse> getCommentsByUserTag(
+        com.instagram_clone.comment_service.GetCommentsByUserTagRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetCommentsByUserTagMethod(), getCallOptions()), request);
+    }
   }
 
   /**
@@ -347,6 +575,36 @@ public final class CommentsGrpc {
       asyncUnimplementedUnaryCall(getGetCommentMethod(), CommentsGrpc.toObserver(response.completer()));
     }
 
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public void deleteComment(com.instagram_clone.comment_service.DeleteCommentRequest request,
+        io.vertx.core.Future<com.instagram_clone.comment_service.DeleteCommentResponse> response) {
+      asyncUnimplementedUnaryCall(getDeleteCommentMethod(), CommentsGrpc.toObserver(response.completer()));
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public void getCommentsByTag(com.instagram_clone.comment_service.GetCommentsByTagRequest request,
+        io.vertx.core.Future<com.instagram_clone.comment_service.GetCommentsByTagResponse> response) {
+      asyncUnimplementedUnaryCall(getGetCommentsByTagMethod(), CommentsGrpc.toObserver(response.completer()));
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public void getCommentsByUserTag(com.instagram_clone.comment_service.GetCommentsByUserTagRequest request,
+        io.vertx.core.Future<com.instagram_clone.comment_service.GetCommentsByUserTagResponse> response) {
+      asyncUnimplementedUnaryCall(getGetCommentsByUserTagMethod(), CommentsGrpc.toObserver(response.completer()));
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -363,6 +621,27 @@ public final class CommentsGrpc {
                 com.instagram_clone.comment_service.GetCommentRequest,
                 com.instagram_clone.comment_service.GetCommentResponse>(
                   this, METHODID_GET_COMMENT)))
+          .addMethod(
+            getDeleteCommentMethod(),
+            asyncUnaryCall(
+              new VertxMethodHandlers<
+                com.instagram_clone.comment_service.DeleteCommentRequest,
+                com.instagram_clone.comment_service.DeleteCommentResponse>(
+                  this, METHODID_DELETE_COMMENT)))
+          .addMethod(
+            getGetCommentsByTagMethod(),
+            asyncUnaryCall(
+              new VertxMethodHandlers<
+                com.instagram_clone.comment_service.GetCommentsByTagRequest,
+                com.instagram_clone.comment_service.GetCommentsByTagResponse>(
+                  this, METHODID_GET_COMMENTS_BY_TAG)))
+          .addMethod(
+            getGetCommentsByUserTagMethod(),
+            asyncUnaryCall(
+              new VertxMethodHandlers<
+                com.instagram_clone.comment_service.GetCommentsByUserTagRequest,
+                com.instagram_clone.comment_service.GetCommentsByUserTagResponse>(
+                  this, METHODID_GET_COMMENTS_BY_USER_TAG)))
           .build();
     }
   }
@@ -409,10 +688,46 @@ public final class CommentsGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetCommentMethod(), getCallOptions()), request, CommentsGrpc.toObserver(response));
     }
+
+    /**
+     * <pre>
+     * Delete comment
+     * </pre>
+     */
+    public void deleteComment(com.instagram_clone.comment_service.DeleteCommentRequest request,
+        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.comment_service.DeleteCommentResponse>> response) {
+      asyncUnaryCall(
+          getChannel().newCall(getDeleteCommentMethod(), getCallOptions()), request, CommentsGrpc.toObserver(response));
+    }
+
+    /**
+     * <pre>
+     * Find Comments by hashtag
+     * </pre>
+     */
+    public void getCommentsByTag(com.instagram_clone.comment_service.GetCommentsByTagRequest request,
+        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.comment_service.GetCommentsByTagResponse>> response) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCommentsByTagMethod(), getCallOptions()), request, CommentsGrpc.toObserver(response));
+    }
+
+    /**
+     * <pre>
+     * Find Comments by userTag
+     * </pre>
+     */
+    public void getCommentsByUserTag(com.instagram_clone.comment_service.GetCommentsByUserTagRequest request,
+        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.comment_service.GetCommentsByUserTagResponse>> response) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetCommentsByUserTagMethod(), getCallOptions()), request, CommentsGrpc.toObserver(response));
+    }
   }
 
   private static final int METHODID_CREATE_COMMENT = 0;
   private static final int METHODID_GET_COMMENT = 1;
+  private static final int METHODID_DELETE_COMMENT = 2;
+  private static final int METHODID_GET_COMMENTS_BY_TAG = 3;
+  private static final int METHODID_GET_COMMENTS_BY_USER_TAG = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -438,6 +753,18 @@ public final class CommentsGrpc {
         case METHODID_GET_COMMENT:
           serviceImpl.getComment((com.instagram_clone.comment_service.GetCommentRequest) request,
               (io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentResponse>) responseObserver);
+          break;
+        case METHODID_DELETE_COMMENT:
+          serviceImpl.deleteComment((com.instagram_clone.comment_service.DeleteCommentRequest) request,
+              (io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.DeleteCommentResponse>) responseObserver);
+          break;
+        case METHODID_GET_COMMENTS_BY_TAG:
+          serviceImpl.getCommentsByTag((com.instagram_clone.comment_service.GetCommentsByTagRequest) request,
+              (io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByTagResponse>) responseObserver);
+          break;
+        case METHODID_GET_COMMENTS_BY_USER_TAG:
+          serviceImpl.getCommentsByUserTag((com.instagram_clone.comment_service.GetCommentsByUserTagRequest) request,
+              (io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByUserTagResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -488,6 +815,39 @@ public final class CommentsGrpc {
               (io.vertx.core.Future<com.instagram_clone.comment_service.GetCommentResponse>) io.vertx.core.Future.<com.instagram_clone.comment_service.GetCommentResponse>future().setHandler(ar -> {
                 if (ar.succeeded()) {
                   ((io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentResponse>) responseObserver).onNext(ar.result());
+                  responseObserver.onCompleted();
+                } else {
+                  responseObserver.onError(ar.cause());
+                }
+              }));
+          break;
+        case METHODID_DELETE_COMMENT:
+          serviceImpl.deleteComment((com.instagram_clone.comment_service.DeleteCommentRequest) request,
+              (io.vertx.core.Future<com.instagram_clone.comment_service.DeleteCommentResponse>) io.vertx.core.Future.<com.instagram_clone.comment_service.DeleteCommentResponse>future().setHandler(ar -> {
+                if (ar.succeeded()) {
+                  ((io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.DeleteCommentResponse>) responseObserver).onNext(ar.result());
+                  responseObserver.onCompleted();
+                } else {
+                  responseObserver.onError(ar.cause());
+                }
+              }));
+          break;
+        case METHODID_GET_COMMENTS_BY_TAG:
+          serviceImpl.getCommentsByTag((com.instagram_clone.comment_service.GetCommentsByTagRequest) request,
+              (io.vertx.core.Future<com.instagram_clone.comment_service.GetCommentsByTagResponse>) io.vertx.core.Future.<com.instagram_clone.comment_service.GetCommentsByTagResponse>future().setHandler(ar -> {
+                if (ar.succeeded()) {
+                  ((io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByTagResponse>) responseObserver).onNext(ar.result());
+                  responseObserver.onCompleted();
+                } else {
+                  responseObserver.onError(ar.cause());
+                }
+              }));
+          break;
+        case METHODID_GET_COMMENTS_BY_USER_TAG:
+          serviceImpl.getCommentsByUserTag((com.instagram_clone.comment_service.GetCommentsByUserTagRequest) request,
+              (io.vertx.core.Future<com.instagram_clone.comment_service.GetCommentsByUserTagResponse>) io.vertx.core.Future.<com.instagram_clone.comment_service.GetCommentsByUserTagResponse>future().setHandler(ar -> {
+                if (ar.succeeded()) {
+                  ((io.grpc.stub.StreamObserver<com.instagram_clone.comment_service.GetCommentsByUserTagResponse>) responseObserver).onNext(ar.result());
                   responseObserver.onCompleted();
                 } else {
                   responseObserver.onError(ar.cause());
@@ -557,6 +917,9 @@ public final class CommentsGrpc {
               .setSchemaDescriptor(new CommentsFileDescriptorSupplier())
               .addMethod(getCreateCommentMethod())
               .addMethod(getGetCommentMethod())
+              .addMethod(getDeleteCommentMethod())
+              .addMethod(getGetCommentsByTagMethod())
+              .addMethod(getGetCommentsByUserTagMethod())
               .build();
         }
       }

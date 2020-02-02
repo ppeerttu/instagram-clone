@@ -4,29 +4,21 @@
 package com.instagram_clone.comment_service;
 
 /**
- * Protobuf enum {@code Comment.CreateCommentErrorStatus}
+ * Protobuf enum {@code Comment.GetCommentsByUserTagErrorStatus}
  */
-public enum CreateCommentErrorStatus
+public enum GetCommentsByUserTagErrorStatus
     implements com.google.protobuf.ProtocolMessageEnum {
   /**
-   * <code>CREATE_SERVER_ERROR = 0;</code>
+   * <code>GET_BY_USER_TAG_SERVER_ERROR = 0;</code>
    */
-  CREATE_SERVER_ERROR(0),
-  /**
-   * <code>CREATE_INVALID_PARAMETER = 1;</code>
-   */
-  CREATE_INVALID_PARAMETER(1),
+  GET_BY_USER_TAG_SERVER_ERROR(0),
   UNRECOGNIZED(-1),
   ;
 
   /**
-   * <code>CREATE_SERVER_ERROR = 0;</code>
+   * <code>GET_BY_USER_TAG_SERVER_ERROR = 0;</code>
    */
-  public static final int CREATE_SERVER_ERROR_VALUE = 0;
-  /**
-   * <code>CREATE_INVALID_PARAMETER = 1;</code>
-   */
-  public static final int CREATE_INVALID_PARAMETER_VALUE = 1;
+  public static final int GET_BY_USER_TAG_SERVER_ERROR_VALUE = 0;
 
 
   public final int getNumber() {
@@ -41,27 +33,26 @@ public enum CreateCommentErrorStatus
    * @deprecated Use {@link #forNumber(int)} instead.
    */
   @java.lang.Deprecated
-  public static CreateCommentErrorStatus valueOf(int value) {
+  public static GetCommentsByUserTagErrorStatus valueOf(int value) {
     return forNumber(value);
   }
 
-  public static CreateCommentErrorStatus forNumber(int value) {
+  public static GetCommentsByUserTagErrorStatus forNumber(int value) {
     switch (value) {
-      case 0: return CREATE_SERVER_ERROR;
-      case 1: return CREATE_INVALID_PARAMETER;
+      case 0: return GET_BY_USER_TAG_SERVER_ERROR;
       default: return null;
     }
   }
 
-  public static com.google.protobuf.Internal.EnumLiteMap<CreateCommentErrorStatus>
+  public static com.google.protobuf.Internal.EnumLiteMap<GetCommentsByUserTagErrorStatus>
       internalGetValueMap() {
     return internalValueMap;
   }
   private static final com.google.protobuf.Internal.EnumLiteMap<
-      CreateCommentErrorStatus> internalValueMap =
-        new com.google.protobuf.Internal.EnumLiteMap<CreateCommentErrorStatus>() {
-          public CreateCommentErrorStatus findValueByNumber(int number) {
-            return CreateCommentErrorStatus.forNumber(number);
+      GetCommentsByUserTagErrorStatus> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<GetCommentsByUserTagErrorStatus>() {
+          public GetCommentsByUserTagErrorStatus findValueByNumber(int number) {
+            return GetCommentsByUserTagErrorStatus.forNumber(number);
           }
         };
 
@@ -75,12 +66,12 @@ public enum CreateCommentErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(3);
+    return com.instagram_clone.comment_service.CommentService.getDescriptor().getEnumTypes().get(1);
   }
 
-  private static final CreateCommentErrorStatus[] VALUES = values();
+  private static final GetCommentsByUserTagErrorStatus[] VALUES = values();
 
-  public static CreateCommentErrorStatus valueOf(
+  public static GetCommentsByUserTagErrorStatus valueOf(
       com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
     if (desc.getType() != getDescriptor()) {
       throw new java.lang.IllegalArgumentException(
@@ -94,10 +85,10 @@ public enum CreateCommentErrorStatus
 
   private final int value;
 
-  private CreateCommentErrorStatus(int value) {
+  private GetCommentsByUserTagErrorStatus(int value) {
     this.value = value;
   }
 
-  // @@protoc_insertion_point(enum_scope:Comment.CreateCommentErrorStatus)
+  // @@protoc_insertion_point(enum_scope:Comment.GetCommentsByUserTagErrorStatus)
 }
 

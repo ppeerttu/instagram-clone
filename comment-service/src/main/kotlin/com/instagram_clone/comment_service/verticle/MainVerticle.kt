@@ -4,6 +4,7 @@ import com.instagram_clone.comment_service.CommentsGrpc
 import com.instagram_clone.comment_service.data.Constants
 import com.instagram_clone.comment_service.grpc.CommentServiceGrpcImpl
 import com.instagram_clone.comment_service.service.CommentServiceMockImpl
+import com.instagram_clone.comment_service.service.CommentServiceMongoImpl
 import com.instagram_clone.comment_service.util.retrieveProblematicString
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
@@ -36,14 +37,13 @@ class MainVerticle : AbstractVerticle() {
   }
 
   override fun start(startPromise: Promise<Void>) {
-    val commentService = CommentServiceMockImpl()
-    val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService)
     val configRetriever = ConfigRetriever.create(vertx)
     configRetriever.getConfig {
       if (it.succeeded()) {
         config = it.result()
         mongoClient = configureMongo(config)
-
+        val commentService = CommentServiceMongoImpl(mongoClient)
+        val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService)
         val grpcPort = retrieveProblematicString(config, Constants.GRPC_KEY_PORT).toInt()
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.getString(Constants.GRPC_KEY_HOST), grpcPort.toInt())
