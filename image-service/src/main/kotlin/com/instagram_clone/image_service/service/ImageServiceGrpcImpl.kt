@@ -58,36 +58,40 @@ class ImageServiceGrpcImpl(
       return
     }
 
-    val meta = try {
-      service.saveImageMeta(mapImageMeta(caption, creatorId, buf))
-    } catch (e: CaptionTooLongException) {
-      responseObserver.onNext(
-        CreateImageResponse.newBuilder()
-          .setError(CreateImageErrorStatus.CAPTION_TOO_LONG)
-          .build()
-      )
-      responseObserver.onCompleted()
-      return
-    }
-
-    vertx
-      .fileSystem()
-      .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
-        val builder = CreateImageResponse.newBuilder()
-        if (it.succeeded()) {
-          try {
-            builder.image = fromImageMeta(meta)
-          } catch (e: InvalidDataException) {
-            logger.warn("Failed to generate metadata for image: ${e.message}")
-            builder.error = CreateImageErrorStatus.INVALID_DATA
+    service.saveImageMeta(mapImageMeta(caption, creatorId, buf))
+      .onComplete {
+        val meta = it.result()
+        vertx
+          .fileSystem()
+          .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
+            val builder = CreateImageResponse.newBuilder()
+            if (it.succeeded()) {
+              try {
+                builder.image = fromImageMeta(meta)
+              } catch (e: InvalidDataException) {
+                logger.warn("Failed to generate metadata for image: ${e.message}")
+                builder.error = CreateImageErrorStatus.INVALID_DATA
+              }
+            } else {
+              builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+            }
+            responseObserver.onNext(
+              builder.build()
+            )
+            responseObserver.onCompleted()
           }
-        } else {
-          builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+      }
+      .onFailure { e ->
+        val error = when (e) {
+          is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+          else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
         }
         responseObserver.onNext(
-          builder.build()
+          CreateImageResponse.newBuilder()
+            .setError(error)
+            .build()
         )
-        responseObserver.onCompleted()
+          responseObserver.onCompleted()
       }
   }
 

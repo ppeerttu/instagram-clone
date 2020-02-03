@@ -29,4 +29,34 @@ object ConfigConstants {
    * Service discovery port
    */
   const val CONSUL_PORT = "CONSUL_PORT"
+
+  /**
+   * MongoDB username
+   */
+  const val MONGO_USER = "MONGO_USER"
+
+  /**
+   * MongoDB password
+   */
+  const val MONGO_PASSWORD = "MONGO_PASSWORD"
+
+  /**
+   * MongoDB database name
+   */
+  const val MONGO_DATABASE = "MONGO_DATABASE"
+
+  /**
+   * MongoDB images collection
+   */
+  const val IMAGES_COLLECTION = "IMAGES_COLLECTION"
+
+  /**
+   * MongoDB host
+   */
+  const val MONGO_HOST = "MONGO_HOST"
+
+  /**
+   * MongoDB port
+   */
+  const val MONGO_PORT = "MONGO_PORT"
 }

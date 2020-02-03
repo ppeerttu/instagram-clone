@@ -12,11 +12,24 @@ services:
       - "./data:/app/image-data"
     networks:
       - ig-clone-dev
+    depends_on:
+      - image-db
     environment:
       - GRPC_HOST=0.0.0.0
       - GRPC_PORT=3000
       - CONSUL_HOST=consul-dev
       - CONSUL_PORT=8500
+
+  image-db:
+    container_name: image-db-dev
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - ig-clone-dev
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
 
 
 networks:
