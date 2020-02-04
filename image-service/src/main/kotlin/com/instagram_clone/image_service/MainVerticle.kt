@@ -112,6 +112,7 @@ class MainVerticle : AbstractVerticle() {
       vertx,
       JsonObject()
         .put("connection_string", conn)
+        .put("db_name", db)
     )
   }
 

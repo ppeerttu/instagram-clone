@@ -5,8 +5,9 @@
   "CONSUL_HOST": "127.0.0.1",
   "CONSUL_PORT": 8500,
   "MONGO_HOST": "127.0.0.1",
-  "MONGO_PORT": "27017",
-  "MONGO_DATABASE": "image_meta",
+  "MONGO_PORT": 27017,
+  "MONGO_DATABASE": "images",
   "MONGO_USER": "image-service",
-  "MONGO_PASSWORD": "image-service"
+  "MONGO_PASSWORD": "image-service",
+  "IMAGES_COLLECTION": "image_meta"
 }

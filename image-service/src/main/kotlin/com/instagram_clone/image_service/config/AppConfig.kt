@@ -84,7 +84,7 @@ class AppConfig private constructor(json: JsonObject) {
     mongoHost = json.getString(ConfigConstants.MONGO_HOST, "127.0.0.1")
     mongoPort = json.getInteger(ConfigConstants.MONGO_PORT, 27017)
     mongoDatabase = json.getString(ConfigConstants.MONGO_DATABASE)
-    imagesCollection = json.getString(ConfigConstants.IMAGES_COLLECTION)
+    imagesCollection = json.getString(ConfigConstants.IMAGES_COLLECTION, "image_meta")
   }
 
   companion object {
