@@ -1,0 +1,27 @@
+version: "3"
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
+
+services:
+  rest-api:
+    container_name: rest-api-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm start
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "4000:3000"
+    networks:
+      - ig-clone-dev
+    environment:
+      NODE_ENV: development
+      SERVER_PORT: 3000
+      AUTH_SERVICE: auth-service
+      CONSUL_HOST: consul-dev
+      IMAGE_SERVICE: image-service

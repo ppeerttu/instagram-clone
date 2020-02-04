@@ -1,0 +1,23 @@
+version: "3"
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
+
+volumes:
+  consul-data-dev:
+    external: true
+
+services:
+  consul:
+    container_name: consul-dev
+    image: consul:latest
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    volumes:
+      - "consul-data-dev:/consul/data"
+    ports:
+      - "8300:8300/udp"
+      - "8500:8500"
+    networks:
+      - ig-clone-dev

@@ -1,0 +1,123 @@
+syntax = "proto3";
+option java_package = "com.instagram_clone.comment_service";
+option java_multiple_files = true;
+option java_outer_classname = "CommentService";
+
+package Comment;
+
+// Comment service definition
+service Comments {
+
+  // Create new comment
+  rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse) {}
+
+  // Get comment
+  rpc GetComment(GetCommentRequest) returns (GetCommentResponse) {}
+
+  // Delete comment
+  rpc DeleteComment(DeleteCommentRequest) returns (DeleteCommentResponse) {}
+
+  // Find Comments by hashtag
+  rpc GetCommentsByTag(GetCommentsByTagRequest) returns (GetCommentsByTagResponse) {}
+
+  // Find Comments by userTag
+  rpc GetCommentsByUserTag(GetCommentsByUserTagRequest) returns (GetCommentsByUserTagResponse) {}
+}
+
+message CreateCommentRequest {
+  string comment = 1;
+  string user_id = 2;
+  string image_id = 3;
+  repeated string tags = 4;
+  repeated string user_tags = 5;
+}
+
+message CreateCommentResponse {
+  oneof status {
+    Comment comment = 1;
+    CreateCommentErrorStatus error = 2;
+  }
+}
+
+message GetCommentRequest {
+  string commentId = 1;
+}
+
+message GetCommentResponse {
+  oneof status {
+    Comment comment = 1;
+    GetCommentErrorStatus error = 2;
+  }
+}
+
+message DeleteCommentRequest {
+  string commentId = 1;
+}
+
+message DeleteCommentResponse {
+  oneof status {
+    string commentId = 1;
+    DeleteCommentErrorStatus error = 2;
+  }
+}
+
+message GetCommentsByTagRequest {
+  string tag = 1;
+}
+
+message GetCommentsByTagResponse {
+  oneof status {
+    CommentList comments = 1;
+    GetCommentsByTagErrorStatus error = 2;
+  }
+}
+
+message CommentList {
+  repeated Comment comments = 1;
+}
+
+enum GetCommentsByTagErrorStatus {
+  GET_BY_TAG_SERVER_ERROR = 0;
+}
+
+message GetCommentsByUserTagRequest {
+  string tag = 1;
+}
+
+message GetCommentsByUserTagResponse {
+  oneof status {
+    CommentList comments = 1;
+    GetCommentsByUserTagErrorStatus error = 2;
+  }
+}
+
+enum GetCommentsByUserTagErrorStatus {
+  GET_BY_USER_TAG_SERVER_ERROR = 0;
+}
+
+enum DeleteCommentErrorStatus {
+  DELETE_NOT_FOUND = 0;
+  DELETE_SERVER_ERROR = 1;
+}
+
+enum CreateCommentErrorStatus {
+  CREATE_SERVER_ERROR = 0;
+  CREATE_INVALID_PARAMETER = 1;
+}
+
+enum GetCommentErrorStatus {
+  GET_SERVER_ERROR = 0;
+  GET_NOT_FOUND = 1;
+}
+
+message Comment {
+  string id = 1;
+  string content = 2;
+  string user_id = 3;
+  string image_id = 4;
+  string created_at = 5;
+  repeated string tags = 6;
+  repeated string userTags = 7;
+}
+
+

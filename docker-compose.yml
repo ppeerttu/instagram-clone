@@ -1,0 +1,56 @@
+version: "3"
+
+# TODO: Use different network?
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
+
+# TODO: Define separate data volumes for "production"?
+volumes:
+  auth-data-dev:
+    external: true
+
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    command: npm run start:prod
+    depends_on:
+      - auth-db
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: auth-db
+    networks:
+      - ig-clone-dev
+    env_file:
+      - ./auth-service/.db.env
+      - ./auth-service/.auth.env
+
+  auth-db:
+    container_name: auth-db
+    image: postgres:11-alpine
+    volumes:
+      - auth-data-dev:/var/lib/postgresql/data
+    networks:
+      - ig-clone-dev
+    env_file:
+      - ./auth-service/.db.env
+
+  rest-api:
+    container_name: rest-api
+    build:
+      context: ./rest-api
+      dockerfile: Dockerfile
+    command: npm run start:prod
+    ports:
+      - "4000:3000"
+    networks:
+      - ig-clone-dev
+    environment:
+      NODE_ENV: production
+      SERVER_PORT: 3000
+      AUTH_SERVICE: "auth-service:3000"
+

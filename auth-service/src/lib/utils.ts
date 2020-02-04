@@ -21,3 +21,13 @@ export function getProcessEnv(
     return val || fallback as string;
 }
 
+/**
+ * Delay execution asynchronously.
+ *
+ * @param ms Time in milliseconds
+ */
+export function delay(ms: number) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve(), ms);
+    });
+}

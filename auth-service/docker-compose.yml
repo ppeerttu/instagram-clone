@@ -17,6 +17,10 @@ services:
     environment:
       NODE_ENV: development
       POSTGRES_HOST: auth-db-dev
+      CONSUL_HOST: consul-dev
+      GRPC_PORT: 3000
+    networks:
+      - ig-clone-dev
     env_file:
       - .db.env
       - .auth.env
@@ -26,6 +30,8 @@ services:
     image: postgres:11-alpine
     volumes:
       - auth-data-dev:/var/lib/postgresql/data
+    networks:
+      - ig-clone-dev
     env_file:
       - .db.env
   
@@ -39,6 +45,11 @@ services:
     hostname: redis
     volumes:
       - redis-data:/data
+
+networks:
+  ig-clone-dev:
+    external:
+      name: ig-clone-dev
 
 volumes:
   auth-data-dev:
