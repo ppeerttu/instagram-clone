@@ -16,7 +16,7 @@ public  final class Image extends
   }
   private Image() {
     id_ = "";
-    type_ = "";
+    mimeType_ = "";
     width_ = 0;
     height_ = 0;
     userId_ = "";
@@ -60,7 +60,7 @@ public  final class Image extends
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            type_ = s;
+            mimeType_ = s;
             break;
           }
           case 24: {
@@ -181,42 +181,42 @@ public  final class Image extends
     }
   }
 
-  public static final int TYPE_FIELD_NUMBER = 2;
-  private volatile java.lang.Object type_;
+  public static final int MIME_TYPE_FIELD_NUMBER = 2;
+  private volatile java.lang.Object mimeType_;
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
-  public java.lang.String getType() {
-    java.lang.Object ref = type_;
+  public java.lang.String getMimeType() {
+    java.lang.Object ref = mimeType_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      type_ = s;
+      mimeType_ = s;
       return s;
     }
   }
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getTypeBytes() {
-    java.lang.Object ref = type_;
+      getMimeTypeBytes() {
+    java.lang.Object ref = mimeType_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      type_ = b;
+      mimeType_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -480,8 +480,8 @@ public  final class Image extends
     if (!getIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, type_);
+    if (!getMimeTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, mimeType_);
     }
     if (width_ != 0) {
       output.writeInt32(3, width_);
@@ -514,8 +514,8 @@ public  final class Image extends
     if (!getIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, type_);
+    if (!getMimeTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, mimeType_);
     }
     if (width_ != 0) {
       size += com.google.protobuf.CodedOutputStream
@@ -568,8 +568,8 @@ public  final class Image extends
     boolean result = true;
     result = result && getId()
         .equals(other.getId());
-    result = result && getType()
-        .equals(other.getType());
+    result = result && getMimeType()
+        .equals(other.getMimeType());
     result = result && (getWidth()
         == other.getWidth());
     result = result && (getHeight()
@@ -596,8 +596,8 @@ public  final class Image extends
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType().hashCode();
+    hash = (37 * hash) + MIME_TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getMimeType().hashCode();
     hash = (37 * hash) + WIDTH_FIELD_NUMBER;
     hash = (53 * hash) + getWidth();
     hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
@@ -747,7 +747,7 @@ public  final class Image extends
       super.clear();
       id_ = "";
 
-      type_ = "";
+      mimeType_ = "";
 
       width_ = 0;
 
@@ -788,7 +788,7 @@ public  final class Image extends
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       result.id_ = id_;
-      result.type_ = type_;
+      result.mimeType_ = mimeType_;
       result.width_ = width_;
       result.height_ = height_;
       result.userId_ = userId_;
@@ -850,8 +850,8 @@ public  final class Image extends
         id_ = other.id_;
         onChanged();
       }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
+      if (!other.getMimeType().isEmpty()) {
+        mimeType_ = other.mimeType_;
         onChanged();
       }
       if (other.getWidth() != 0) {
@@ -1008,21 +1008,21 @@ public  final class Image extends
       return this;
     }
 
-    private java.lang.Object type_ = "";
+    private java.lang.Object mimeType_ = "";
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public java.lang.String getType() {
-      java.lang.Object ref = type_;
+    public java.lang.String getMimeType() {
+      java.lang.Object ref = mimeType_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        type_ = s;
+        mimeType_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
@@ -1030,19 +1030,19 @@ public  final class Image extends
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getTypeBytes() {
-      java.lang.Object ref = type_;
+        getMimeTypeBytes() {
+      java.lang.Object ref = mimeType_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        type_ = b;
+        mimeType_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1050,49 +1050,49 @@ public  final class Image extends
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder setType(
+    public Builder setMimeType(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      type_ = value;
+      mimeType_ = value;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder clearType() {
+    public Builder clearMimeType() {
       
-      type_ = getDefaultInstance().getType();
+      mimeType_ = getDefaultInstance().getMimeType();
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder setTypeBytes(
+    public Builder setMimeTypeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      type_ = value;
+      mimeType_ = value;
       onChanged();
       return this;
     }

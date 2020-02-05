@@ -63,7 +63,7 @@ fun mapImageMeta(
  */
 fun fromImageMeta(meta: ImageMeta): Image = Image.newBuilder()
   .setId(meta.id)
-  .setType(meta.mimeType)
+  .setMimeType(meta.mimeType)
   .setWidth(meta.width)
   .setHeight(meta.height)
   .setUserId(meta.userId)

@@ -506,8 +506,8 @@ export class Image extends jspb.Message {
     getId(): string;
     setId(value: string): void;
 
-    getType(): string;
-    setType(value: string): void;
+    getMimeType(): string;
+    setMimeType(value: string): void;
 
     getWidth(): number;
     setWidth(value: number): void;
@@ -524,6 +524,16 @@ export class Image extends jspb.Message {
     getCreatedAt(): string;
     setCreatedAt(value: string): void;
 
+    clearUserTagsList(): void;
+    getUserTagsList(): Array<string>;
+    setUserTagsList(value: Array<string>): void;
+    addUserTags(value: string, index?: number): string;
+
+    clearHashTagsList(): void;
+    getHashTagsList(): Array<string>;
+    setHashTagsList(value: Array<string>): void;
+    addHashTags(value: string, index?: number): string;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Image.AsObject;
@@ -538,12 +548,14 @@ export class Image extends jspb.Message {
 export namespace Image {
     export type AsObject = {
         id: string,
-        type: string,
+        mimeType: string,
         width: number,
         height: number,
         userId: string,
         caption: string,
         createdAt: string,
+        userTagsList: Array<string>,
+        hashTagsList: Array<string>,
     }
 }
 

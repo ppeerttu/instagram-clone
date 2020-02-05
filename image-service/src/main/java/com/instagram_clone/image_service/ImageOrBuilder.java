@@ -27,21 +27,21 @@ public interface ImageOrBuilder extends
 
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
-  java.lang.String getType();
+  java.lang.String getMimeType();
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
   com.google.protobuf.ByteString
-      getTypeBytes();
+      getMimeTypeBytes();
 
   /**
    * <pre>

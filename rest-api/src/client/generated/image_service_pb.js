@@ -2980,12 +2980,19 @@ proto.Image.UserImagePage.prototype.clearImagesList = function() {
  * @constructor
  */
 proto.Image.Image = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.Image.Image.repeatedFields_, null);
 };
 goog.inherits(proto.Image.Image, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.Image.Image.displayName = 'proto.Image.Image';
 }
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.Image.Image.repeatedFields_ = [8,9];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -3016,12 +3023,14 @@ proto.Image.Image.prototype.toObject = function(opt_includeInstance) {
 proto.Image.Image.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    type: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    mimeType: jspb.Message.getFieldWithDefault(msg, 2, ""),
     width: jspb.Message.getFieldWithDefault(msg, 3, 0),
     height: jspb.Message.getFieldWithDefault(msg, 4, 0),
     userId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     caption: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    createdAt: jspb.Message.getFieldWithDefault(msg, 7, "")
+    createdAt: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    userTagsList: jspb.Message.getRepeatedField(msg, 8),
+    hashTagsList: jspb.Message.getRepeatedField(msg, 9)
   };
 
   if (includeInstance) {
@@ -3064,7 +3073,7 @@ proto.Image.Image.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setType(value);
+      msg.setMimeType(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
@@ -3085,6 +3094,14 @@ proto.Image.Image.deserializeBinaryFromReader = function(msg, reader) {
     case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedAt(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addUserTags(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addHashTags(value);
       break;
     default:
       reader.skipField();
@@ -3122,7 +3139,7 @@ proto.Image.Image.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getType();
+  f = message.getMimeType();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -3164,6 +3181,20 @@ proto.Image.Image.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getUserTagsList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      8,
+      f
+    );
+  }
+  f = message.getHashTagsList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      9,
+      f
+    );
+  }
 };
 
 
@@ -3183,16 +3214,16 @@ proto.Image.Image.prototype.setId = function(value) {
 
 
 /**
- * optional string type = 2;
+ * optional string mime_type = 2;
  * @return {string}
  */
-proto.Image.Image.prototype.getType = function() {
+proto.Image.Image.prototype.getMimeType = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.Image.Image.prototype.setType = function(value) {
+proto.Image.Image.prototype.setMimeType = function(value) {
   jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -3269,6 +3300,64 @@ proto.Image.Image.prototype.getCreatedAt = function() {
 /** @param {string} value */
 proto.Image.Image.prototype.setCreatedAt = function(value) {
   jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * repeated string user_tags = 8;
+ * @return {!Array<string>}
+ */
+proto.Image.Image.prototype.getUserTagsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 8));
+};
+
+
+/** @param {!Array<string>} value */
+proto.Image.Image.prototype.setUserTagsList = function(value) {
+  jspb.Message.setField(this, 8, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.Image.Image.prototype.addUserTags = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 8, value, opt_index);
+};
+
+
+proto.Image.Image.prototype.clearUserTagsList = function() {
+  this.setUserTagsList([]);
+};
+
+
+/**
+ * repeated string hash_tags = 9;
+ * @return {!Array<string>}
+ */
+proto.Image.Image.prototype.getHashTagsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 9));
+};
+
+
+/** @param {!Array<string>} value */
+proto.Image.Image.prototype.setHashTagsList = function(value) {
+  jspb.Message.setField(this, 9, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.Image.Image.prototype.addHashTags = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 9, value, opt_index);
+};
+
+
+proto.Image.Image.prototype.clearHashTagsList = function() {
+  this.setHashTagsList([]);
 };
 
 

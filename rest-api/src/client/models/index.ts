@@ -31,9 +31,9 @@ export interface ImageMeta {
     caption: string;
 
     /**
-     * Type of the image
+     * Mime type of the image
      */
-    type: string;
+    mimeType: string;
 
     /**
      * Height of the image
@@ -49,6 +49,16 @@ export interface ImageMeta {
      * Image poster ID
      */
     userId: string;
+
+    /**
+     * Users tagged into the caption of the photo
+     */
+    userTags: string[];
+
+    /**
+     * Hash tags within the caption of the photo
+     */
+    hashTags: string[];
 
     /**
      * Creatd at timestap

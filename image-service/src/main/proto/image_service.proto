@@ -197,8 +197,8 @@ message Image {
   // ID of the image
   string id = 1;
 
-  // Type of the image, e.g. img/png or img/jpeg
-  string type = 2;
+  // Mime type of the image, e.g. img/png or img/jpeg
+  string mime_type = 2;
 
   // Width in pixels
   int32 width = 3;

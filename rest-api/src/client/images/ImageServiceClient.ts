@@ -67,7 +67,9 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                     userId: meta.getUserId(),
                     height: meta.getHeight(),
                     width: meta.getWidth(),
-                    type: meta.getType(),
+                    mimeType: meta.getMimeType(),
+                    hashTags: meta.getHashTagsList(),
+                    userTags: meta.getUserTagsList(),
                     createdAt: meta.getCreatedAt(),
                 });
             });
