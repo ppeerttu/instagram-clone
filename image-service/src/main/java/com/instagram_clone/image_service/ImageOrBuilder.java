@@ -114,4 +114,74 @@ public interface ImageOrBuilder extends
    */
   com.google.protobuf.ByteString
       getCreatedAtBytes();
+
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  java.util.List<java.lang.String>
+      getUserTagsList();
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  int getUserTagsCount();
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  java.lang.String getUserTags(int index);
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  com.google.protobuf.ByteString
+      getUserTagsBytes(int index);
+
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  java.util.List<java.lang.String>
+      getHashTagsList();
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  int getHashTagsCount();
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  java.lang.String getHashTags(int index);
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  com.google.protobuf.ByteString
+      getHashTagsBytes(int index);
 }

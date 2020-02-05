@@ -128,34 +128,35 @@ public final class ImageService {
       "mage.ImageB\010\n\006search\"o\n\rUserImagePage\022\017\n" +
       "\007user_id\030\001 \001(\t\022\014\n\004size\030\002 \001(\005\022\014\n\004page\030\003 \001" +
       "(\005\022\023\n\013total_count\030\004 \001(\005\022\034\n\006images\030\005 \003(\0132",
-      "\014.Image.Image\"v\n\005Image\022\n\n\002id\030\001 \001(\t\022\014\n\004ty" +
-      "pe\030\002 \001(\t\022\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022" +
-      "\017\n\007user_id\030\005 \001(\t\022\017\n\007caption\030\006 \001(\t\022\022\n\ncre" +
-      "ated_at\030\007 \001(\t*\214\001\n\026CreateImageErrorStatus" +
-      "\022\035\n\031CREATE_IMAGE_SERVER_ERROR\020\000\022\024\n\020CONTE" +
-      "NT_TOO_LONG\020\001\022\025\n\021CREATOR_NOT_FOUND\020\002\022\020\n\014" +
-      "INVALID_DATA\020\003\022\024\n\020CAPTION_TOO_LONG\020\004*S\n\021" +
-      "DeleteImageStatus\022\035\n\031DELETE_IMAGE_SERVER" +
-      "_ERROR\020\000\022\027\n\023DELETABLE_NOT_FOUND\020\001\022\006\n\002OK\020" +
-      "\002*F\n\023GetImageErrorStatus\022\032\n\026GET_IMAGE_SE",
-      "RVER_ERROR\020\000\022\023\n\017IMAGE_NOT_FOUND\020\001*P\n\030Get" +
-      "UserImagesErrorStatus\022 \n\034GET_USER_IMAGES" +
-      "_SERVER_ERROR\020\000\022\022\n\016USER_NOT_FOUND\020\001*K\n\027S" +
-      "earchImagesErrorStatus\022\036\n\032SEARCH_IMAGES_" +
-      "SERVER_ERROR\020\000\022\020\n\014EMPTY_SEARCH\020\0012\273\003\n\006Ima" +
-      "ges\022F\n\013CreateImage\022\031.Image.CreateImageRe" +
-      "quest\032\032.Image.CreateImageResponse\"\000\022F\n\013D" +
-      "eleteImage\022\031.Image.DeleteImageRequest\032\032." +
-      "Image.DeleteImageResponse\"\000\022=\n\010GetImage\022" +
-      "\026.Image.GetImageRequest\032\027.Image.GetImage",
-      "Response\"\000\022I\n\014GetImageData\022\032.Image.GetIm" +
-      "ageDataRequest\032\033.Image.GetImageDataRespo" +
-      "nse\"\000\022L\n\rGetUserImages\022\033.Image.GetUserIm" +
-      "agesRequest\032\034.Image.GetUserImagesRespons" +
-      "e\"\000\022I\n\014SearchImages\022\032.Image.SearchImages" +
-      "Request\032\033.Image.SearchImagesResponse\"\000B3" +
-      "\n!com.instagram_clone.image_serviceB\014Ima" +
-      "geServiceP\001b\006proto3"
+      "\014.Image.Image\"\234\001\n\005Image\022\n\n\002id\030\001 \001(\t\022\014\n\004t" +
+      "ype\030\002 \001(\t\022\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005" +
+      "\022\017\n\007user_id\030\005 \001(\t\022\017\n\007caption\030\006 \001(\t\022\022\n\ncr" +
+      "eated_at\030\007 \001(\t\022\021\n\tuser_tags\030\010 \003(\t\022\021\n\thas" +
+      "h_tags\030\t \003(\t*\214\001\n\026CreateImageErrorStatus\022" +
+      "\035\n\031CREATE_IMAGE_SERVER_ERROR\020\000\022\024\n\020CONTEN" +
+      "T_TOO_LONG\020\001\022\025\n\021CREATOR_NOT_FOUND\020\002\022\020\n\014I" +
+      "NVALID_DATA\020\003\022\024\n\020CAPTION_TOO_LONG\020\004*S\n\021D" +
+      "eleteImageStatus\022\035\n\031DELETE_IMAGE_SERVER_" +
+      "ERROR\020\000\022\027\n\023DELETABLE_NOT_FOUND\020\001\022\006\n\002OK\020\002",
+      "*F\n\023GetImageErrorStatus\022\032\n\026GET_IMAGE_SER" +
+      "VER_ERROR\020\000\022\023\n\017IMAGE_NOT_FOUND\020\001*P\n\030GetU" +
+      "serImagesErrorStatus\022 \n\034GET_USER_IMAGES_" +
+      "SERVER_ERROR\020\000\022\022\n\016USER_NOT_FOUND\020\001*K\n\027Se" +
+      "archImagesErrorStatus\022\036\n\032SEARCH_IMAGES_S" +
+      "ERVER_ERROR\020\000\022\020\n\014EMPTY_SEARCH\020\0012\273\003\n\006Imag" +
+      "es\022F\n\013CreateImage\022\031.Image.CreateImageReq" +
+      "uest\032\032.Image.CreateImageResponse\"\000\022F\n\013De" +
+      "leteImage\022\031.Image.DeleteImageRequest\032\032.I" +
+      "mage.DeleteImageResponse\"\000\022=\n\010GetImage\022\026",
+      ".Image.GetImageRequest\032\027.Image.GetImageR" +
+      "esponse\"\000\022I\n\014GetImageData\022\032.Image.GetIma" +
+      "geDataRequest\032\033.Image.GetImageDataRespon" +
+      "se\"\000\022L\n\rGetUserImages\022\033.Image.GetUserIma" +
+      "gesRequest\032\034.Image.GetUserImagesResponse" +
+      "\"\000\022I\n\014SearchImages\022\032.Image.SearchImagesR" +
+      "equest\032\033.Image.SearchImagesResponse\"\000B3\n" +
+      "!com.instagram_clone.image_serviceB\014Imag" +
+      "eServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -258,7 +259,7 @@ public final class ImageService {
     internal_static_Image_Image_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_Image_descriptor,
-        new java.lang.String[] { "Id", "Type", "Width", "Height", "UserId", "Caption", "CreatedAt", });
+        new java.lang.String[] { "Id", "Type", "Width", "Height", "UserId", "Caption", "CreatedAt", "UserTags", "HashTags", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

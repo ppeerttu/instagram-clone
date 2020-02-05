@@ -214,5 +214,11 @@ message Image {
 
   // Created at timestamp
   string created_at = 7;
+
+  // Users marked into the image caption
+  repeated string user_tags = 8;
+
+  // Hash tags marked into the image caption
+  repeated string hash_tags = 9;
 }
 
