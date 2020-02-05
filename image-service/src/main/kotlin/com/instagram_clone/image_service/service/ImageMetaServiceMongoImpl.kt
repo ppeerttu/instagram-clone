@@ -5,8 +5,7 @@ import com.instagram_clone.image_service.data.ImageMeta
 import io.vertx.core.Future
 import io.vertx.core.Promise
 import io.vertx.core.json.JsonObject
-import io.vertx.core.logging.LoggerFactory
-import io.vertx.ext.mongo.MongoClient
+import io.vertx.ext.mongo.*
 
 private const val FIELD_ID = "_id"
 
@@ -14,20 +13,9 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
 
   private val config = AppConfig.getInstance()
 
-  private val logger = LoggerFactory.getLogger(javaClass)
-
   override fun saveImageMeta(imageMeta: ImageMeta): Future<ImageMeta> {
-    val promise = Promise.promise<ImageMeta>()
-    val asJson = JsonObject.mapFrom(imageMeta)
-
-    client.insert(config.imagesCollection, asJson) {
-      if (it.succeeded()) {
-        promise.complete(imageMeta)
-      } else {
-        promise.fail(it.cause())
-      }
-    }
-    return promise.future()
+    // TODO: Check that users exist
+    return insertMeta(imageMeta)
   }
 
   override fun deleteImage(imageId: String): Future<Nothing> {
@@ -55,6 +43,23 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
         } else {
           promise.complete(it.result().mapTo(ImageMeta::class.java))
         }
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
+
+  /**
+   * Insert given image metadata into the database.
+   */
+  private fun insertMeta(meta: ImageMeta): Future<ImageMeta> {
+    val promise = Promise.promise<ImageMeta>()
+    val asJson = JsonObject.mapFrom(meta)
+
+    client.insert(config.imagesCollection, asJson) {
+      if (it.succeeded()) {
+        promise.complete(meta)
       } else {
         promise.fail(it.cause())
       }

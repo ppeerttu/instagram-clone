@@ -59,20 +59,16 @@ class ImageServiceGrpcImpl(
     }
 
     service.saveImageMeta(mapImageMeta(caption, creatorId, buf))
-      .onComplete {
-        val meta = it.result()
+      .onSuccess { meta ->
         vertx
           .fileSystem()
           .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
             val builder = CreateImageResponse.newBuilder()
             if (it.succeeded()) {
-              try {
-                builder.image = fromImageMeta(meta)
-              } catch (e: InvalidDataException) {
-                logger.warn("Failed to generate metadata for image: ${e.message}")
-                builder.error = CreateImageErrorStatus.INVALID_DATA
-              }
+              builder.image = fromImageMeta(meta)
             } else {
+              logger.error("Failed to persist the image on disk:", it.cause())
+              // TODO: Remove image meta from MongoDB
               builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
             }
             responseObserver.onNext(
@@ -84,7 +80,10 @@ class ImageServiceGrpcImpl(
       .onFailure { e ->
         val error = when (e) {
           is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
-          else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+          else -> {
+            logger.error("Failed persist image meta data into database:", e)
+            CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+          }
         }
         responseObserver.onNext(
           CreateImageResponse.newBuilder()

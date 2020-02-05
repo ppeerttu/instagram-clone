@@ -1,20 +1,21 @@
 package com.instagram_clone.image_service.data
 
-import java.util.*
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDateTime
 
 /**
  * Temporary data class wrapping image meta data
  */
-data class ImageMeta(
+class ImageMeta(
   /**
    * ID of the image
    */
-  val id: String,
+  @get:JsonProperty("_id") val id: String,
 
   /**
    * Type of the image (e.g. img/png)
    */
-  val type: String,
+  val mimeType: String,
 
   /**
    * Width in pixels
@@ -22,7 +23,7 @@ data class ImageMeta(
   val width: Int,
 
   /**
-   * Heigh in pixels
+   * Height in pixels
    */
   val height: Int,
 
@@ -37,7 +38,17 @@ data class ImageMeta(
   val caption: String,
 
   /**
+   * List of hash tags
+   */
+  var hashTags: List<String> = listOf(),
+
+  /**
+   * List of user tags
+   */
+  var userTags: List<String> = listOf(),
+
+  /**
    * Created at timestamp
    */
-  val createdAt: Date
+  val createdAt: String = LocalDateTime.now().toString()
 )

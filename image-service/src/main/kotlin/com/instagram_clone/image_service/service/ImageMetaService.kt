@@ -1,6 +1,5 @@
 package com.instagram_clone.image_service.service
 
-import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.data.ImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.NotFoundException
