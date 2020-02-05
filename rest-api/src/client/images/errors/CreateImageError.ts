@@ -1,4 +1,4 @@
-import { CreateImageErrorStatus } from "../generated/image_service_pb";
+import { CreateImageErrorStatus } from "../../generated/image_service_pb";
 
 /**
  * Error thrown when create image operation fails.
@@ -11,5 +11,4 @@ export class CreateImageError extends Error {
         super(message);
         this.status = status;
     }
-
 }

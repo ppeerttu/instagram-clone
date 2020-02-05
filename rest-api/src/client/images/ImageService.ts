@@ -17,4 +17,25 @@ export interface ImageService {
         userId: string,
         data: string | Uint8Array
     ): Promise<ImageMeta>;
+
+    /**
+     * Get image metadata.
+     *
+     * @param imageId The ID of the image
+     */
+    getImageMeta(imageId: string): Promise<ImageMeta | null>;
+
+    /**
+     * Get image byte data.
+     *
+     * @param imageId The ID of the image
+     */
+    getImageData(imageId: string): Promise<string | Uint8Array>;
+
+    /**
+     * Delete an image based on ID.
+     *
+     * @param imageId The ID of the image
+     */
+    deleteImage(imageId: string): Promise<void>;
 }
