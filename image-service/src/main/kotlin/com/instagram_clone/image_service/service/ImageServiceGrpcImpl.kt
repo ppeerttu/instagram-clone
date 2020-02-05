@@ -1,8 +1,7 @@
 package com.instagram_clone.image_service.service
 
-import com.instagram_clone.image_service.CreateImageErrorStatus
-import com.instagram_clone.image_service.CreateImageRequest
-import com.instagram_clone.image_service.CreateImageResponse
+import com.google.protobuf.ByteString
+import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
 import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.data.fromImageMeta
@@ -68,8 +67,15 @@ class ImageServiceGrpcImpl(
               builder.image = fromImageMeta(meta)
             } else {
               logger.error("Failed to persist the image on disk:", it.cause())
-              // TODO: Remove image meta from MongoDB
               builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+              // We don't have to wait for this before returning response
+              service.deleteImage(meta.id)
+                .onSuccess {
+                  logger.info("Removed metadata of image ${meta.id} as a result of failed file disk save")
+                }
+                .onFailure {  e ->
+                  logger.error("Failed to remove metadata of image ${meta.id}:", e)
+                }
             }
             responseObserver.onNext(
               builder.build()
@@ -94,4 +100,68 @@ class ImageServiceGrpcImpl(
       }
   }
 
+  /**
+   * Get image metadata based on image ID.
+   */
+  override fun getImage(request: GetImageRequest, responseObserver: StreamObserver<GetImageResponse>) {
+    val imageId = request.imageId
+    val builder = GetImageResponse.newBuilder()
+    service.getImageMeta(imageId)
+      .onSuccess { meta ->
+        if (meta != null) {
+          builder.image  = fromImageMeta(meta)
+        } else {
+          builder.error = GetImageErrorStatus.IMAGE_NOT_FOUND
+        }
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        logger.error("Failure on fetch image meta for id $imageId:", e)
+        builder.error = GetImageErrorStatus.GET_IMAGE_SERVER_ERROR
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+  }
+
+  override fun deleteImage(request: DeleteImageRequest, responseObserver: StreamObserver<DeleteImageResponse>) {
+    val imageId = request.id
+    val builder = DeleteImageResponse.newBuilder()
+    service.deleteImage(imageId)
+      .onSuccess { _ ->
+        vertx.fileSystem()
+          .delete("${appConfig.imageDataDir}/${imageId}") {
+            if (it.succeeded()) {
+              builder.status = DeleteImageStatus.OK
+            } else {
+              logger.error("Failed to delete image $imageId data on disk:", it.cause())
+              builder.status = DeleteImageStatus.DELETE_IMAGE_SERVER_ERROR
+            }
+            responseObserver.onNext(builder.build())
+            responseObserver.onCompleted()
+          }
+      }
+      .onFailure {
+        logger.error("Failed to delete image $imageId:", it)
+        builder.status = DeleteImageStatus.DELETE_IMAGE_SERVER_ERROR
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+  }
+
+  override fun getImageData(request: GetImageDataRequest, responseObserver: StreamObserver<GetImageDataResponse>) {
+    val imageId = request.imageId
+    val builder = GetImageDataResponse.newBuilder()
+    vertx.fileSystem()
+      .readFile("${appConfig.imageDataDir}/${imageId}") { res ->
+        if (res.succeeded()) {
+          builder.data = ByteString.copyFrom(res.result().bytes)
+        } else {
+          logger.error("Failed to fetch image data for image $imageId:", res.cause())
+          builder.error = GetImageErrorStatus.IMAGE_NOT_FOUND
+        }
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+  }
 }
