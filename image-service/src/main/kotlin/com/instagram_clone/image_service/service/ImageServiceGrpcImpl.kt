@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
 import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.data.ImageMeta
 import com.instagram_clone.image_service.data.fromImageMeta
 import com.instagram_clone.image_service.data.mapImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
@@ -19,8 +20,12 @@ import io.vertx.kotlin.core.Vertx
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
 import java.io.ByteArrayInputStream
+import java.net.URLConnection
 import java.nio.ByteBuffer
 import javax.imageio.ImageIO
+
+fun ByteArray.toHexString() = joinToString { "%02x".format(it) }
+fun ByteString.toHexString() = joinToString { "%02x".format(it) }
 
 /**
  * Class implementing the image_service.proto Image service interface.
@@ -43,26 +48,35 @@ class ImageServiceGrpcImpl(
   override fun createImage(request: CreateImageRequest, responseObserver: StreamObserver<CreateImageResponse>) {
     val caption = request.caption
     val creatorId = request.creatorId
+    val stream = request.data.newInput()
     val bytes = request.data.toByteArray()
-    val buf = ImageIO.read(ByteArrayInputStream(bytes))
+    val builder = CreateImageResponse.newBuilder()
 
-    // TODO: Check bytes size, return error if too large image (or scale down the image)
-    if (buf == null) {
+    val meta: ImageMeta = try {
+      mapImageMeta(caption, creatorId, stream)
+    } catch (e: Exception) {
+      logger.warn(e.message)
+      logger.info("First 10 bytes of ByteArray as hex: ${bytes.sliceArray(IntRange(0, 9)).toHexString()}")
+      logger.info("First 10 bytes of ByteString as hex: ${request.data.substring(0, 10).toHexString()}")
       responseObserver.onNext(
-        CreateImageResponse.newBuilder()
-          .setError(CreateImageErrorStatus.INVALID_DATA)
+        builder
+          .setError(
+            when (e) {
+              is InvalidDataException -> CreateImageErrorStatus.INVALID_DATA
+              is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+              else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+            }
+          )
           .build()
       )
       responseObserver.onCompleted()
       return
     }
-
-    service.saveImageMeta(mapImageMeta(caption, creatorId, buf))
+    service.saveImageMeta(meta)
       .onSuccess { meta ->
         vertx
           .fileSystem()
           .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
-            val builder = CreateImageResponse.newBuilder()
             if (it.succeeded()) {
               builder.image = fromImageMeta(meta)
             } else {
@@ -92,7 +106,7 @@ class ImageServiceGrpcImpl(
           }
         }
         responseObserver.onNext(
-          CreateImageResponse.newBuilder()
+          builder
             .setError(error)
             .build()
         )
@@ -157,7 +171,7 @@ class ImageServiceGrpcImpl(
         if (res.succeeded()) {
           builder.data = ByteString.copyFrom(res.result().bytes)
         } else {
-          logger.error("Failed to fetch image data for image $imageId:", res.cause())
+          logger.warn("Failed to fetch image data for image $imageId: " + res.cause().message)
           builder.error = GetImageErrorStatus.IMAGE_NOT_FOUND
         }
         responseObserver.onNext(builder.build())

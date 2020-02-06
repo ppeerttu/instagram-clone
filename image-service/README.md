@@ -10,12 +10,13 @@ You also might need to give execution permissions to the mvn wrapper ./mvnw
 ## Running (with docker)
 
 1. Build (fat) jar with `./mvnw clean package`
-2. run `docker-compose up`
-3. gRPC server is running on port 3002
+2. Create data volume for MongoDB: `docker volume create image-data-dev`
+3. Run `docker-compose up`
+4. gRPC server is running on port 3002
 
 ## Developing
 
-When using intellij open this folder as the project root to get java support right away.
+When using IntelliJ open this folder as the project root to get java support right away.
 
 After making changes to proto file, packaging (`./mvnw clean package`) should compile the protofiles.
 To launch tests:

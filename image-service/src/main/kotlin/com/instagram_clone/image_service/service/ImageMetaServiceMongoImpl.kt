@@ -38,7 +38,7 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
 
     client.findOne(config.imagesCollection, query, null) {
       if (it.succeeded()) {
-        if (it.result().isEmpty) {
+        if (it.result() == null || it.result().isEmpty) {
           promise.complete(null)
         } else {
           promise.complete(it.result().mapTo(ImageMeta::class.java))

@@ -4,38 +4,38 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 /**
- * Temporary data class wrapping image meta data
+ * Data class wrapping image meta data
  */
-class ImageMeta(
+data class ImageMeta(
   /**
    * ID of the image
    */
-  @get:JsonProperty("_id") val id: String,
+  @get:JsonProperty("_id") var id: String = "",
 
   /**
    * Type of the image (e.g. img/png)
    */
-  val mimeType: String,
+  val mimeType: String = "",
 
   /**
    * Width in pixels
    */
-  val width: Int,
+  val width: Int = 0,
 
   /**
    * Height in pixels
    */
-  val height: Int,
+  val height: Int = 0,
 
   /**
    * User who posted the image
    */
-  val userId: String,
+  val userId: String = "",
 
   /**
    * Caption for the image
    */
-  val caption: String,
+  val caption: String = "",
 
   /**
    * List of hash tags
