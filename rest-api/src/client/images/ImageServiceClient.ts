@@ -85,7 +85,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         const client = this.getClient();
         const req = new GetImageRequest();
         req.setImageId(imageId);
-        return new Promise<ImageMeta | null>((resolve, reject) => {
+        return new Promise<ImageMeta>((resolve, reject) => {
             client.getImage(req, (e, response) => {
                 if (e) {
                     return reject(e);
@@ -93,10 +93,6 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
 
                 const error = response.getError();
                 const image = response.getImage();
-
-                if (error === GetImageErrorStatus.IMAGE_NOT_FOUND) {
-                    return resolve(null);
-                }
 
                 if (!image || error) {
                     return reject(

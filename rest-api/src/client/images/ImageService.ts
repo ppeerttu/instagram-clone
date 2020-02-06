@@ -23,7 +23,7 @@ export interface ImageService {
      *
      * @param imageId The ID of the image
      */
-    getImageMeta(imageId: string): Promise<ImageMeta | null>;
+    getImageMeta(imageId: string): Promise<ImageMeta>;
 
     /**
      * Get image byte data.
