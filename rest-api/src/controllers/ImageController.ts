@@ -2,7 +2,6 @@ import { ParameterizedContext } from "koa";
 import { body, IValidationContext, validationResults, param } from "koa-req-validation";
 import Router, { RouterContext } from "@koa/router";
 import multer, { File } from "@koa/multer";
-import FileType from "file-type";
 
 import { IController } from "./Controller";
 import { ImageService } from "../client/images/ImageService";
@@ -113,11 +112,10 @@ export class ImageController implements IController {
          */
         // TODO: Check file size, cancel request if too large
         try {
-            console.log(file.buffer.slice(0, 10).toString("hex"));
             const response = await this.imageService.createImage(
                 caption,
                 userId,
-                file.mimetype === "image/png" ? "png" : "jpg",
+                file.mimetype === "image/png" ? "png" : "jpeg",
                 file.buffer
             );
             ctx.body = response;
@@ -173,6 +171,9 @@ export class ImageController implements IController {
         }
     }
 
+    /**
+     * Get image metadata.
+     */
     private getImageMeta = async (
         ctx: ParameterizedContext<IValidationContext, RouterContext>,
     ) => {
@@ -201,6 +202,9 @@ export class ImageController implements IController {
         }
     }
 
+    /**
+     * Get image data.
+     */
     private getImageData = async (
         ctx: ParameterizedContext<IValidationContext, RouterContext>,
     ) => {
@@ -211,14 +215,10 @@ export class ImageController implements IController {
         const { imageId } = ctx.params;
 
         try {
-            const data = await this.imageService.getImageData(imageId);
-            const buffer = typeof data === "string"
-                ? Buffer.from(data)
-                : Buffer.from(data.buffer);
-            ctx.body = buffer.slice(5);
-            ctx.type = "image/png";
+            const { type, data } = await this.imageService.getImageData(imageId);
+            ctx.body = Buffer.from(data);
+            ctx.type = `image/${type}`;
             ctx.status = 200;
-            console.log(buffer.slice(0, 10).toString("hex"));
         } catch (e) {
             if (e instanceof GetImageError) {
                 switch (e.status) {

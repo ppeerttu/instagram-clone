@@ -34,7 +34,6 @@
     "@koa/multer": "^2.0.2",
     "@koa/router": "^8.0.6",
     "consul": "^0.37.0",
-    "file-type": "^14.1.0",
     "google-protobuf": "^3.11.2",
     "grpc": "^1.24.2",
     "koa": "^2.11.0",

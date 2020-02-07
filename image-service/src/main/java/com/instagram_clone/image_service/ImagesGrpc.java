@@ -151,7 +151,7 @@ public final class ImagesGrpc {
         if ((getGetImageDataMethod = ImagesGrpc.getGetImageDataMethod) == null) {
           ImagesGrpc.getGetImageDataMethod = getGetImageDataMethod = 
               io.grpc.MethodDescriptor.<com.instagram_clone.image_service.GetImageDataRequest, com.instagram_clone.image_service.GetImageDataResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
               .setFullMethodName(generateFullMethodName(
                   "Image.Images", "GetImageData"))
               .setSampledToLocalTracing(true)
@@ -343,7 +343,7 @@ public final class ImagesGrpc {
                   this, METHODID_GET_IMAGE)))
           .addMethod(
             getGetImageDataMethod(),
-            asyncUnaryCall(
+            asyncServerStreamingCall(
               new MethodHandlers<
                 com.instagram_clone.image_service.GetImageDataRequest,
                 com.instagram_clone.image_service.GetImageDataResponse>(
@@ -427,7 +427,7 @@ public final class ImagesGrpc {
      */
     public void getImageData(com.instagram_clone.image_service.GetImageDataRequest request,
         io.grpc.stub.StreamObserver<com.instagram_clone.image_service.GetImageDataResponse> responseObserver) {
-      asyncUnaryCall(
+      asyncServerStreamingCall(
           getChannel().newCall(getGetImageDataMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -500,8 +500,9 @@ public final class ImagesGrpc {
      * Get image data
      * </pre>
      */
-    public com.instagram_clone.image_service.GetImageDataResponse getImageData(com.instagram_clone.image_service.GetImageDataRequest request) {
-      return blockingUnaryCall(
+    public java.util.Iterator<com.instagram_clone.image_service.GetImageDataResponse> getImageData(
+        com.instagram_clone.image_service.GetImageDataRequest request) {
+      return blockingServerStreamingCall(
           getChannel(), getGetImageDataMethod(), getCallOptions(), request);
     }
 
@@ -571,17 +572,6 @@ public final class ImagesGrpc {
 
     /**
      * <pre>
-     * Get image data
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.image_service.GetImageDataResponse> getImageData(
-        com.instagram_clone.image_service.GetImageDataRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getGetImageDataMethod(), getCallOptions()), request);
-    }
-
-    /**
-     * <pre>
      * Get user's images
      * </pre>
      */
@@ -646,8 +636,8 @@ public final class ImagesGrpc {
      * </pre>
      */
     public void getImageData(com.instagram_clone.image_service.GetImageDataRequest request,
-        io.vertx.core.Future<com.instagram_clone.image_service.GetImageDataResponse> response) {
-      asyncUnimplementedUnaryCall(getGetImageDataMethod(), ImagesGrpc.toObserver(response.completer()));
+        io.vertx.grpc.GrpcWriteStream<com.instagram_clone.image_service.GetImageDataResponse> response) {
+      asyncUnimplementedUnaryCall(getGetImageDataMethod(), response.writeObserver());
     }
 
     /**
@@ -695,7 +685,7 @@ public final class ImagesGrpc {
                   this, METHODID_GET_IMAGE)))
           .addMethod(
             getGetImageDataMethod(),
-            asyncUnaryCall(
+            asyncServerStreamingCall(
               new VertxMethodHandlers<
                 com.instagram_clone.image_service.GetImageDataRequest,
                 com.instagram_clone.image_service.GetImageDataResponse>(
@@ -781,9 +771,13 @@ public final class ImagesGrpc {
      * </pre>
      */
     public void getImageData(com.instagram_clone.image_service.GetImageDataRequest request,
-        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.image_service.GetImageDataResponse>> response) {
-      asyncUnaryCall(
-          getChannel().newCall(getGetImageDataMethod(), getCallOptions()), request, ImagesGrpc.toObserver(response));
+        io.vertx.core.Handler<io.vertx.grpc.GrpcReadStream<com.instagram_clone.image_service.GetImageDataResponse>> handler) {
+      final io.vertx.grpc.GrpcReadStream<com.instagram_clone.image_service.GetImageDataResponse> readStream =
+          io.vertx.grpc.GrpcReadStream.<com.instagram_clone.image_service.GetImageDataResponse>create();
+
+      handler.handle(readStream);
+      asyncServerStreamingCall(
+          getChannel().newCall(getGetImageDataMethod(), getCallOptions()), request, readStream.readObserver());
     }
 
     /**
@@ -913,14 +907,7 @@ public final class ImagesGrpc {
           break;
         case METHODID_GET_IMAGE_DATA:
           serviceImpl.getImageData((com.instagram_clone.image_service.GetImageDataRequest) request,
-              (io.vertx.core.Future<com.instagram_clone.image_service.GetImageDataResponse>) io.vertx.core.Future.<com.instagram_clone.image_service.GetImageDataResponse>future().setHandler(ar -> {
-                if (ar.succeeded()) {
-                  ((io.grpc.stub.StreamObserver<com.instagram_clone.image_service.GetImageDataResponse>) responseObserver).onNext(ar.result());
-                  responseObserver.onCompleted();
-                } else {
-                  responseObserver.onError(ar.cause());
-                }
-              }));
+              (io.vertx.grpc.GrpcWriteStream<com.instagram_clone.image_service.GetImageDataResponse>) io.vertx.grpc.GrpcWriteStream.create(responseObserver));
           break;
         case METHODID_GET_USER_IMAGES:
           serviceImpl.getUserImages((com.instagram_clone.image_service.GetUserImagesRequest) request,

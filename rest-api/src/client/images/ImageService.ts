@@ -1,5 +1,7 @@
 import { ImageMeta } from "../models";
 
+export type ImageMimeType = "png" | "jpeg"
+
 /**
  * Image service interface description
  */
@@ -15,7 +17,7 @@ export interface ImageService {
     createImage(
         caption: string,
         userId: string,
-        type: "jpg" | "png",
+        type: ImageMimeType,
         data: string | Uint8Array
     ): Promise<ImageMeta>;
 
@@ -31,7 +33,7 @@ export interface ImageService {
      *
      * @param imageId The ID of the image
      */
-    getImageData(imageId: string): Promise<string | Uint8Array>;
+    getImageData(imageId: string): Promise<{ type: ImageMimeType, data: Uint8Array }>;
 
     /**
      * Delete an image based on ID.

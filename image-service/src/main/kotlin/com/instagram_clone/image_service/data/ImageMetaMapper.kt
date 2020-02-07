@@ -3,16 +3,8 @@ package com.instagram_clone.image_service.data
 import com.instagram_clone.image_service.Image
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.InvalidDataException
-import com.instagram_clone.image_service.util.DocumentParser
 import com.instagram_clone.image_service.util.TagParser
-import org.apache.tika.metadata.Metadata
-import org.apache.tika.parser.AutoDetectParser
-import org.apache.tika.sax.BodyContentHandler
-import java.awt.image.BufferedImage
-import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.net.URLConnection
 import java.util.*
 import javax.imageio.ImageIO
 

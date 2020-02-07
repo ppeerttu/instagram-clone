@@ -46,7 +46,7 @@ interface IImagesService_IGetImage extends grpc.MethodDefinition<image_service_p
 interface IImagesService_IGetImageData extends grpc.MethodDefinition<image_service_pb.GetImageDataRequest, image_service_pb.GetImageDataResponse> {
     path: string; // "/Image.Images/GetImageData"
     requestStream: boolean; // false
-    responseStream: boolean; // false
+    responseStream: boolean; // true
     requestSerialize: grpc.serialize<image_service_pb.GetImageDataRequest>;
     requestDeserialize: grpc.deserialize<image_service_pb.GetImageDataRequest>;
     responseSerialize: grpc.serialize<image_service_pb.GetImageDataResponse>;
@@ -77,7 +77,7 @@ export interface IImagesServer {
     createImage: grpc.handleClientStreamingCall<image_service_pb.CreateImageRequest, image_service_pb.CreateImageResponse>;
     deleteImage: grpc.handleUnaryCall<image_service_pb.DeleteImageRequest, image_service_pb.DeleteImageResponse>;
     getImage: grpc.handleUnaryCall<image_service_pb.GetImageRequest, image_service_pb.GetImageResponse>;
-    getImageData: grpc.handleUnaryCall<image_service_pb.GetImageDataRequest, image_service_pb.GetImageDataResponse>;
+    getImageData: grpc.handleServerStreamingCall<image_service_pb.GetImageDataRequest, image_service_pb.GetImageDataResponse>;
     getUserImages: grpc.handleUnaryCall<image_service_pb.GetUserImagesRequest, image_service_pb.GetUserImagesResponse>;
     searchImages: grpc.handleUnaryCall<image_service_pb.SearchImagesRequest, image_service_pb.SearchImagesResponse>;
 }
@@ -93,9 +93,8 @@ export interface IImagesClient {
     getImage(request: image_service_pb.GetImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
     getImage(request: image_service_pb.GetImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
     getImage(request: image_service_pb.GetImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
-    getImageData(request: image_service_pb.GetImageDataRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
-    getImageData(request: image_service_pb.GetImageDataRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
-    getImageData(request: image_service_pb.GetImageDataRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
+    getImageData(request: image_service_pb.GetImageDataRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<image_service_pb.GetImageDataResponse>;
+    getImageData(request: image_service_pb.GetImageDataRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<image_service_pb.GetImageDataResponse>;
     getUserImages(request: image_service_pb.GetUserImagesRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;
     getUserImages(request: image_service_pb.GetUserImagesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;
     getUserImages(request: image_service_pb.GetUserImagesRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;
@@ -116,9 +115,8 @@ export class ImagesClient extends grpc.Client implements IImagesClient {
     public getImage(request: image_service_pb.GetImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
     public getImage(request: image_service_pb.GetImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
     public getImage(request: image_service_pb.GetImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageResponse) => void): grpc.ClientUnaryCall;
-    public getImageData(request: image_service_pb.GetImageDataRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
-    public getImageData(request: image_service_pb.GetImageDataRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
-    public getImageData(request: image_service_pb.GetImageDataRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetImageDataResponse) => void): grpc.ClientUnaryCall;
+    public getImageData(request: image_service_pb.GetImageDataRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<image_service_pb.GetImageDataResponse>;
+    public getImageData(request: image_service_pb.GetImageDataRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<image_service_pb.GetImageDataResponse>;
     public getUserImages(request: image_service_pb.GetUserImagesRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;
     public getUserImages(request: image_service_pb.GetUserImagesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;
     public getUserImages(request: image_service_pb.GetUserImagesRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.GetUserImagesResponse) => void): grpc.ClientUnaryCall;

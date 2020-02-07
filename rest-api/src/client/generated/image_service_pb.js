@@ -1525,7 +1525,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2]];
+proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2,3]];
 
 /**
  * @enum {number}
@@ -1533,7 +1533,8 @@ proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2]];
 proto.Image.GetImageDataResponse.StatusCase = {
   STATUS_NOT_SET: 0,
   DATA: 1,
-  ERROR: 2
+  IMAGE_TYPE: 2,
+  ERROR: 3
 };
 
 /**
@@ -1573,7 +1574,8 @@ proto.Image.GetImageDataResponse.prototype.toObject = function(opt_includeInstan
 proto.Image.GetImageDataResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     data: msg.getData_asB64(),
-    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    imageType: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    error: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -1615,6 +1617,10 @@ proto.Image.GetImageDataResponse.deserializeBinaryFromReader = function(msg, rea
       msg.setData(value);
       break;
     case 2:
+      var value = /** @type {!proto.Image.ImageType} */ (reader.readEnum());
+      msg.setImageType(value);
+      break;
+    case 3:
       var value = /** @type {!proto.Image.GetImageErrorStatus} */ (reader.readEnum());
       msg.setError(value);
       break;
@@ -1654,10 +1660,17 @@ proto.Image.GetImageDataResponse.serializeBinaryToWriter = function(message, wri
       f
     );
   }
-  f = /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getField(message, 2));
+  f = /** @type {!proto.Image.ImageType} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeEnum(
       2,
+      f
+    );
+  }
+  f = /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeEnum(
+      3,
       f
     );
   }
@@ -1718,21 +1731,21 @@ proto.Image.GetImageDataResponse.prototype.hasData = function() {
 
 
 /**
- * optional GetImageErrorStatus error = 2;
- * @return {!proto.Image.GetImageErrorStatus}
+ * optional ImageType image_type = 2;
+ * @return {!proto.Image.ImageType}
  */
-proto.Image.GetImageDataResponse.prototype.getError = function() {
-  return /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.Image.GetImageDataResponse.prototype.getImageType = function() {
+  return /** @type {!proto.Image.ImageType} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {!proto.Image.GetImageErrorStatus} value */
-proto.Image.GetImageDataResponse.prototype.setError = function(value) {
+/** @param {!proto.Image.ImageType} value */
+proto.Image.GetImageDataResponse.prototype.setImageType = function(value) {
   jspb.Message.setOneofField(this, 2, proto.Image.GetImageDataResponse.oneofGroups_[0], value);
 };
 
 
-proto.Image.GetImageDataResponse.prototype.clearError = function() {
+proto.Image.GetImageDataResponse.prototype.clearImageType = function() {
   jspb.Message.setOneofField(this, 2, proto.Image.GetImageDataResponse.oneofGroups_[0], undefined);
 };
 
@@ -1741,8 +1754,37 @@ proto.Image.GetImageDataResponse.prototype.clearError = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.Image.GetImageDataResponse.prototype.hasError = function() {
+proto.Image.GetImageDataResponse.prototype.hasImageType = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional GetImageErrorStatus error = 3;
+ * @return {!proto.Image.GetImageErrorStatus}
+ */
+proto.Image.GetImageDataResponse.prototype.getError = function() {
+  return /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.Image.GetImageErrorStatus} value */
+proto.Image.GetImageDataResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 3, proto.Image.GetImageDataResponse.oneofGroups_[0], value);
+};
+
+
+proto.Image.GetImageDataResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 3, proto.Image.GetImageDataResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.GetImageDataResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

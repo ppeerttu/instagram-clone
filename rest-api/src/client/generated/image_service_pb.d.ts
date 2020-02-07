@@ -260,6 +260,12 @@ export class GetImageDataResponse extends jspb.Message {
     setData(value: Uint8Array | string): void;
 
 
+    hasImageType(): boolean;
+    clearImageType(): void;
+    getImageType(): ImageType;
+    setImageType(value: ImageType): void;
+
+
     hasError(): boolean;
     clearError(): void;
     getError(): GetImageErrorStatus;
@@ -281,6 +287,7 @@ export class GetImageDataResponse extends jspb.Message {
 export namespace GetImageDataResponse {
     export type AsObject = {
         data: Uint8Array | string,
+        imageType: ImageType,
         error: GetImageErrorStatus,
     }
 
@@ -289,7 +296,9 @@ export namespace GetImageDataResponse {
     
     DATA = 1,
 
-    ERROR = 2,
+    IMAGE_TYPE = 2,
+
+    ERROR = 3,
 
     }
 

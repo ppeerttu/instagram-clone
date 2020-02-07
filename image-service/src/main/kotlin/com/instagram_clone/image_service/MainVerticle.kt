@@ -1,6 +1,7 @@
 package com.instagram_clone.image_service
 
 import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.service.ImageFileServiceVertxImpl
 import com.instagram_clone.image_service.service.ImageServiceGrpcImpl
 import com.instagram_clone.image_service.service.ImageMetaServiceMockImpl
 import com.instagram_clone.image_service.service.ImageMetaServiceMongoImpl
@@ -48,7 +49,12 @@ class MainVerticle : AbstractVerticle() {
         val mongoClient = configureMongo(config)
 
         val imageMetaService = ImageMetaServiceMongoImpl(mongoClient)
-        val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(imageMetaService, vertx)
+        val imageFileService = ImageFileServiceVertxImpl(vertx)
+        val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(
+          imageMetaService,
+          imageFileService,
+          vertx
+        )
 
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.grpcHost, config.grpcPort)

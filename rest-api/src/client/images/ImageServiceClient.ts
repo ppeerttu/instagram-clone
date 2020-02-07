@@ -2,7 +2,7 @@ import { credentials, ClientWritableStream } from "grpc";
 
 import { GrpcClient } from "../GrpcClient";
 import { ImageMeta, metaFromImage } from "../models";
-import { ImageService } from "./ImageService";
+import { ImageService, ImageMimeType } from "./ImageService";
 import { config } from "../../config/grpc";
 import { ImagesClient } from "../generated/image_service_grpc_pb";
 import {
@@ -13,8 +13,10 @@ import {
     DeleteImageStatus,
     Metadata,
     ImageType,
+    GetImageDataResponse,
 } from "../generated/image_service_pb";
 import { CreateImageError, GetImageError, DeleteImageError } from "./errors";
+import { ImageDataResponseRecorder } from "./helpers";
 
 // Chunk size in bytes
 const CHUNK_SIZE = 1024 * 16; // 16KB
@@ -68,7 +70,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
     createImage = async (
         caption: string,
         userId: string,
-        type: "jpg" | "png",
+        type: ImageMimeType,
         data: string | Uint8Array
     ) => {
         const client = this.getClient();
@@ -76,8 +78,6 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         meta.setCaption(caption);
         meta.setCreatorId(userId);
         meta.setImageType(type === "png" ? ImageType.PNG : ImageType.JPG);
-
-        console.log("Sending out, first 10 bytes: " + data.slice(0, 10))
 
         const promise = new Promise<ImageMeta>((resolve, reject) => {
             const stream = client.createImage((e, response) => {
@@ -129,6 +129,11 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         stream.end();
     }
 
+    /**
+     * Get image metadata.
+     *
+     * @param imageId ID of the image
+     */
     getImageMeta = async (imageId: string) => {
         const client = this.getClient();
         const req = new GetImageRequest();
@@ -155,35 +160,64 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         });
     }
 
-    // 0a, e3, a9, 1b, [89, 50, 4e, 47, 0d, 0a, ...] PNG
-    // 0a, ef, c4, e7, 01, [ff, d8, ff, e1, 72, ...] JPEG
+    /**
+     * Get the image raw data.
+     *
+     * @param imageId ID of the image
+     */
     getImageData = async (imageId: string) => {
         const client = this.getClient();
         const req = new GetImageDataRequest();
         req.setImageId(imageId);
-        return new Promise<string | Uint8Array>((resolve, reject) => {
-            client.getImageData(req, (e, response) => {
-                if (e) {
-                    return reject(e);
-                }
+        return new Promise<{ type: ImageMimeType, data: Uint8Array }>(
+            (resolve, reject) => {
+                const stream = client.getImageData(req);
 
-                const error = response.getError();
-                const bytes = response.getData();
+                const recorder = new ImageDataResponseRecorder();
 
-                if (error || !bytes) {
-                    return reject(
-                        new GetImageError(
-                            "Failed to fetch image data",
-                            error || null
-                        )
-                    );
-                }
-                console.log("Received, first 10 bytes:" + bytes.slice(0, 10));
-                return resolve(bytes);
-            });
-        });
+                stream.on("data", (chunk: GetImageDataResponse) => {
+                    try {
+                        recorder.receive(chunk);
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+
+                stream.on("end", () => {
+                    const type = recorder.getType();
+                    const data = recorder.getData();
+                    const error = recorder.getError();
+                    if (error || !data) {
+                        return reject(
+                            new GetImageError(
+                                "Failed to fetch image data",
+                                error || null
+                            )
+                        );
+                    }
+                    if (type === null) {
+                        return reject(
+                            new GetImageError("Image type is missing")
+                        );
+                    }
+                    return resolve({
+                        type: type === ImageType.JPG ? "jpeg" : "png",
+                        data,
+                    });
+                });
+
+                stream.on("error", (e) => {
+                    reject(e);
+                });
+            }
+        );
     }
 
+    /**
+     * Delete an image based on id.
+     *
+     * @param imageId ID of the image
+     */
     deleteImage = async (imageId: string): Promise<void> => {
         const client = this.getClient();
         const req = new DeleteImageRequest();
@@ -199,9 +233,13 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                     case DeleteImageStatus.OK:
                         return resolve();
                     case DeleteImageStatus.DELETABLE_NOT_FOUND:
-                        throw new DeleteImageError(`Image with id ${imageId} not found`, "NOT_FOUND");
+                        return reject(
+                            new DeleteImageError(`Image with id ${imageId} not found`, "NOT_FOUND")
+                        );
                     default:
-                        throw new DeleteImageError(`Failed to delete image ${imageId}`);
+                        return reject(
+                            new DeleteImageError(`Failed to delete image ${imageId}`)
+                        );
                 }
             });
         });
@@ -214,8 +252,6 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
      */
     private getChunks<T extends GrpcBytes>(data: T): T[] {
         const size = data.length;
-        const chunkCount = Math.ceil(size / CHUNK_SIZE);
-        console.log(`Chunking into ${chunkCount} chunks`);
         const arr: T[] = [];
         for (let i = 0; i < size; i += CHUNK_SIZE) {
             arr.push(data.slice(i, i + CHUNK_SIZE) as T);
