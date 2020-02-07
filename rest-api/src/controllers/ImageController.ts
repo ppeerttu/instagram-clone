@@ -11,7 +11,20 @@ import { CreateImageError } from "../client/images/errors/CreateImageError";
 import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
 import { DeleteImageError, GetImageError } from "../client/images/errors";
 
-const upload = multer();
+const allowedFileTypes = [
+    "image/png",
+    "image/jpeg"
+];
+
+const upload = multer({
+    fileFilter: (req, file, cb) => {
+        if (!allowedFileTypes.includes(file.mimetype)) {
+            cb(null, false);
+        } else {
+            cb(null, true);
+        }
+    }
+});
 
 export class ImageController implements IController {
 
@@ -99,11 +112,12 @@ export class ImageController implements IController {
          * }
          */
         // TODO: Check file size, cancel request if too large
-
         try {
+            console.log(file.buffer.slice(0, 10).toString("hex"));
             const response = await this.imageService.createImage(
                 caption,
                 userId,
+                file.mimetype === "image/png" ? "png" : "jpg",
                 file.buffer
             );
             ctx.body = response;
@@ -201,10 +215,10 @@ export class ImageController implements IController {
             const buffer = typeof data === "string"
                 ? Buffer.from(data)
                 : Buffer.from(data.buffer);
-            const mimeType = await FileType.fromBuffer(buffer);
-            ctx.body = buffer;
-            ctx.type = mimeType?.mime || "image/png";
+            ctx.body = buffer.slice(5);
+            ctx.type = "image/png";
             ctx.status = 200;
+            console.log(buffer.slice(0, 10).toString("hex"));
         } catch (e) {
             if (e instanceof GetImageError) {
                 switch (e.status) {

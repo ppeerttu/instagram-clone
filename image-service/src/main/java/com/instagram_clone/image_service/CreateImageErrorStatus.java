@@ -102,7 +102,7 @@ public enum CreateImageErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(0);
+    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(1);
   }
 
   private static final CreateImageErrorStatus[] VALUES = values();

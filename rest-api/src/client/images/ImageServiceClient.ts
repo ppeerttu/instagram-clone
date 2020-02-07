@@ -1,4 +1,4 @@
-import { credentials } from "grpc";
+import { credentials, ClientWritableStream } from "grpc";
 
 import { GrpcClient } from "../GrpcClient";
 import { ImageMeta, metaFromImage } from "../models";
@@ -8,12 +8,21 @@ import { ImagesClient } from "../generated/image_service_grpc_pb";
 import {
     CreateImageRequest,
     GetImageRequest,
-    GetImageErrorStatus,
     GetImageDataRequest,
     DeleteImageRequest,
     DeleteImageStatus,
+    Metadata,
+    ImageType,
 } from "../generated/image_service_pb";
 import { CreateImageError, GetImageError, DeleteImageError } from "./errors";
+
+// Chunk size in bytes
+const CHUNK_SIZE = 1024 * 16; // 16KB
+
+/**
+ * Types that can be converted into `bytes` type of protobuf
+ */
+type GrpcBytes = string | Uint8Array;
 
 
 export class ImageServiceClient extends GrpcClient implements ImageService {
@@ -56,15 +65,22 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         return client;
     }
 
-    createImage = async (caption: string, userId: string, data: string | Uint8Array) => {
+    createImage = async (
+        caption: string,
+        userId: string,
+        type: "jpg" | "png",
+        data: string | Uint8Array
+    ) => {
         const client = this.getClient();
-        const req = new CreateImageRequest();
-        req.setCaption(caption);
-        req.setCreatorId(userId);
-        req.setData(data);
+        const meta = new Metadata();
+        meta.setCaption(caption);
+        meta.setCreatorId(userId);
+        meta.setImageType(type === "png" ? ImageType.PNG : ImageType.JPG);
 
-        return new Promise<ImageMeta>((resolve, reject) => {
-            client.createImage(req, (e, response) => {
+        console.log("Sending out, first 10 bytes: " + data.slice(0, 10))
+
+        const promise = new Promise<ImageMeta>((resolve, reject) => {
+            const stream = client.createImage((e, response) => {
                 if (e) {
                     return reject(e);
                 }
@@ -78,7 +94,39 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                 }
                 return resolve(metaFromImage(image));
             });
+
+            this.writeImageToStream(stream, meta, data);
         });
+
+        return promise;
+    }
+
+    /**
+     * Write the image into the request stream.
+     *
+     * @param stream The write stream
+     * @param meta Image meta data
+     * @param image Image data
+     *
+     * @todo Should we wait untile each chunk has been flushed before sending the
+     * next one?
+     */
+    private async writeImageToStream(
+        stream: ClientWritableStream<CreateImageRequest>,
+        meta: Metadata,
+        image: string | Uint8Array
+    ) {
+        const head = new CreateImageRequest();
+        head.setMetaData(meta);
+        stream.write(head);
+
+        const chunks = this.getChunks(image);
+        for (const chunk of chunks) {
+            const req = new CreateImageRequest();
+            req.setData(chunk);
+            stream.write(req);
+        }
+        stream.end();
     }
 
     getImageMeta = async (imageId: string) => {
@@ -107,6 +155,8 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
         });
     }
 
+    // 0a, e3, a9, 1b, [89, 50, 4e, 47, 0d, 0a, ...] PNG
+    // 0a, ef, c4, e7, 01, [ff, d8, ff, e1, 72, ...] JPEG
     getImageData = async (imageId: string) => {
         const client = this.getClient();
         const req = new GetImageDataRequest();
@@ -128,6 +178,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                         )
                     );
                 }
+                console.log("Received, first 10 bytes:" + bytes.slice(0, 10));
                 return resolve(bytes);
             });
         });
@@ -154,5 +205,21 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                 }
             });
         });
+    }
+
+    /**
+     * Chunk the data into an array of data.
+     *
+     * @param data The image data to be chunked up
+     */
+    private getChunks<T extends GrpcBytes>(data: T): T[] {
+        const size = data.length;
+        const chunkCount = Math.ceil(size / CHUNK_SIZE);
+        console.log(`Chunking into ${chunkCount} chunks`);
+        const arr: T[] = [];
+        for (let i = 0; i < size; i += CHUNK_SIZE) {
+            arr.push(data.slice(i, i + CHUNK_SIZE) as T);
+        }
+        return arr;
     }
 }

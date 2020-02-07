@@ -9,13 +9,16 @@ import com.instagram_clone.image_service.data.fromImageMeta
 import com.instagram_clone.image_service.data.mapImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.InvalidDataException
+import com.instagram_clone.image_service.util.ImageRecorder
 import io.grpc.stub.StreamObserver
+import io.vertx.core.Future
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.file.AsyncFile
 import io.vertx.core.file.FileSystem
 import io.vertx.core.file.impl.AsyncFileImpl
 import io.vertx.core.file.impl.FileSystemImpl
 import io.vertx.core.logging.LoggerFactory
+import io.vertx.grpc.GrpcReadStream
 import io.vertx.kotlin.core.Vertx
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
@@ -42,77 +45,87 @@ class ImageServiceGrpcImpl(
 
   private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
 
-  /**
-   * Create a new image based on given meta-data and image byte data.
-   */
-  override fun createImage(request: CreateImageRequest, responseObserver: StreamObserver<CreateImageResponse>) {
-    val caption = request.caption
-    val creatorId = request.creatorId
-    val stream = request.data.newInput()
-    val bytes = request.data.toByteArray()
+  override fun createImage(responseObserver: StreamObserver<CreateImageResponse>): StreamObserver<CreateImageRequest> {
+    val recorder = ImageRecorder()
     val builder = CreateImageResponse.newBuilder()
+    return object: StreamObserver<CreateImageRequest> {
 
-    val meta: ImageMeta = try {
-      mapImageMeta(caption, creatorId, stream)
-    } catch (e: Exception) {
-      logger.warn(e.message)
-      logger.info("First 10 bytes of ByteArray as hex: ${bytes.sliceArray(IntRange(0, 9)).toHexString()}")
-      logger.info("First 10 bytes of ByteString as hex: ${request.data.substring(0, 10).toHexString()}")
-      responseObserver.onNext(
-        builder
-          .setError(
-            when (e) {
-              is InvalidDataException -> CreateImageErrorStatus.INVALID_DATA
-              is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
-              else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
-            }
+      override fun onNext(req: CreateImageRequest) {
+        recorder.takeChunk(req)
+      }
+
+      override fun onError(e: Throwable) {
+        logger.error("Error during create image stream", e)
+        // TODO: Cleanup?
+      }
+
+      override fun onCompleted() {
+        val meta = try {
+          recorder.toImageMeta()
+        } catch (e: Exception) {
+          logger.warn(e.message)
+
+          responseObserver.onNext(
+            builder
+              .setError(
+                when (e) {
+                  is InvalidDataException -> CreateImageErrorStatus.INVALID_DATA
+                  is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+                  else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+                }
+              )
+              .build()
           )
-          .build()
-      )
-      responseObserver.onCompleted()
-      return
-    }
-    service.saveImageMeta(meta)
-      .onSuccess { meta ->
-        vertx
-          .fileSystem()
-          .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
-            if (it.succeeded()) {
-              builder.image = fromImageMeta(meta)
-            } else {
-              logger.error("Failed to persist the image on disk:", it.cause())
-              builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
-              // We don't have to wait for this before returning response
-              service.deleteImage(meta.id)
-                .onSuccess {
-                  logger.info("Removed metadata of image ${meta.id} as a result of failed file disk save")
+          responseObserver.onCompleted()
+          return
+        }
+        val bytes = recorder.chunks!!.toByteArray()
+        logger.info("First 10 bytes: ${bytes.sliceArray(IntRange(0, 9)).toHexString()}")
+        service.saveImageMeta(meta)
+          .onSuccess { meta ->
+            vertx
+              .fileSystem()
+              .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
+                if (it.succeeded()) {
+                  builder.image = fromImageMeta(meta)
+                } else {
+                  logger.error("Failed to persist the image on disk:", it.cause())
+                  builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+                  // We don't have to wait for this before returning response
+                  service.deleteImage(meta.id)
+                    .onSuccess {
+                      logger.info("Removed metadata of image ${meta.id} as a result of failed file disk save")
+                    }
+                    .onFailure {  e ->
+                      logger.error("Failed to remove metadata of image ${meta.id}:", e)
+                    }
                 }
-                .onFailure {  e ->
-                  logger.error("Failed to remove metadata of image ${meta.id}:", e)
-                }
+                responseObserver.onNext(
+                  builder.build()
+                )
+                responseObserver.onCompleted()
+              }
+          }
+          .onFailure { e ->
+            val error = when (e) {
+              is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+              else -> {
+                logger.error("Failed persist image meta data into database:", e)
+                CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+              }
             }
             responseObserver.onNext(
-              builder.build()
+              builder
+                .setError(error)
+                .build()
             )
             responseObserver.onCompleted()
           }
       }
-      .onFailure { e ->
-        val error = when (e) {
-          is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
-          else -> {
-            logger.error("Failed persist image meta data into database:", e)
-            CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
-          }
-        }
-        responseObserver.onNext(
-          builder
-            .setError(error)
-            .build()
-        )
-          responseObserver.onCompleted()
-      }
+
+    }
   }
+
 
   /**
    * Get image metadata based on image ID.

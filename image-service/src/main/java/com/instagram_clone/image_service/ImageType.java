@@ -4,37 +4,29 @@
 package com.instagram_clone.image_service;
 
 /**
- * Protobuf enum {@code Image.SearchImagesErrorStatus}
+ * Protobuf enum {@code Image.ImageType}
  */
-public enum SearchImagesErrorStatus
+public enum ImageType
     implements com.google.protobuf.ProtocolMessageEnum {
   /**
-   * <code>SEARCH_IMAGES_SERVER_ERROR = 0;</code>
+   * <code>PNG = 0;</code>
    */
-  SEARCH_IMAGES_SERVER_ERROR(0),
+  PNG(0),
   /**
-   * <pre>
-   * Empty search string
-   * </pre>
-   *
-   * <code>EMPTY_SEARCH = 1;</code>
+   * <code>JPG = 1;</code>
    */
-  EMPTY_SEARCH(1),
+  JPG(1),
   UNRECOGNIZED(-1),
   ;
 
   /**
-   * <code>SEARCH_IMAGES_SERVER_ERROR = 0;</code>
+   * <code>PNG = 0;</code>
    */
-  public static final int SEARCH_IMAGES_SERVER_ERROR_VALUE = 0;
+  public static final int PNG_VALUE = 0;
   /**
-   * <pre>
-   * Empty search string
-   * </pre>
-   *
-   * <code>EMPTY_SEARCH = 1;</code>
+   * <code>JPG = 1;</code>
    */
-  public static final int EMPTY_SEARCH_VALUE = 1;
+  public static final int JPG_VALUE = 1;
 
 
   public final int getNumber() {
@@ -49,27 +41,27 @@ public enum SearchImagesErrorStatus
    * @deprecated Use {@link #forNumber(int)} instead.
    */
   @java.lang.Deprecated
-  public static SearchImagesErrorStatus valueOf(int value) {
+  public static ImageType valueOf(int value) {
     return forNumber(value);
   }
 
-  public static SearchImagesErrorStatus forNumber(int value) {
+  public static ImageType forNumber(int value) {
     switch (value) {
-      case 0: return SEARCH_IMAGES_SERVER_ERROR;
-      case 1: return EMPTY_SEARCH;
+      case 0: return PNG;
+      case 1: return JPG;
       default: return null;
     }
   }
 
-  public static com.google.protobuf.Internal.EnumLiteMap<SearchImagesErrorStatus>
+  public static com.google.protobuf.Internal.EnumLiteMap<ImageType>
       internalGetValueMap() {
     return internalValueMap;
   }
   private static final com.google.protobuf.Internal.EnumLiteMap<
-      SearchImagesErrorStatus> internalValueMap =
-        new com.google.protobuf.Internal.EnumLiteMap<SearchImagesErrorStatus>() {
-          public SearchImagesErrorStatus findValueByNumber(int number) {
-            return SearchImagesErrorStatus.forNumber(number);
+      ImageType> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<ImageType>() {
+          public ImageType findValueByNumber(int number) {
+            return ImageType.forNumber(number);
           }
         };
 
@@ -83,12 +75,12 @@ public enum SearchImagesErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(5);
+    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(0);
   }
 
-  private static final SearchImagesErrorStatus[] VALUES = values();
+  private static final ImageType[] VALUES = values();
 
-  public static SearchImagesErrorStatus valueOf(
+  public static ImageType valueOf(
       com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
     if (desc.getType() != getDescriptor()) {
       throw new java.lang.IllegalArgumentException(
@@ -102,10 +94,10 @@ public enum SearchImagesErrorStatus
 
   private final int value;
 
-  private SearchImagesErrorStatus(int value) {
+  private ImageType(int value) {
     this.value = value;
   }
 
-  // @@protoc_insertion_point(enum_scope:Image.SearchImagesErrorStatus)
+  // @@protoc_insertion_point(enum_scope:Image.ImageType)
 }
 

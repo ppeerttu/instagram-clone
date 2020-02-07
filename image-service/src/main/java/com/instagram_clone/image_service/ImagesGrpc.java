@@ -70,7 +70,7 @@ public final class ImagesGrpc {
         if ((getCreateImageMethod = ImagesGrpc.getCreateImageMethod) == null) {
           ImagesGrpc.getCreateImageMethod = getCreateImageMethod = 
               io.grpc.MethodDescriptor.<com.instagram_clone.image_service.CreateImageRequest, com.instagram_clone.image_service.CreateImageResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(
                   "Image.Images", "CreateImage"))
               .setSampledToLocalTracing(true)
@@ -263,9 +263,9 @@ public final class ImagesGrpc {
      * Create a new image
      * </pre>
      */
-    public void createImage(com.instagram_clone.image_service.CreateImageRequest request,
+    public io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageRequest> createImage(
         io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse> responseObserver) {
-      asyncUnimplementedUnaryCall(getCreateImageMethod(), responseObserver);
+      return asyncUnimplementedStreamingCall(getCreateImageMethod(), responseObserver);
     }
 
     /**
@@ -322,7 +322,7 @@ public final class ImagesGrpc {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getCreateImageMethod(),
-            asyncUnaryCall(
+            asyncClientStreamingCall(
               new MethodHandlers<
                 com.instagram_clone.image_service.CreateImageRequest,
                 com.instagram_clone.image_service.CreateImageResponse>(
@@ -392,10 +392,10 @@ public final class ImagesGrpc {
      * Create a new image
      * </pre>
      */
-    public void createImage(com.instagram_clone.image_service.CreateImageRequest request,
+    public io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageRequest> createImage(
         io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(getCreateImageMethod(), getCallOptions()), request, responseObserver);
+      return asyncClientStreamingCall(
+          getChannel().newCall(getCreateImageMethod(), getCallOptions()), responseObserver);
     }
 
     /**
@@ -477,16 +477,6 @@ public final class ImagesGrpc {
 
     /**
      * <pre>
-     * Create a new image
-     * </pre>
-     */
-    public com.instagram_clone.image_service.CreateImageResponse createImage(com.instagram_clone.image_service.CreateImageRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getCreateImageMethod(), getCallOptions(), request);
-    }
-
-    /**
-     * <pre>
      * Delete an image
      * </pre>
      */
@@ -559,17 +549,6 @@ public final class ImagesGrpc {
 
     /**
      * <pre>
-     * Create a new image
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.image_service.CreateImageResponse> createImage(
-        com.instagram_clone.image_service.CreateImageRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getCreateImageMethod(), getCallOptions()), request);
-    }
-
-    /**
-     * <pre>
      * Delete an image
      * </pre>
      */
@@ -636,9 +615,9 @@ public final class ImagesGrpc {
      * Create a new image
      * </pre>
      */
-    public void createImage(com.instagram_clone.image_service.CreateImageRequest request,
+    public void createImage(io.vertx.grpc.GrpcReadStream<com.instagram_clone.image_service.CreateImageRequest> request,
         io.vertx.core.Future<com.instagram_clone.image_service.CreateImageResponse> response) {
-      asyncUnimplementedUnaryCall(getCreateImageMethod(), ImagesGrpc.toObserver(response.completer()));
+      request.setReadObserver(asyncUnimplementedStreamingCall(getCreateImageMethod(), ImagesGrpc.toObserver(response.completer())));
     }
 
     /**
@@ -695,7 +674,7 @@ public final class ImagesGrpc {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getCreateImageMethod(),
-            asyncUnaryCall(
+            asyncClientStreamingCall(
               new VertxMethodHandlers<
                 com.instagram_clone.image_service.CreateImageRequest,
                 com.instagram_clone.image_service.CreateImageResponse>(
@@ -765,10 +744,13 @@ public final class ImagesGrpc {
      * Create a new image
      * </pre>
      */
-    public void createImage(com.instagram_clone.image_service.CreateImageRequest request,
-        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.image_service.CreateImageResponse>> response) {
-      asyncUnaryCall(
-          getChannel().newCall(getCreateImageMethod(), getCallOptions()), request, ImagesGrpc.toObserver(response));
+    public void createImage(io.vertx.core.Handler<
+        io.vertx.grpc.GrpcUniExchange<com.instagram_clone.image_service.CreateImageRequest, com.instagram_clone.image_service.CreateImageResponse>> handler) {
+      final io.vertx.grpc.GrpcReadStream<com.instagram_clone.image_service.CreateImageResponse> readStream =
+          io.vertx.grpc.GrpcReadStream.<com.instagram_clone.image_service.CreateImageResponse>create();
+
+      handler.handle(io.vertx.grpc.GrpcUniExchange.create(readStream, asyncClientStreamingCall(
+          getChannel().newCall(getCreateImageMethod(), getCallOptions()), readStream.readObserver())));
     }
 
     /**
@@ -827,12 +809,12 @@ public final class ImagesGrpc {
     }
   }
 
-  private static final int METHODID_CREATE_IMAGE = 0;
-  private static final int METHODID_DELETE_IMAGE = 1;
-  private static final int METHODID_GET_IMAGE = 2;
-  private static final int METHODID_GET_IMAGE_DATA = 3;
-  private static final int METHODID_GET_USER_IMAGES = 4;
-  private static final int METHODID_SEARCH_IMAGES = 5;
+  private static final int METHODID_DELETE_IMAGE = 0;
+  private static final int METHODID_GET_IMAGE = 1;
+  private static final int METHODID_GET_IMAGE_DATA = 2;
+  private static final int METHODID_GET_USER_IMAGES = 3;
+  private static final int METHODID_SEARCH_IMAGES = 4;
+  private static final int METHODID_CREATE_IMAGE = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -851,10 +833,6 @@ public final class ImagesGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CREATE_IMAGE:
-          serviceImpl.createImage((com.instagram_clone.image_service.CreateImageRequest) request,
-              (io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse>) responseObserver);
-          break;
         case METHODID_DELETE_IMAGE:
           serviceImpl.deleteImage((com.instagram_clone.image_service.DeleteImageRequest) request,
               (io.grpc.stub.StreamObserver<com.instagram_clone.image_service.DeleteImageResponse>) responseObserver);
@@ -885,6 +863,9 @@ public final class ImagesGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_CREATE_IMAGE:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.createImage(
+              (io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -908,17 +889,6 @@ public final class ImagesGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CREATE_IMAGE:
-          serviceImpl.createImage((com.instagram_clone.image_service.CreateImageRequest) request,
-              (io.vertx.core.Future<com.instagram_clone.image_service.CreateImageResponse>) io.vertx.core.Future.<com.instagram_clone.image_service.CreateImageResponse>future().setHandler(ar -> {
-                if (ar.succeeded()) {
-                  ((io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse>) responseObserver).onNext(ar.result());
-                  responseObserver.onCompleted();
-                } else {
-                  responseObserver.onError(ar.cause());
-                }
-              }));
-          break;
         case METHODID_DELETE_IMAGE:
           serviceImpl.deleteImage((com.instagram_clone.image_service.DeleteImageRequest) request,
               (io.vertx.core.Future<com.instagram_clone.image_service.DeleteImageResponse>) io.vertx.core.Future.<com.instagram_clone.image_service.DeleteImageResponse>future().setHandler(ar -> {
@@ -984,6 +954,17 @@ public final class ImagesGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_CREATE_IMAGE:
+          io.vertx.grpc.GrpcReadStream<com.instagram_clone.image_service.CreateImageRequest> request0 = io.vertx.grpc.GrpcReadStream.<com.instagram_clone.image_service.CreateImageRequest>create();
+          serviceImpl.createImage(request0, (io.vertx.core.Future<com.instagram_clone.image_service.CreateImageResponse>) io.vertx.core.Future.<com.instagram_clone.image_service.CreateImageResponse>future().setHandler(ar -> {
+            if (ar.succeeded()) {
+              ((io.grpc.stub.StreamObserver<com.instagram_clone.image_service.CreateImageResponse>) responseObserver).onNext(ar.result());
+              responseObserver.onCompleted();
+            } else {
+              responseObserver.onError(ar.cause());
+            }
+          }));
+          return (io.grpc.stub.StreamObserver<Req>) request0.readObserver();
         default:
           throw new AssertionError();
       }

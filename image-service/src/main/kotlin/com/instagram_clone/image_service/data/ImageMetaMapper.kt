@@ -22,7 +22,7 @@ const val MAX_CAPTION_LENGTH = 500
  * Map given image properties into an instance of [ImageMeta]
  */
 @Throws(InvalidDataException::class, CaptionTooLongException::class)
-fun mapImageMeta(caption: String, userId: String, stream: InputStream): ImageMeta {
+fun mapImageMeta(caption: String, userId: String, mimeType: String, stream: InputStream): ImageMeta {
   if (caption.length > MAX_CAPTION_LENGTH) {
     throw CaptionTooLongException(
       "Caption cannot be longer than $MAX_CAPTION_LENGTH but received ${caption.length}"
@@ -31,13 +31,6 @@ fun mapImageMeta(caption: String, userId: String, stream: InputStream): ImageMet
   val buf = ImageIO.read(stream) ?: throw InvalidDataException(
     "Unable to read the given data into BufferedImage"
   )
-  val mimeType = DocumentParser.detectDocumentType(stream)
-
-  if (!mimeType.startsWith("image/")) {
-    throw InvalidDataException(
-      "Detected mime type $mimeType is not acceptable as image"
-    )
-  }
 
   val width = buf.width
   val height = buf.height

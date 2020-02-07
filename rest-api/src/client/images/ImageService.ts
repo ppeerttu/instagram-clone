@@ -15,6 +15,7 @@ export interface ImageService {
     createImage(
         caption: string,
         userId: string,
+        type: "jpg" | "png",
         data: string | Uint8Array
     ): Promise<ImageMeta>;
 

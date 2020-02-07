@@ -18,7 +18,7 @@ interface IImagesService extends grpc.ServiceDefinition<grpc.UntypedServiceImple
 
 interface IImagesService_ICreateImage extends grpc.MethodDefinition<image_service_pb.CreateImageRequest, image_service_pb.CreateImageResponse> {
     path: string; // "/Image.Images/CreateImage"
-    requestStream: boolean; // false
+    requestStream: boolean; // true
     responseStream: boolean; // false
     requestSerialize: grpc.serialize<image_service_pb.CreateImageRequest>;
     requestDeserialize: grpc.deserialize<image_service_pb.CreateImageRequest>;
@@ -74,7 +74,7 @@ interface IImagesService_ISearchImages extends grpc.MethodDefinition<image_servi
 export const ImagesService: IImagesService;
 
 export interface IImagesServer {
-    createImage: grpc.handleUnaryCall<image_service_pb.CreateImageRequest, image_service_pb.CreateImageResponse>;
+    createImage: grpc.handleClientStreamingCall<image_service_pb.CreateImageRequest, image_service_pb.CreateImageResponse>;
     deleteImage: grpc.handleUnaryCall<image_service_pb.DeleteImageRequest, image_service_pb.DeleteImageResponse>;
     getImage: grpc.handleUnaryCall<image_service_pb.GetImageRequest, image_service_pb.GetImageResponse>;
     getImageData: grpc.handleUnaryCall<image_service_pb.GetImageDataRequest, image_service_pb.GetImageDataResponse>;
@@ -83,9 +83,10 @@ export interface IImagesServer {
 }
 
 export interface IImagesClient {
-    createImage(request: image_service_pb.CreateImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
-    createImage(request: image_service_pb.CreateImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
-    createImage(request: image_service_pb.CreateImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
+    createImage(callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    createImage(metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    createImage(options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    createImage(metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
     deleteImage(request: image_service_pb.DeleteImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
     deleteImage(request: image_service_pb.DeleteImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
     deleteImage(request: image_service_pb.DeleteImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
@@ -105,9 +106,10 @@ export interface IImagesClient {
 
 export class ImagesClient extends grpc.Client implements IImagesClient {
     constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
-    public createImage(request: image_service_pb.CreateImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
-    public createImage(request: image_service_pb.CreateImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
-    public createImage(request: image_service_pb.CreateImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientUnaryCall;
+    public createImage(callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    public createImage(metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    public createImage(options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
+    public createImage(metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.CreateImageResponse) => void): grpc.ClientWritableStream<image_service_pb.CreateImageRequest>;
     public deleteImage(request: image_service_pb.DeleteImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
     public deleteImage(request: image_service_pb.DeleteImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
     public deleteImage(request: image_service_pb.DeleteImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.DeleteImageResponse) => void): grpc.ClientUnaryCall;
