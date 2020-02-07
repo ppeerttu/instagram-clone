@@ -11,8 +11,11 @@ You also might need to give execution permissions to the mvn wrapper ./mvnw
 
 1. Build (fat) jar with `./mvnw clean package`
 2. Create data volume for MongoDB: `docker volume create image-data-dev`
-3. Run `docker-compose up`
-4. gRPC server is running on port 3002
+    * By default the app container requires a volume as well for raw image files, but it has already been set to [./data](./data)
+3. Create `.env` -file out of [example.env](example.env) and fill in proper values
+    * Most of the variables are already set in [docker-compose.yml](docker-compose.yml)
+4. Run `docker-compose up`
+5. gRPC server is running on port 3002
 
 ## Developing
 
@@ -27,8 +30,7 @@ Simply running locally:
 
 ## Configuration
 
-The local configuration is located at [conf/config.json](conf/config.json). In case you run the image using Docker (and `doker-compose`), those configurations aren't applied. Configure by using environment variables instead. See [docker-compose.yml](docker-compose.yml) as an example. The `IMAGE_DATA_DIR` variable is populated during build, and persisting the image files on host can be done by using volume. 
-
+The local configuration is located at [conf/config.json](conf/config.json). In case you run the image using Docker (and `docker-compose`), those configurations are overwritten by environment variables. See [docker-compose.yml](docker-compose.yml) as an example. The `IMAGE_DATA_DIR` variable is populated during build, and persisting the image files on host can be done by using volume. 
 
 
 **Original Vert.x Starter documentation below**
