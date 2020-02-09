@@ -1,8 +1,10 @@
 package com.instagram_clone.image_service
 
 import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.service.ImageFileServiceVertxImpl
 import com.instagram_clone.image_service.service.ImageServiceGrpcImpl
 import com.instagram_clone.image_service.service.ImageMetaServiceMockImpl
+import com.instagram_clone.image_service.service.ImageMetaServiceMongoImpl
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Context
@@ -15,6 +17,7 @@ import io.vertx.ext.consul.CheckOptions
 import io.vertx.ext.consul.ConsulClient
 import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
+import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
 import io.vertx.kotlin.ext.consul.deregisterServiceAwait
 import java.net.InetAddress
@@ -43,8 +46,15 @@ class MainVerticle : AbstractVerticle() {
         val json = ar.result()
         val config = AppConfig.getInstance(json)
 
-        val imageMetaService = ImageMetaServiceMockImpl()
-        val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(imageMetaService, vertx)
+        val mongoClient = configureMongo(config)
+
+        val imageMetaService = ImageMetaServiceMongoImpl(mongoClient)
+        val imageFileService = ImageFileServiceVertxImpl(vertx)
+        val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(
+          imageMetaService,
+          imageFileService,
+          vertx
+        )
 
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.grpcHost, config.grpcPort)
@@ -94,6 +104,22 @@ class MainVerticle : AbstractVerticle() {
         logger.error("Failed to register service to consul, cause:", it.cause())
       }
     }
+  }
+
+  private fun configureMongo(config: AppConfig): MongoClient {
+    val user = config.mongoUser
+    val pass = config.mongoPassword
+    val host = config.mongoHost
+    val port = config.mongoPort
+    val db = config.mongoDatabase
+    val conn = "mongodb://$user:$pass@$host:$port/$db"
+    logger.info("Mongo config: $user:****@$host:$port/$db")
+    return MongoClient.createShared(
+      vertx,
+      JsonObject()
+        .put("connection_string", conn)
+        .put("db_name", db)
+    )
   }
 
   /**

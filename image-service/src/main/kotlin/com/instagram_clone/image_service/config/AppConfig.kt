@@ -37,12 +37,54 @@ class AppConfig private constructor(json: JsonObject) {
   var consulPort: Int = 0
     private set
 
+  /**
+   * MongoDB user
+   */
+  var mongoUser: String
+    private set
+
+  /**
+   * MongoDB password
+   */
+  var mongoPassword: String
+    private set
+
+  /**
+   * MongoDB host
+   */
+  var mongoHost: String
+    private set
+
+  /**
+   * MongoDB port
+   */
+  var mongoPort: Int
+    private set
+
+  /**
+   * MongoDB database name
+   */
+  var mongoDatabase: String
+    private set
+
+  /**
+   * MongoDB images collection
+   */
+  var imagesCollection: String
+    private set
+
   init {
     grpcHost = json.getString(ConfigConstants.GRPC_HOST)
     grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
     imageDataDir = json.getString(ConfigConstants.IMAGE_DATA_DIR)
     consulHost = json.getString(ConfigConstants.CONSUL_HOST)
     consulPort = json.getInteger(ConfigConstants.CONSUL_PORT)
+    mongoUser = json.getString(ConfigConstants.MONGO_USER)
+    mongoPassword = json.getString(ConfigConstants.MONGO_PASSWORD)
+    mongoHost = json.getString(ConfigConstants.MONGO_HOST, "127.0.0.1")
+    mongoPort = json.getInteger(ConfigConstants.MONGO_PORT, 27017)
+    mongoDatabase = json.getString(ConfigConstants.MONGO_DATABASE)
+    imagesCollection = json.getString(ConfigConstants.IMAGES_COLLECTION, "image_meta")
   }
 
   companion object {

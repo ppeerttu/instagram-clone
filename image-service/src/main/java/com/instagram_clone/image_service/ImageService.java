@@ -20,6 +20,11 @@ public final class ImageService {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Image_CreateImageRequest_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Image_Metadata_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Image_Metadata_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Image_CreateImageResponse_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -98,64 +103,69 @@ public final class ImageService {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023image_service.proto\022\005Image\"G\n\022CreateIm" +
-      "ageRequest\022\017\n\007caption\030\001 \001(\t\022\022\n\ncreator_i" +
-      "d\030\002 \001(\t\022\014\n\004data\030\003 \001(\014\"n\n\023CreateImageResp" +
-      "onse\022\035\n\005image\030\001 \001(\0132\014.Image.ImageH\000\022.\n\005e" +
-      "rror\030\002 \001(\0162\035.Image.CreateImageErrorStatu" +
-      "sH\000B\010\n\006status\" \n\022DeleteImageRequest\022\n\n\002i" +
-      "d\030\001 \001(\t\"?\n\023DeleteImageResponse\022(\n\006status" +
-      "\030\001 \001(\0162\030.Image.DeleteImageStatus\"#\n\017GetI" +
-      "mageRequest\022\020\n\010image_id\030\001 \001(\t\"h\n\020GetImag" +
-      "eResponse\022\035\n\005image\030\001 \001(\0132\014.Image.ImageH\000",
-      "\022+\n\005error\030\002 \001(\0162\032.Image.GetImageErrorSta" +
-      "tusH\000B\010\n\006status\"\'\n\023GetImageDataRequest\022\020" +
-      "\n\010image_id\030\001 \001(\t\"]\n\024GetImageDataResponse" +
-      "\022\016\n\004data\030\001 \001(\014H\000\022+\n\005error\030\002 \001(\0162\032.Image." +
-      "GetImageErrorStatusH\000B\010\n\006status\"\'\n\024GetUs" +
-      "erImagesRequest\022\017\n\007user_id\030\001 \001(\t\"y\n\025GetU" +
-      "serImagesResponse\022$\n\004page\030\001 \001(\0132\024.Image." +
-      "UserImagePageH\000\0220\n\005error\030\002 \001(\0162\037.Image.G" +
-      "etUserImagesErrorStatusH\000B\010\n\006status\"G\n\023S" +
-      "earchImagesRequest\022\022\n\010hash_tag\030\001 \001(\tH\000\022\022",
-      "\n\010user_tag\030\002 \001(\tH\000B\010\n\006search\"y\n\024SearchIm" +
-      "agesResponse\022&\n\004page\030\001 \001(\0132\026.Image.Image" +
-      "SearchPageH\000\022/\n\005error\030\002 \001(\0162\036.Image.Sear" +
-      "chImagesErrorStatusH\000B\010\n\006status\"\222\001\n\017Imag" +
-      "eSearchPage\022\022\n\010hash_tag\030\001 \001(\tH\000\022\022\n\010user_" +
-      "tag\030\002 \001(\tH\000\022\014\n\004size\030\003 \001(\005\022\014\n\004page\030\004 \001(\005\022" +
-      "\023\n\013total_count\030\005 \001(\005\022\034\n\006images\030\006 \003(\0132\014.I" +
-      "mage.ImageB\010\n\006search\"o\n\rUserImagePage\022\017\n" +
-      "\007user_id\030\001 \001(\t\022\014\n\004size\030\002 \001(\005\022\014\n\004page\030\003 \001" +
-      "(\005\022\023\n\013total_count\030\004 \001(\005\022\034\n\006images\030\005 \003(\0132",
-      "\014.Image.Image\"v\n\005Image\022\n\n\002id\030\001 \001(\t\022\014\n\004ty" +
-      "pe\030\002 \001(\t\022\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022" +
-      "\017\n\007user_id\030\005 \001(\t\022\017\n\007caption\030\006 \001(\t\022\022\n\ncre" +
-      "ated_at\030\007 \001(\t*\214\001\n\026CreateImageErrorStatus" +
-      "\022\035\n\031CREATE_IMAGE_SERVER_ERROR\020\000\022\024\n\020CONTE" +
-      "NT_TOO_LONG\020\001\022\025\n\021CREATOR_NOT_FOUND\020\002\022\020\n\014" +
-      "INVALID_DATA\020\003\022\024\n\020CAPTION_TOO_LONG\020\004*S\n\021" +
-      "DeleteImageStatus\022\035\n\031DELETE_IMAGE_SERVER" +
-      "_ERROR\020\000\022\027\n\023DELETABLE_NOT_FOUND\020\001\022\006\n\002OK\020" +
-      "\002*F\n\023GetImageErrorStatus\022\032\n\026GET_IMAGE_SE",
-      "RVER_ERROR\020\000\022\023\n\017IMAGE_NOT_FOUND\020\001*P\n\030Get" +
-      "UserImagesErrorStatus\022 \n\034GET_USER_IMAGES" +
-      "_SERVER_ERROR\020\000\022\022\n\016USER_NOT_FOUND\020\001*K\n\027S" +
-      "earchImagesErrorStatus\022\036\n\032SEARCH_IMAGES_" +
-      "SERVER_ERROR\020\000\022\020\n\014EMPTY_SEARCH\020\0012\273\003\n\006Ima" +
-      "ges\022F\n\013CreateImage\022\031.Image.CreateImageRe" +
-      "quest\032\032.Image.CreateImageResponse\"\000\022F\n\013D" +
-      "eleteImage\022\031.Image.DeleteImageRequest\032\032." +
-      "Image.DeleteImageResponse\"\000\022=\n\010GetImage\022" +
-      "\026.Image.GetImageRequest\032\027.Image.GetImage",
-      "Response\"\000\022I\n\014GetImageData\022\032.Image.GetIm" +
-      "ageDataRequest\032\033.Image.GetImageDataRespo" +
-      "nse\"\000\022L\n\rGetUserImages\022\033.Image.GetUserIm" +
-      "agesRequest\032\034.Image.GetUserImagesRespons" +
-      "e\"\000\022I\n\014SearchImages\022\032.Image.SearchImages" +
-      "Request\032\033.Image.SearchImagesResponse\"\000B3" +
-      "\n!com.instagram_clone.image_serviceB\014Ima" +
-      "geServiceP\001b\006proto3"
+      "\n\023image_service.proto\022\005Image\"R\n\022CreateIm" +
+      "ageRequest\022$\n\tmeta_data\030\001 \001(\0132\017.Image.Me" +
+      "tadataH\000\022\016\n\004data\030\002 \001(\014H\000B\006\n\004part\"U\n\010Meta" +
+      "data\022\017\n\007caption\030\001 \001(\t\022\022\n\ncreator_id\030\002 \001(" +
+      "\t\022$\n\nimage_type\030\003 \001(\0162\020.Image.ImageType\"" +
+      "n\n\023CreateImageResponse\022\035\n\005image\030\001 \001(\0132\014." +
+      "Image.ImageH\000\022.\n\005error\030\002 \001(\0162\035.Image.Cre" +
+      "ateImageErrorStatusH\000B\010\n\006status\" \n\022Delet" +
+      "eImageRequest\022\n\n\002id\030\001 \001(\t\"?\n\023DeleteImage" +
+      "Response\022(\n\006status\030\001 \001(\0162\030.Image.DeleteI",
+      "mageStatus\"#\n\017GetImageRequest\022\020\n\010image_i" +
+      "d\030\001 \001(\t\"h\n\020GetImageResponse\022\035\n\005image\030\001 \001" +
+      "(\0132\014.Image.ImageH\000\022+\n\005error\030\002 \001(\0162\032.Imag" +
+      "e.GetImageErrorStatusH\000B\010\n\006status\"\'\n\023Get" +
+      "ImageDataRequest\022\020\n\010image_id\030\001 \001(\t\"\205\001\n\024G" +
+      "etImageDataResponse\022\016\n\004data\030\001 \001(\014H\000\022&\n\ni" +
+      "mage_type\030\002 \001(\0162\020.Image.ImageTypeH\000\022+\n\005e" +
+      "rror\030\003 \001(\0162\032.Image.GetImageErrorStatusH\000" +
+      "B\010\n\006status\"\'\n\024GetUserImagesRequest\022\017\n\007us" +
+      "er_id\030\001 \001(\t\"y\n\025GetUserImagesResponse\022$\n\004",
+      "page\030\001 \001(\0132\024.Image.UserImagePageH\000\0220\n\005er" +
+      "ror\030\002 \001(\0162\037.Image.GetUserImagesErrorStat" +
+      "usH\000B\010\n\006status\"G\n\023SearchImagesRequest\022\022\n" +
+      "\010hash_tag\030\001 \001(\tH\000\022\022\n\010user_tag\030\002 \001(\tH\000B\010\n" +
+      "\006search\"y\n\024SearchImagesResponse\022&\n\004page\030" +
+      "\001 \001(\0132\026.Image.ImageSearchPageH\000\022/\n\005error" +
+      "\030\002 \001(\0162\036.Image.SearchImagesErrorStatusH\000" +
+      "B\010\n\006status\"\222\001\n\017ImageSearchPage\022\022\n\010hash_t" +
+      "ag\030\001 \001(\tH\000\022\022\n\010user_tag\030\002 \001(\tH\000\022\014\n\004size\030\003" +
+      " \001(\005\022\014\n\004page\030\004 \001(\005\022\023\n\013total_count\030\005 \001(\005\022",
+      "\034\n\006images\030\006 \003(\0132\014.Image.ImageB\010\n\006search\"" +
+      "o\n\rUserImagePage\022\017\n\007user_id\030\001 \001(\t\022\014\n\004siz" +
+      "e\030\002 \001(\005\022\014\n\004page\030\003 \001(\005\022\023\n\013total_count\030\004 \001" +
+      "(\005\022\034\n\006images\030\005 \003(\0132\014.Image.Image\"\241\001\n\005Ima" +
+      "ge\022\n\n\002id\030\001 \001(\t\022\021\n\tmime_type\030\002 \001(\t\022\r\n\005wid" +
+      "th\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022\017\n\007user_id\030\005 \001(" +
+      "\t\022\017\n\007caption\030\006 \001(\t\022\022\n\ncreated_at\030\007 \001(\t\022\021" +
+      "\n\tuser_tags\030\010 \003(\t\022\021\n\thash_tags\030\t \003(\t*\035\n\t" +
+      "ImageType\022\007\n\003PNG\020\000\022\007\n\003JPG\020\001*\214\001\n\026CreateIm" +
+      "ageErrorStatus\022\035\n\031CREATE_IMAGE_SERVER_ER",
+      "ROR\020\000\022\024\n\020CONTENT_TOO_LONG\020\001\022\025\n\021CREATOR_N" +
+      "OT_FOUND\020\002\022\020\n\014INVALID_DATA\020\003\022\024\n\020CAPTION_" +
+      "TOO_LONG\020\004*S\n\021DeleteImageStatus\022\035\n\031DELET" +
+      "E_IMAGE_SERVER_ERROR\020\000\022\027\n\023DELETABLE_NOT_" +
+      "FOUND\020\001\022\006\n\002OK\020\002*F\n\023GetImageErrorStatus\022\032" +
+      "\n\026GET_IMAGE_SERVER_ERROR\020\000\022\023\n\017IMAGE_NOT_" +
+      "FOUND\020\001*P\n\030GetUserImagesErrorStatus\022 \n\034G" +
+      "ET_USER_IMAGES_SERVER_ERROR\020\000\022\022\n\016USER_NO" +
+      "T_FOUND\020\001*K\n\027SearchImagesErrorStatus\022\036\n\032" +
+      "SEARCH_IMAGES_SERVER_ERROR\020\000\022\020\n\014EMPTY_SE",
+      "ARCH\020\0012\277\003\n\006Images\022H\n\013CreateImage\022\031.Image" +
+      ".CreateImageRequest\032\032.Image.CreateImageR" +
+      "esponse\"\000(\001\022F\n\013DeleteImage\022\031.Image.Delet" +
+      "eImageRequest\032\032.Image.DeleteImageRespons" +
+      "e\"\000\022=\n\010GetImage\022\026.Image.GetImageRequest\032" +
+      "\027.Image.GetImageResponse\"\000\022K\n\014GetImageDa" +
+      "ta\022\032.Image.GetImageDataRequest\032\033.Image.G" +
+      "etImageDataResponse\"\0000\001\022L\n\rGetUserImages" +
+      "\022\033.Image.GetUserImagesRequest\032\034.Image.Ge" +
+      "tUserImagesResponse\"\000\022I\n\014SearchImages\022\032.",
+      "Image.SearchImagesRequest\032\033.Image.Search" +
+      "ImagesResponse\"\000B3\n!com.instagram_clone." +
+      "image_serviceB\014ImageServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -174,91 +184,97 @@ public final class ImageService {
     internal_static_Image_CreateImageRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_CreateImageRequest_descriptor,
-        new java.lang.String[] { "Caption", "CreatorId", "Data", });
-    internal_static_Image_CreateImageResponse_descriptor =
+        new java.lang.String[] { "MetaData", "Data", "Part", });
+    internal_static_Image_Metadata_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_Image_Metadata_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Image_Metadata_descriptor,
+        new java.lang.String[] { "Caption", "CreatorId", "ImageType", });
+    internal_static_Image_CreateImageResponse_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_Image_CreateImageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_CreateImageResponse_descriptor,
         new java.lang.String[] { "Image", "Error", "Status", });
     internal_static_Image_DeleteImageRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_Image_DeleteImageRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_DeleteImageRequest_descriptor,
         new java.lang.String[] { "Id", });
     internal_static_Image_DeleteImageResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_Image_DeleteImageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_DeleteImageResponse_descriptor,
         new java.lang.String[] { "Status", });
     internal_static_Image_GetImageRequest_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_Image_GetImageRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetImageRequest_descriptor,
         new java.lang.String[] { "ImageId", });
     internal_static_Image_GetImageResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_Image_GetImageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetImageResponse_descriptor,
         new java.lang.String[] { "Image", "Error", "Status", });
     internal_static_Image_GetImageDataRequest_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_Image_GetImageDataRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetImageDataRequest_descriptor,
         new java.lang.String[] { "ImageId", });
     internal_static_Image_GetImageDataResponse_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_Image_GetImageDataResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetImageDataResponse_descriptor,
-        new java.lang.String[] { "Data", "Error", "Status", });
+        new java.lang.String[] { "Data", "ImageType", "Error", "Status", });
     internal_static_Image_GetUserImagesRequest_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_Image_GetUserImagesRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetUserImagesRequest_descriptor,
         new java.lang.String[] { "UserId", });
     internal_static_Image_GetUserImagesResponse_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_Image_GetUserImagesResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_GetUserImagesResponse_descriptor,
         new java.lang.String[] { "Page", "Error", "Status", });
     internal_static_Image_SearchImagesRequest_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_Image_SearchImagesRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_SearchImagesRequest_descriptor,
         new java.lang.String[] { "HashTag", "UserTag", "Search", });
     internal_static_Image_SearchImagesResponse_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_Image_SearchImagesResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_SearchImagesResponse_descriptor,
         new java.lang.String[] { "Page", "Error", "Status", });
     internal_static_Image_ImageSearchPage_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_Image_ImageSearchPage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_ImageSearchPage_descriptor,
         new java.lang.String[] { "HashTag", "UserTag", "Size", "Page", "TotalCount", "Images", "Search", });
     internal_static_Image_UserImagePage_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_Image_UserImagePage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_UserImagePage_descriptor,
         new java.lang.String[] { "UserId", "Size", "Page", "TotalCount", "Images", });
     internal_static_Image_Image_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_Image_Image_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_Image_descriptor,
-        new java.lang.String[] { "Id", "Type", "Width", "Height", "UserId", "Caption", "CreatedAt", });
+        new java.lang.String[] { "Id", "MimeType", "Width", "Height", "UserId", "Caption", "CreatedAt", "UserTags", "HashTags", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

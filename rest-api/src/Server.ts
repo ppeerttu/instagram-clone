@@ -41,7 +41,9 @@ export default class Server {
      */
     public configure() {
         this.app
-            .use(middlewareLogger())
+            .use(middlewareLogger({
+                level: process.env.NODE_ENV === "development" ? "debug" : "info"
+            }))
             .use(bodyParser())
             .use(async (ctx: ParameterizedContext<RouterContext>, next) => {
                 try {

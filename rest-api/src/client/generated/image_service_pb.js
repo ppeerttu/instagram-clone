@@ -27,6 +27,8 @@ goog.exportSymbol('proto.Image.GetUserImagesRequest', null, global);
 goog.exportSymbol('proto.Image.GetUserImagesResponse', null, global);
 goog.exportSymbol('proto.Image.Image', null, global);
 goog.exportSymbol('proto.Image.ImageSearchPage', null, global);
+goog.exportSymbol('proto.Image.ImageType', null, global);
+goog.exportSymbol('proto.Image.Metadata', null, global);
 goog.exportSymbol('proto.Image.SearchImagesErrorStatus', null, global);
 goog.exportSymbol('proto.Image.SearchImagesRequest', null, global);
 goog.exportSymbol('proto.Image.SearchImagesResponse', null, global);
@@ -43,12 +45,38 @@ goog.exportSymbol('proto.Image.UserImagePage', null, global);
  * @constructor
  */
 proto.Image.CreateImageRequest = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Image.CreateImageRequest.oneofGroups_);
 };
 goog.inherits(proto.Image.CreateImageRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.Image.CreateImageRequest.displayName = 'proto.Image.CreateImageRequest';
 }
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.Image.CreateImageRequest.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.Image.CreateImageRequest.PartCase = {
+  PART_NOT_SET: 0,
+  META_DATA: 1,
+  DATA: 2
+};
+
+/**
+ * @return {proto.Image.CreateImageRequest.PartCase}
+ */
+proto.Image.CreateImageRequest.prototype.getPartCase = function() {
+  return /** @type {proto.Image.CreateImageRequest.PartCase} */(jspb.Message.computeOneofCase(this, proto.Image.CreateImageRequest.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -78,8 +106,7 @@ proto.Image.CreateImageRequest.prototype.toObject = function(opt_includeInstance
  */
 proto.Image.CreateImageRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    caption: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    creatorId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    metaData: (f = msg.getMetaData()) && proto.Image.Metadata.toObject(includeInstance, f),
     data: msg.getData_asB64()
   };
 
@@ -118,14 +145,11 @@ proto.Image.CreateImageRequest.deserializeBinaryFromReader = function(msg, reade
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setCaption(value);
+      var value = new proto.Image.Metadata;
+      reader.readMessage(value,proto.Image.Metadata.deserializeBinaryFromReader);
+      msg.setMetaData(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setCreatorId(value);
-      break;
-    case 3:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setData(value);
       break;
@@ -158,6 +182,234 @@ proto.Image.CreateImageRequest.prototype.serializeBinary = function() {
  */
 proto.Image.CreateImageRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getMetaData();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.Image.Metadata.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!(string|Uint8Array)} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeBytes(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional Metadata meta_data = 1;
+ * @return {?proto.Image.Metadata}
+ */
+proto.Image.CreateImageRequest.prototype.getMetaData = function() {
+  return /** @type{?proto.Image.Metadata} */ (
+    jspb.Message.getWrapperField(this, proto.Image.Metadata, 1));
+};
+
+
+/** @param {?proto.Image.Metadata|undefined} value */
+proto.Image.CreateImageRequest.prototype.setMetaData = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.Image.CreateImageRequest.oneofGroups_[0], value);
+};
+
+
+proto.Image.CreateImageRequest.prototype.clearMetaData = function() {
+  this.setMetaData(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.CreateImageRequest.prototype.hasMetaData = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional bytes data = 2;
+ * @return {!(string|Uint8Array)}
+ */
+proto.Image.CreateImageRequest.prototype.getData = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * optional bytes data = 2;
+ * This is a type-conversion wrapper around `getData()`
+ * @return {string}
+ */
+proto.Image.CreateImageRequest.prototype.getData_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getData()));
+};
+
+
+/**
+ * optional bytes data = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getData()`
+ * @return {!Uint8Array}
+ */
+proto.Image.CreateImageRequest.prototype.getData_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getData()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.Image.CreateImageRequest.prototype.setData = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.Image.CreateImageRequest.oneofGroups_[0], value);
+};
+
+
+proto.Image.CreateImageRequest.prototype.clearData = function() {
+  jspb.Message.setOneofField(this, 2, proto.Image.CreateImageRequest.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.CreateImageRequest.prototype.hasData = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Image.Metadata = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.Image.Metadata, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Image.Metadata.displayName = 'proto.Image.Metadata';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Image.Metadata.prototype.toObject = function(opt_includeInstance) {
+  return proto.Image.Metadata.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Image.Metadata} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.Metadata.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    caption: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    creatorId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    imageType: jspb.Message.getFieldWithDefault(msg, 3, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Image.Metadata}
+ */
+proto.Image.Metadata.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Image.Metadata;
+  return proto.Image.Metadata.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Image.Metadata} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Image.Metadata}
+ */
+proto.Image.Metadata.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCaption(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCreatorId(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.Image.ImageType} */ (reader.readEnum());
+      msg.setImageType(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Image.Metadata.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Image.Metadata.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Image.Metadata} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.Metadata.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
   f = message.getCaption();
   if (f.length > 0) {
     writer.writeString(
@@ -172,9 +424,9 @@ proto.Image.CreateImageRequest.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getData_asU8();
-  if (f.length > 0) {
-    writer.writeBytes(
+  f = message.getImageType();
+  if (f !== 0.0) {
+    writer.writeEnum(
       3,
       f
     );
@@ -186,13 +438,13 @@ proto.Image.CreateImageRequest.serializeBinaryToWriter = function(message, write
  * optional string caption = 1;
  * @return {string}
  */
-proto.Image.CreateImageRequest.prototype.getCaption = function() {
+proto.Image.Metadata.prototype.getCaption = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
-proto.Image.CreateImageRequest.prototype.setCaption = function(value) {
+proto.Image.Metadata.prototype.setCaption = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -201,53 +453,29 @@ proto.Image.CreateImageRequest.prototype.setCaption = function(value) {
  * optional string creator_id = 2;
  * @return {string}
  */
-proto.Image.CreateImageRequest.prototype.getCreatorId = function() {
+proto.Image.Metadata.prototype.getCreatorId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.Image.CreateImageRequest.prototype.setCreatorId = function(value) {
+proto.Image.Metadata.prototype.setCreatorId = function(value) {
   jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional bytes data = 3;
- * @return {!(string|Uint8Array)}
+ * optional ImageType image_type = 3;
+ * @return {!proto.Image.ImageType}
  */
-proto.Image.CreateImageRequest.prototype.getData = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.Image.Metadata.prototype.getImageType = function() {
+  return /** @type {!proto.Image.ImageType} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/**
- * optional bytes data = 3;
- * This is a type-conversion wrapper around `getData()`
- * @return {string}
- */
-proto.Image.CreateImageRequest.prototype.getData_asB64 = function() {
-  return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getData()));
-};
-
-
-/**
- * optional bytes data = 3;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getData()`
- * @return {!Uint8Array}
- */
-proto.Image.CreateImageRequest.prototype.getData_asU8 = function() {
-  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getData()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.Image.CreateImageRequest.prototype.setData = function(value) {
-  jspb.Message.setProto3BytesField(this, 3, value);
+/** @param {!proto.Image.ImageType} value */
+proto.Image.Metadata.prototype.setImageType = function(value) {
+  jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -1297,7 +1525,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2]];
+proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2,3]];
 
 /**
  * @enum {number}
@@ -1305,7 +1533,8 @@ proto.Image.GetImageDataResponse.oneofGroups_ = [[1,2]];
 proto.Image.GetImageDataResponse.StatusCase = {
   STATUS_NOT_SET: 0,
   DATA: 1,
-  ERROR: 2
+  IMAGE_TYPE: 2,
+  ERROR: 3
 };
 
 /**
@@ -1345,7 +1574,8 @@ proto.Image.GetImageDataResponse.prototype.toObject = function(opt_includeInstan
 proto.Image.GetImageDataResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     data: msg.getData_asB64(),
-    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    imageType: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    error: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -1387,6 +1617,10 @@ proto.Image.GetImageDataResponse.deserializeBinaryFromReader = function(msg, rea
       msg.setData(value);
       break;
     case 2:
+      var value = /** @type {!proto.Image.ImageType} */ (reader.readEnum());
+      msg.setImageType(value);
+      break;
+    case 3:
       var value = /** @type {!proto.Image.GetImageErrorStatus} */ (reader.readEnum());
       msg.setError(value);
       break;
@@ -1426,10 +1660,17 @@ proto.Image.GetImageDataResponse.serializeBinaryToWriter = function(message, wri
       f
     );
   }
-  f = /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getField(message, 2));
+  f = /** @type {!proto.Image.ImageType} */ (jspb.Message.getField(message, 2));
   if (f != null) {
     writer.writeEnum(
       2,
+      f
+    );
+  }
+  f = /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeEnum(
+      3,
       f
     );
   }
@@ -1490,21 +1731,21 @@ proto.Image.GetImageDataResponse.prototype.hasData = function() {
 
 
 /**
- * optional GetImageErrorStatus error = 2;
- * @return {!proto.Image.GetImageErrorStatus}
+ * optional ImageType image_type = 2;
+ * @return {!proto.Image.ImageType}
  */
-proto.Image.GetImageDataResponse.prototype.getError = function() {
-  return /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.Image.GetImageDataResponse.prototype.getImageType = function() {
+  return /** @type {!proto.Image.ImageType} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {!proto.Image.GetImageErrorStatus} value */
-proto.Image.GetImageDataResponse.prototype.setError = function(value) {
+/** @param {!proto.Image.ImageType} value */
+proto.Image.GetImageDataResponse.prototype.setImageType = function(value) {
   jspb.Message.setOneofField(this, 2, proto.Image.GetImageDataResponse.oneofGroups_[0], value);
 };
 
 
-proto.Image.GetImageDataResponse.prototype.clearError = function() {
+proto.Image.GetImageDataResponse.prototype.clearImageType = function() {
   jspb.Message.setOneofField(this, 2, proto.Image.GetImageDataResponse.oneofGroups_[0], undefined);
 };
 
@@ -1513,8 +1754,37 @@ proto.Image.GetImageDataResponse.prototype.clearError = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.Image.GetImageDataResponse.prototype.hasError = function() {
+proto.Image.GetImageDataResponse.prototype.hasImageType = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional GetImageErrorStatus error = 3;
+ * @return {!proto.Image.GetImageErrorStatus}
+ */
+proto.Image.GetImageDataResponse.prototype.getError = function() {
+  return /** @type {!proto.Image.GetImageErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.Image.GetImageErrorStatus} value */
+proto.Image.GetImageDataResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 3, proto.Image.GetImageDataResponse.oneofGroups_[0], value);
+};
+
+
+proto.Image.GetImageDataResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 3, proto.Image.GetImageDataResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.GetImageDataResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -2980,12 +3250,19 @@ proto.Image.UserImagePage.prototype.clearImagesList = function() {
  * @constructor
  */
 proto.Image.Image = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.Image.Image.repeatedFields_, null);
 };
 goog.inherits(proto.Image.Image, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.Image.Image.displayName = 'proto.Image.Image';
 }
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.Image.Image.repeatedFields_ = [8,9];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -3016,12 +3293,14 @@ proto.Image.Image.prototype.toObject = function(opt_includeInstance) {
 proto.Image.Image.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    type: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    mimeType: jspb.Message.getFieldWithDefault(msg, 2, ""),
     width: jspb.Message.getFieldWithDefault(msg, 3, 0),
     height: jspb.Message.getFieldWithDefault(msg, 4, 0),
     userId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     caption: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    createdAt: jspb.Message.getFieldWithDefault(msg, 7, "")
+    createdAt: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    userTagsList: jspb.Message.getRepeatedField(msg, 8),
+    hashTagsList: jspb.Message.getRepeatedField(msg, 9)
   };
 
   if (includeInstance) {
@@ -3064,7 +3343,7 @@ proto.Image.Image.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setType(value);
+      msg.setMimeType(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
@@ -3085,6 +3364,14 @@ proto.Image.Image.deserializeBinaryFromReader = function(msg, reader) {
     case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedAt(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addUserTags(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addHashTags(value);
       break;
     default:
       reader.skipField();
@@ -3122,7 +3409,7 @@ proto.Image.Image.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getType();
+  f = message.getMimeType();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -3164,6 +3451,20 @@ proto.Image.Image.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getUserTagsList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      8,
+      f
+    );
+  }
+  f = message.getHashTagsList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      9,
+      f
+    );
+  }
 };
 
 
@@ -3183,16 +3484,16 @@ proto.Image.Image.prototype.setId = function(value) {
 
 
 /**
- * optional string type = 2;
+ * optional string mime_type = 2;
  * @return {string}
  */
-proto.Image.Image.prototype.getType = function() {
+proto.Image.Image.prototype.getMimeType = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.Image.Image.prototype.setType = function(value) {
+proto.Image.Image.prototype.setMimeType = function(value) {
   jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -3271,6 +3572,72 @@ proto.Image.Image.prototype.setCreatedAt = function(value) {
   jspb.Message.setProto3StringField(this, 7, value);
 };
 
+
+/**
+ * repeated string user_tags = 8;
+ * @return {!Array<string>}
+ */
+proto.Image.Image.prototype.getUserTagsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 8));
+};
+
+
+/** @param {!Array<string>} value */
+proto.Image.Image.prototype.setUserTagsList = function(value) {
+  jspb.Message.setField(this, 8, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.Image.Image.prototype.addUserTags = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 8, value, opt_index);
+};
+
+
+proto.Image.Image.prototype.clearUserTagsList = function() {
+  this.setUserTagsList([]);
+};
+
+
+/**
+ * repeated string hash_tags = 9;
+ * @return {!Array<string>}
+ */
+proto.Image.Image.prototype.getHashTagsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 9));
+};
+
+
+/** @param {!Array<string>} value */
+proto.Image.Image.prototype.setHashTagsList = function(value) {
+  jspb.Message.setField(this, 9, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.Image.Image.prototype.addHashTags = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 9, value, opt_index);
+};
+
+
+proto.Image.Image.prototype.clearHashTagsList = function() {
+  this.setHashTagsList([]);
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.Image.ImageType = {
+  PNG: 0,
+  JPG: 1
+};
 
 /**
  * @enum {number}

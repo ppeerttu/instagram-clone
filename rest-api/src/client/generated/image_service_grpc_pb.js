@@ -142,7 +142,7 @@ var ImagesService = exports.ImagesService = {
   // Create a new image
 createImage: {
     path: '/Image.Images/CreateImage',
-    requestStream: false,
+    requestStream: true,
     responseStream: false,
     requestType: image_service_pb.CreateImageRequest,
     responseType: image_service_pb.CreateImageResponse,
@@ -179,7 +179,7 @@ getImage: {
 getImageData: {
     path: '/Image.Images/GetImageData',
     requestStream: false,
-    responseStream: false,
+    responseStream: true,
     requestType: image_service_pb.GetImageDataRequest,
     responseType: image_service_pb.GetImageDataResponse,
     requestSerialize: serialize_Image_GetImageDataRequest,

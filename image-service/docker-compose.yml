@@ -12,14 +12,42 @@ services:
       - "./data:/app/image-data"
     networks:
       - ig-clone-dev
+    depends_on:
+      - image-db
     environment:
-      - GRPC_HOST=0.0.0.0
-      - GRPC_PORT=3000
-      - CONSUL_HOST=consul-dev
-      - CONSUL_PORT=8500
+      GRPC_HOST: 0.0.0.0
+      GRPC_PORT: 3000
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_HOST: image-db-dev
+      MONGO_PORT: 27017
+      MONGO_DATABASE: images
+      IMAGES_COLLECTION: image_meta
 
+  image-db:
+    container_name: image-db-dev
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - ig-clone-dev
+    volumes:
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - image-data-dev:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: images
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
 
 networks:
   ig-clone-dev:
     external:
       name: ig-clone-dev
+
+volumes:
+  image-data-dev:
+    external: true

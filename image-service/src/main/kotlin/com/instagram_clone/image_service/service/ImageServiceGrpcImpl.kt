@@ -1,94 +1,239 @@
 package com.instagram_clone.image_service.service
 
-import com.instagram_clone.image_service.CreateImageErrorStatus
-import com.instagram_clone.image_service.CreateImageRequest
-import com.instagram_clone.image_service.CreateImageResponse
+import com.google.protobuf.ByteString
+import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
-import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.data.ImageMeta
 import com.instagram_clone.image_service.data.fromImageMeta
-import com.instagram_clone.image_service.data.mapImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.InvalidDataException
+import com.instagram_clone.image_service.exception.NotFoundException
+import com.instagram_clone.image_service.util.ImageRecorder
 import io.grpc.stub.StreamObserver
-import io.vertx.core.buffer.Buffer
-import io.vertx.core.file.AsyncFile
-import io.vertx.core.file.FileSystem
-import io.vertx.core.file.impl.AsyncFileImpl
-import io.vertx.core.file.impl.FileSystemImpl
 import io.vertx.core.logging.LoggerFactory
-import io.vertx.kotlin.core.Vertx
-import java.awt.image.BufferedImage
-import java.awt.image.DataBufferByte
-import java.io.ByteArrayInputStream
-import java.nio.ByteBuffer
-import javax.imageio.ImageIO
+import kotlin.math.min
+
+// Chunk size in bytes
+private const val CHUNK_SIZE = 1024 * 16
 
 /**
  * Class implementing the image_service.proto Image service interface.
  */
 class ImageServiceGrpcImpl(
-  private val service: ImageMetaService,
+  private val metaService: ImageMetaService,
+  private val fileService: ImageFileService,
   private val vertx: io.vertx.core.Vertx
 ) : ImagesImplBase() {
-
-  /**
-   * Application configuration values
-   */
-  private val appConfig = AppConfig.getInstance()
 
   private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
 
   /**
-   * Create a new image based on given meta-data and image byte data.
+   * Create an image based on client-streaming chunks.
    */
-  override fun createImage(request: CreateImageRequest, responseObserver: StreamObserver<CreateImageResponse>) {
-    val caption = request.caption
-    val creatorId = request.creatorId
-    val bytes = request.data.toByteArray()
-    val buf = ImageIO.read(ByteArrayInputStream(bytes))
+  override fun createImage(responseObserver: StreamObserver<CreateImageResponse>): StreamObserver<CreateImageRequest> {
+    val recorder = ImageRecorder()
+    val builder = CreateImageResponse.newBuilder()
+    return object: StreamObserver<CreateImageRequest> {
 
-    // TODO: Check bytes size, return error if too large image (or scale down the image)
-    if (buf == null) {
-      responseObserver.onNext(
-        CreateImageResponse.newBuilder()
-          .setError(CreateImageErrorStatus.INVALID_DATA)
-          .build()
-      )
-      responseObserver.onCompleted()
-      return
-    }
+      override fun onNext(req: CreateImageRequest) {
+        recorder.takeChunk(req)
+      }
 
-    val meta = try {
-      service.saveImageMeta(mapImageMeta(caption, creatorId, buf))
-    } catch (e: CaptionTooLongException) {
-      responseObserver.onNext(
-        CreateImageResponse.newBuilder()
-          .setError(CreateImageErrorStatus.CAPTION_TOO_LONG)
-          .build()
-      )
-      responseObserver.onCompleted()
-      return
-    }
+      override fun onError(e: Throwable) {
+        logger.error("Error during create image stream", e)
+        // TODO: Cleanup or something?
+      }
 
-    vertx
-      .fileSystem()
-      .writeFile("${appConfig.imageDataDir}/${meta.id}", Buffer.buffer(bytes)) {
-        val builder = CreateImageResponse.newBuilder()
-        if (it.succeeded()) {
-          try {
-            builder.image = fromImageMeta(meta)
-          } catch (e: InvalidDataException) {
-            logger.warn("Failed to generate metadata for image: ${e.message}")
-            builder.error = CreateImageErrorStatus.INVALID_DATA
-          }
-        } else {
-          builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+      override fun onCompleted() {
+        val meta = try {
+          recorder.toImageMeta()
+        } catch (e: Exception) {
+          logger.warn(e.message)
+
+          responseObserver.onNext(
+            builder
+              .setError(
+                when (e) {
+                  is InvalidDataException -> CreateImageErrorStatus.INVALID_DATA
+                  is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+                  else -> CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+                }
+              )
+              .build()
+          )
+          responseObserver.onCompleted()
+          return
         }
+        val bytes = recorder.chunks!!.toByteArray()
+
+        metaService.saveImageMeta(meta)
+          .onSuccess { meta ->
+            fileService.saveImageFile(meta.id, bytes)
+              .onSuccess {
+                builder.image = fromImageMeta(meta)
+                responseObserver.onNext(builder.build())
+                responseObserver.onCompleted()
+              }
+              .onFailure { e ->
+                logger.error("Failed to persist the image on disk: ", e)
+                builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+
+                // We don't have to wait for this before returning response
+                metaService.deleteImage(meta.id)
+                  .onSuccess {
+                    logger.info("Removed metadata of image ${meta.id} as a result of failed file disk save")
+                  }
+                  .onFailure {  e ->
+                    logger.error("Failed to remove metadata of image ${meta.id}:", e)
+                  }
+
+                responseObserver.onNext(builder.build())
+                responseObserver.onCompleted()
+              }
+          }
+          .onFailure { e ->
+            val error = when (e) {
+              is CaptionTooLongException -> CreateImageErrorStatus.CAPTION_TOO_LONG
+              else -> {
+                logger.error("Failed persist image meta data into database:", e)
+                CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
+              }
+            }
+            responseObserver.onNext(
+              builder
+                .setError(error)
+                .build()
+            )
+            responseObserver.onCompleted()
+          }
+      }
+
+    }
+  }
+
+
+  /**
+   * Get image metadata based on image ID.
+   */
+  override fun getImage(request: GetImageRequest, responseObserver: StreamObserver<GetImageResponse>) {
+    val imageId = request.imageId
+    val builder = GetImageResponse.newBuilder()
+    metaService.getImageMeta(imageId)
+      .onSuccess { meta ->
+        if (meta != null) {
+          builder.image  = fromImageMeta(meta)
+        } else {
+          builder.error = GetImageErrorStatus.IMAGE_NOT_FOUND
+        }
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        logger.error("Failure on fetch image meta for id $imageId:", e)
+        builder.error = GetImageErrorStatus.GET_IMAGE_SERVER_ERROR
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+  }
+
+  /**
+   * Delete an image based on given image ID.
+   */
+  override fun deleteImage(request: DeleteImageRequest, responseObserver: StreamObserver<DeleteImageResponse>) {
+    val imageId = request.id
+    val builder = DeleteImageResponse.newBuilder()
+    metaService.deleteImage(imageId)
+      .compose { fileService.deleteImageFile(imageId) }
+      .onSuccess {
+        builder.status = DeleteImageStatus.OK
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        builder.status = when (e) {
+          is NotFoundException -> DeleteImageStatus.DELETABLE_NOT_FOUND
+          else -> {
+            logger.error("Delete image $imageId failed: ", e)
+            DeleteImageStatus.DELETE_IMAGE_SERVER_ERROR
+          }
+        }
+        responseObserver.onNext(builder.build())
+        responseObserver.onCompleted()
+      }
+  }
+
+  /**
+   * Return raw image data and it's type to the caller.
+   */
+  override fun getImageData(request: GetImageDataRequest, responseObserver: StreamObserver<GetImageDataResponse>) {
+    val imageId = request.imageId
+    var tmpMeta: ImageMeta? = null
+    metaService.getImageMeta(imageId)
+      .compose { m ->
+        if (m == null) {
+          throw NotFoundException("No image meta found with id $imageId")
+        }
+        tmpMeta = m
+        fileService.getImageFile(imageId)
+      }
+      .onSuccess { data ->
+        val meta = tmpMeta!!
+
         responseObserver.onNext(
-          builder.build()
+          GetImageDataResponse
+            .newBuilder()
+            .setImageType(
+              when (meta.mimeType) {
+                "image/png" -> ImageType.PNG
+                else -> ImageType.JPG
+              }
+            )
+            .build()
+        )
+
+        val chunks = chunkBytes(ByteString.copyFrom(data))
+        for (chunk in chunks) {
+          responseObserver.onNext(
+            GetImageDataResponse
+              .newBuilder()
+              .setData(chunk)
+              .build()
+          )
+        }
+
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        logger.error("Unable to fetch image: ", e)
+
+        responseObserver.onNext(
+          GetImageDataResponse
+            .newBuilder()
+            .setError(
+              when (e) {
+                is NotFoundException -> GetImageErrorStatus.IMAGE_NOT_FOUND
+                else -> {
+                  logger.error("Unable to fetch image: ", e)
+                  GetImageErrorStatus.GET_IMAGE_SERVER_ERROR
+                }
+              }
+            )
+            .build()
         )
         responseObserver.onCompleted()
       }
   }
 
+  /**
+   * Slice the given [bytes] into chunks of size [CHUNK_SIZE].
+   */
+  private fun chunkBytes(bytes: ByteString): List<ByteString> {
+    val list = mutableListOf<ByteString>()
+    val size = bytes.size()
+    for (i in 0 until size step CHUNK_SIZE) {
+      val end = min(size, i + CHUNK_SIZE)
+      list.add(bytes.substring(i, end))
+    }
+    return list.toList()
+  }
 }

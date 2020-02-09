@@ -53,6 +53,12 @@ public  final class GetImageDataResponse extends
             status_ = rawValue;
             break;
           }
+          case 24: {
+            int rawValue = input.readEnum();
+            statusCase_ = 3;
+            status_ = rawValue;
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -81,7 +87,8 @@ public  final class GetImageDataResponse extends
   public enum StatusCase
       implements com.google.protobuf.Internal.EnumLite {
     DATA(1),
-    ERROR(2),
+    IMAGE_TYPE(2),
+    ERROR(3),
     STATUS_NOT_SET(0);
     private final int value;
     private StatusCase(int value) {
@@ -98,7 +105,8 @@ public  final class GetImageDataResponse extends
     public static StatusCase forNumber(int value) {
       switch (value) {
         case 1: return DATA;
-        case 2: return ERROR;
+        case 2: return IMAGE_TYPE;
+        case 3: return ERROR;
         case 0: return STATUS_NOT_SET;
         default: return null;
       }
@@ -125,21 +133,43 @@ public  final class GetImageDataResponse extends
     return com.google.protobuf.ByteString.EMPTY;
   }
 
-  public static final int ERROR_FIELD_NUMBER = 2;
+  public static final int IMAGE_TYPE_FIELD_NUMBER = 2;
   /**
-   * <code>.Image.GetImageErrorStatus error = 2;</code>
+   * <code>.Image.ImageType image_type = 2;</code>
    */
-  public int getErrorValue() {
+  public int getImageTypeValue() {
     if (statusCase_ == 2) {
       return (java.lang.Integer) status_;
     }
     return 0;
   }
   /**
-   * <code>.Image.GetImageErrorStatus error = 2;</code>
+   * <code>.Image.ImageType image_type = 2;</code>
+   */
+  public com.instagram_clone.image_service.ImageType getImageType() {
+    if (statusCase_ == 2) {
+      com.instagram_clone.image_service.ImageType result = com.instagram_clone.image_service.ImageType.valueOf(
+          (java.lang.Integer) status_);
+      return result == null ? com.instagram_clone.image_service.ImageType.UNRECOGNIZED : result;
+    }
+    return com.instagram_clone.image_service.ImageType.PNG;
+  }
+
+  public static final int ERROR_FIELD_NUMBER = 3;
+  /**
+   * <code>.Image.GetImageErrorStatus error = 3;</code>
+   */
+  public int getErrorValue() {
+    if (statusCase_ == 3) {
+      return (java.lang.Integer) status_;
+    }
+    return 0;
+  }
+  /**
+   * <code>.Image.GetImageErrorStatus error = 3;</code>
    */
   public com.instagram_clone.image_service.GetImageErrorStatus getError() {
-    if (statusCase_ == 2) {
+    if (statusCase_ == 3) {
       com.instagram_clone.image_service.GetImageErrorStatus result = com.instagram_clone.image_service.GetImageErrorStatus.valueOf(
           (java.lang.Integer) status_);
       return result == null ? com.instagram_clone.image_service.GetImageErrorStatus.UNRECOGNIZED : result;
@@ -166,6 +196,9 @@ public  final class GetImageDataResponse extends
     if (statusCase_ == 2) {
       output.writeEnum(2, ((java.lang.Integer) status_));
     }
+    if (statusCase_ == 3) {
+      output.writeEnum(3, ((java.lang.Integer) status_));
+    }
   }
 
   public int getSerializedSize() {
@@ -181,6 +214,10 @@ public  final class GetImageDataResponse extends
     if (statusCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(2, ((java.lang.Integer) status_));
+    }
+    if (statusCase_ == 3) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeEnumSize(3, ((java.lang.Integer) status_));
     }
     memoizedSize = size;
     return size;
@@ -207,6 +244,10 @@ public  final class GetImageDataResponse extends
             .equals(other.getData());
         break;
       case 2:
+        result = result && getImageTypeValue()
+            == other.getImageTypeValue();
+        break;
+      case 3:
         result = result && getErrorValue()
             == other.getErrorValue();
         break;
@@ -229,6 +270,10 @@ public  final class GetImageDataResponse extends
         hash = (53 * hash) + getData().hashCode();
         break;
       case 2:
+        hash = (37 * hash) + IMAGE_TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + getImageTypeValue();
+        break;
+      case 3:
         hash = (37 * hash) + ERROR_FIELD_NUMBER;
         hash = (53 * hash) + getErrorValue();
         break;
@@ -394,6 +439,9 @@ public  final class GetImageDataResponse extends
       if (statusCase_ == 2) {
         result.status_ = status_;
       }
+      if (statusCase_ == 3) {
+        result.status_ = status_;
+      }
       result.statusCase_ = statusCase_;
       onBuilt();
       return result;
@@ -439,6 +487,10 @@ public  final class GetImageDataResponse extends
       switch (other.getStatusCase()) {
         case DATA: {
           setData(other.getData());
+          break;
+        }
+        case IMAGE_TYPE: {
+          setImageTypeValue(other.getImageTypeValue());
           break;
         }
         case ERROR: {
@@ -524,38 +576,38 @@ public  final class GetImageDataResponse extends
     }
 
     /**
-     * <code>.Image.GetImageErrorStatus error = 2;</code>
+     * <code>.Image.ImageType image_type = 2;</code>
      */
-    public int getErrorValue() {
+    public int getImageTypeValue() {
       if (statusCase_ == 2) {
         return ((java.lang.Integer) status_).intValue();
       }
       return 0;
     }
     /**
-     * <code>.Image.GetImageErrorStatus error = 2;</code>
+     * <code>.Image.ImageType image_type = 2;</code>
      */
-    public Builder setErrorValue(int value) {
+    public Builder setImageTypeValue(int value) {
       statusCase_ = 2;
       status_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>.Image.GetImageErrorStatus error = 2;</code>
+     * <code>.Image.ImageType image_type = 2;</code>
      */
-    public com.instagram_clone.image_service.GetImageErrorStatus getError() {
+    public com.instagram_clone.image_service.ImageType getImageType() {
       if (statusCase_ == 2) {
-        com.instagram_clone.image_service.GetImageErrorStatus result = com.instagram_clone.image_service.GetImageErrorStatus.valueOf(
+        com.instagram_clone.image_service.ImageType result = com.instagram_clone.image_service.ImageType.valueOf(
             (java.lang.Integer) status_);
-        return result == null ? com.instagram_clone.image_service.GetImageErrorStatus.UNRECOGNIZED : result;
+        return result == null ? com.instagram_clone.image_service.ImageType.UNRECOGNIZED : result;
       }
-      return com.instagram_clone.image_service.GetImageErrorStatus.GET_IMAGE_SERVER_ERROR;
+      return com.instagram_clone.image_service.ImageType.PNG;
     }
     /**
-     * <code>.Image.GetImageErrorStatus error = 2;</code>
+     * <code>.Image.ImageType image_type = 2;</code>
      */
-    public Builder setError(com.instagram_clone.image_service.GetImageErrorStatus value) {
+    public Builder setImageType(com.instagram_clone.image_service.ImageType value) {
       if (value == null) {
         throw new NullPointerException();
       }
@@ -565,10 +617,63 @@ public  final class GetImageDataResponse extends
       return this;
     }
     /**
-     * <code>.Image.GetImageErrorStatus error = 2;</code>
+     * <code>.Image.ImageType image_type = 2;</code>
+     */
+    public Builder clearImageType() {
+      if (statusCase_ == 2) {
+        statusCase_ = 0;
+        status_ = null;
+        onChanged();
+      }
+      return this;
+    }
+
+    /**
+     * <code>.Image.GetImageErrorStatus error = 3;</code>
+     */
+    public int getErrorValue() {
+      if (statusCase_ == 3) {
+        return ((java.lang.Integer) status_).intValue();
+      }
+      return 0;
+    }
+    /**
+     * <code>.Image.GetImageErrorStatus error = 3;</code>
+     */
+    public Builder setErrorValue(int value) {
+      statusCase_ = 3;
+      status_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.Image.GetImageErrorStatus error = 3;</code>
+     */
+    public com.instagram_clone.image_service.GetImageErrorStatus getError() {
+      if (statusCase_ == 3) {
+        com.instagram_clone.image_service.GetImageErrorStatus result = com.instagram_clone.image_service.GetImageErrorStatus.valueOf(
+            (java.lang.Integer) status_);
+        return result == null ? com.instagram_clone.image_service.GetImageErrorStatus.UNRECOGNIZED : result;
+      }
+      return com.instagram_clone.image_service.GetImageErrorStatus.GET_IMAGE_SERVER_ERROR;
+    }
+    /**
+     * <code>.Image.GetImageErrorStatus error = 3;</code>
+     */
+    public Builder setError(com.instagram_clone.image_service.GetImageErrorStatus value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      statusCase_ = 3;
+      status_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.Image.GetImageErrorStatus error = 3;</code>
      */
     public Builder clearError() {
-      if (statusCase_ == 2) {
+      if (statusCase_ == 3) {
         statusCase_ = 0;
         status_ = null;
         onChanged();

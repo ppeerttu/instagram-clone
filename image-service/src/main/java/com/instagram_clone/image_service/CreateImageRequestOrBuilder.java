@@ -8,27 +8,18 @@ public interface CreateImageRequestOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string caption = 1;</code>
+   * <code>.Image.Metadata meta_data = 1;</code>
    */
-  java.lang.String getCaption();
+  com.instagram_clone.image_service.Metadata getMetaData();
   /**
-   * <code>string caption = 1;</code>
+   * <code>.Image.Metadata meta_data = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getCaptionBytes();
+  com.instagram_clone.image_service.MetadataOrBuilder getMetaDataOrBuilder();
 
   /**
-   * <code>string creator_id = 2;</code>
-   */
-  java.lang.String getCreatorId();
-  /**
-   * <code>string creator_id = 2;</code>
-   */
-  com.google.protobuf.ByteString
-      getCreatorIdBytes();
-
-  /**
-   * <code>bytes data = 3;</code>
+   * <code>bytes data = 2;</code>
    */
   com.google.protobuf.ByteString getData();
+
+  public com.instagram_clone.image_service.CreateImageRequest.PartCase getPartCase();
 }

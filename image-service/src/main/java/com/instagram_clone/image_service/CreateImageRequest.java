@@ -15,9 +15,6 @@ public  final class CreateImageRequest extends
     super(builder);
   }
   private CreateImageRequest() {
-    caption_ = "";
-    creatorId_ = "";
-    data_ = com.google.protobuf.ByteString.EMPTY;
   }
 
   @java.lang.Override
@@ -46,20 +43,22 @@ public  final class CreateImageRequest extends
             break;
           }
           case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            caption_ = s;
+            com.instagram_clone.image_service.Metadata.Builder subBuilder = null;
+            if (partCase_ == 1) {
+              subBuilder = ((com.instagram_clone.image_service.Metadata) part_).toBuilder();
+            }
+            part_ =
+                input.readMessage(com.instagram_clone.image_service.Metadata.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom((com.instagram_clone.image_service.Metadata) part_);
+              part_ = subBuilder.buildPartial();
+            }
+            partCase_ = 1;
             break;
           }
           case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            creatorId_ = s;
-            break;
-          }
-          case 26: {
-
-            data_ = input.readBytes();
+            partCase_ = 2;
+            part_ = input.readBytes();
             break;
           }
         }
@@ -85,81 +84,73 @@ public  final class CreateImageRequest extends
             com.instagram_clone.image_service.CreateImageRequest.class, com.instagram_clone.image_service.CreateImageRequest.Builder.class);
   }
 
-  public static final int CAPTION_FIELD_NUMBER = 1;
-  private volatile java.lang.Object caption_;
-  /**
-   * <code>string caption = 1;</code>
-   */
-  public java.lang.String getCaption() {
-    java.lang.Object ref = caption_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      caption_ = s;
-      return s;
+  private int partCase_ = 0;
+  private java.lang.Object part_;
+  public enum PartCase
+      implements com.google.protobuf.Internal.EnumLite {
+    META_DATA(1),
+    DATA(2),
+    PART_NOT_SET(0);
+    private final int value;
+    private PartCase(int value) {
+      this.value = value;
     }
-  }
-  /**
-   * <code>string caption = 1;</code>
-   */
-  public com.google.protobuf.ByteString
-      getCaptionBytes() {
-    java.lang.Object ref = caption_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      caption_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static PartCase valueOf(int value) {
+      return forNumber(value);
     }
+
+    public static PartCase forNumber(int value) {
+      switch (value) {
+        case 1: return META_DATA;
+        case 2: return DATA;
+        case 0: return PART_NOT_SET;
+        default: return null;
+      }
+    }
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public PartCase
+  getPartCase() {
+    return PartCase.forNumber(
+        partCase_);
   }
 
-  public static final int CREATOR_ID_FIELD_NUMBER = 2;
-  private volatile java.lang.Object creatorId_;
+  public static final int META_DATA_FIELD_NUMBER = 1;
   /**
-   * <code>string creator_id = 2;</code>
+   * <code>.Image.Metadata meta_data = 1;</code>
    */
-  public java.lang.String getCreatorId() {
-    java.lang.Object ref = creatorId_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      creatorId_ = s;
-      return s;
+  public com.instagram_clone.image_service.Metadata getMetaData() {
+    if (partCase_ == 1) {
+       return (com.instagram_clone.image_service.Metadata) part_;
     }
+    return com.instagram_clone.image_service.Metadata.getDefaultInstance();
   }
   /**
-   * <code>string creator_id = 2;</code>
+   * <code>.Image.Metadata meta_data = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getCreatorIdBytes() {
-    java.lang.Object ref = creatorId_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      creatorId_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
+  public com.instagram_clone.image_service.MetadataOrBuilder getMetaDataOrBuilder() {
+    if (partCase_ == 1) {
+       return (com.instagram_clone.image_service.Metadata) part_;
     }
+    return com.instagram_clone.image_service.Metadata.getDefaultInstance();
   }
 
-  public static final int DATA_FIELD_NUMBER = 3;
-  private com.google.protobuf.ByteString data_;
+  public static final int DATA_FIELD_NUMBER = 2;
   /**
-   * <code>bytes data = 3;</code>
+   * <code>bytes data = 2;</code>
    */
   public com.google.protobuf.ByteString getData() {
-    return data_;
+    if (partCase_ == 2) {
+      return (com.google.protobuf.ByteString) part_;
+    }
+    return com.google.protobuf.ByteString.EMPTY;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -174,14 +165,12 @@ public  final class CreateImageRequest extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getCaptionBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, caption_);
+    if (partCase_ == 1) {
+      output.writeMessage(1, (com.instagram_clone.image_service.Metadata) part_);
     }
-    if (!getCreatorIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, creatorId_);
-    }
-    if (!data_.isEmpty()) {
-      output.writeBytes(3, data_);
+    if (partCase_ == 2) {
+      output.writeBytes(
+          2, (com.google.protobuf.ByteString) part_);
     }
   }
 
@@ -190,15 +179,14 @@ public  final class CreateImageRequest extends
     if (size != -1) return size;
 
     size = 0;
-    if (!getCaptionBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, caption_);
-    }
-    if (!getCreatorIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, creatorId_);
-    }
-    if (!data_.isEmpty()) {
+    if (partCase_ == 1) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(3, data_);
+        .computeMessageSize(1, (com.instagram_clone.image_service.Metadata) part_);
+    }
+    if (partCase_ == 2) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBytesSize(
+            2, (com.google.protobuf.ByteString) part_);
     }
     memoizedSize = size;
     return size;
@@ -216,12 +204,21 @@ public  final class CreateImageRequest extends
     com.instagram_clone.image_service.CreateImageRequest other = (com.instagram_clone.image_service.CreateImageRequest) obj;
 
     boolean result = true;
-    result = result && getCaption()
-        .equals(other.getCaption());
-    result = result && getCreatorId()
-        .equals(other.getCreatorId());
-    result = result && getData()
-        .equals(other.getData());
+    result = result && getPartCase().equals(
+        other.getPartCase());
+    if (!result) return false;
+    switch (partCase_) {
+      case 1:
+        result = result && getMetaData()
+            .equals(other.getMetaData());
+        break;
+      case 2:
+        result = result && getData()
+            .equals(other.getData());
+        break;
+      case 0:
+      default:
+    }
     return result;
   }
 
@@ -232,12 +229,18 @@ public  final class CreateImageRequest extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + CAPTION_FIELD_NUMBER;
-    hash = (53 * hash) + getCaption().hashCode();
-    hash = (37 * hash) + CREATOR_ID_FIELD_NUMBER;
-    hash = (53 * hash) + getCreatorId().hashCode();
-    hash = (37 * hash) + DATA_FIELD_NUMBER;
-    hash = (53 * hash) + getData().hashCode();
+    switch (partCase_) {
+      case 1:
+        hash = (37 * hash) + META_DATA_FIELD_NUMBER;
+        hash = (53 * hash) + getMetaData().hashCode();
+        break;
+      case 2:
+        hash = (37 * hash) + DATA_FIELD_NUMBER;
+        hash = (53 * hash) + getData().hashCode();
+        break;
+      case 0:
+      default:
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -367,12 +370,8 @@ public  final class CreateImageRequest extends
     }
     public Builder clear() {
       super.clear();
-      caption_ = "";
-
-      creatorId_ = "";
-
-      data_ = com.google.protobuf.ByteString.EMPTY;
-
+      partCase_ = 0;
+      part_ = null;
       return this;
     }
 
@@ -395,9 +394,17 @@ public  final class CreateImageRequest extends
 
     public com.instagram_clone.image_service.CreateImageRequest buildPartial() {
       com.instagram_clone.image_service.CreateImageRequest result = new com.instagram_clone.image_service.CreateImageRequest(this);
-      result.caption_ = caption_;
-      result.creatorId_ = creatorId_;
-      result.data_ = data_;
+      if (partCase_ == 1) {
+        if (metaDataBuilder_ == null) {
+          result.part_ = part_;
+        } else {
+          result.part_ = metaDataBuilder_.build();
+        }
+      }
+      if (partCase_ == 2) {
+        result.part_ = part_;
+      }
+      result.partCase_ = partCase_;
       onBuilt();
       return result;
     }
@@ -439,16 +446,18 @@ public  final class CreateImageRequest extends
 
     public Builder mergeFrom(com.instagram_clone.image_service.CreateImageRequest other) {
       if (other == com.instagram_clone.image_service.CreateImageRequest.getDefaultInstance()) return this;
-      if (!other.getCaption().isEmpty()) {
-        caption_ = other.caption_;
-        onChanged();
-      }
-      if (!other.getCreatorId().isEmpty()) {
-        creatorId_ = other.creatorId_;
-        onChanged();
-      }
-      if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
-        setData(other.getData());
+      switch (other.getPartCase()) {
+        case META_DATA: {
+          mergeMetaData(other.getMetaData());
+          break;
+        }
+        case DATA: {
+          setData(other.getData());
+          break;
+        }
+        case PART_NOT_SET: {
+          break;
+        }
       }
       onChanged();
       return this;
@@ -475,171 +484,182 @@ public  final class CreateImageRequest extends
       }
       return this;
     }
+    private int partCase_ = 0;
+    private java.lang.Object part_;
+    public PartCase
+        getPartCase() {
+      return PartCase.forNumber(
+          partCase_);
+    }
 
-    private java.lang.Object caption_ = "";
-    /**
-     * <code>string caption = 1;</code>
-     */
-    public java.lang.String getCaption() {
-      java.lang.Object ref = caption_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        caption_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string caption = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCaptionBytes() {
-      java.lang.Object ref = caption_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        caption_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string caption = 1;</code>
-     */
-    public Builder setCaption(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      caption_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string caption = 1;</code>
-     */
-    public Builder clearCaption() {
-      
-      caption_ = getDefaultInstance().getCaption();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string caption = 1;</code>
-     */
-    public Builder setCaptionBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      caption_ = value;
+    public Builder clearPart() {
+      partCase_ = 0;
+      part_ = null;
       onChanged();
       return this;
     }
 
-    private java.lang.Object creatorId_ = "";
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.instagram_clone.image_service.Metadata, com.instagram_clone.image_service.Metadata.Builder, com.instagram_clone.image_service.MetadataOrBuilder> metaDataBuilder_;
     /**
-     * <code>string creator_id = 2;</code>
+     * <code>.Image.Metadata meta_data = 1;</code>
      */
-    public java.lang.String getCreatorId() {
-      java.lang.Object ref = creatorId_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        creatorId_ = s;
-        return s;
+    public com.instagram_clone.image_service.Metadata getMetaData() {
+      if (metaDataBuilder_ == null) {
+        if (partCase_ == 1) {
+          return (com.instagram_clone.image_service.Metadata) part_;
+        }
+        return com.instagram_clone.image_service.Metadata.getDefaultInstance();
       } else {
-        return (java.lang.String) ref;
+        if (partCase_ == 1) {
+          return metaDataBuilder_.getMessage();
+        }
+        return com.instagram_clone.image_service.Metadata.getDefaultInstance();
       }
     }
     /**
-     * <code>string creator_id = 2;</code>
+     * <code>.Image.Metadata meta_data = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getCreatorIdBytes() {
-      java.lang.Object ref = creatorId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        creatorId_ = b;
-        return b;
+    public Builder setMetaData(com.instagram_clone.image_service.Metadata value) {
+      if (metaDataBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        part_ = value;
+        onChanged();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        metaDataBuilder_.setMessage(value);
+      }
+      partCase_ = 1;
+      return this;
+    }
+    /**
+     * <code>.Image.Metadata meta_data = 1;</code>
+     */
+    public Builder setMetaData(
+        com.instagram_clone.image_service.Metadata.Builder builderForValue) {
+      if (metaDataBuilder_ == null) {
+        part_ = builderForValue.build();
+        onChanged();
+      } else {
+        metaDataBuilder_.setMessage(builderForValue.build());
+      }
+      partCase_ = 1;
+      return this;
+    }
+    /**
+     * <code>.Image.Metadata meta_data = 1;</code>
+     */
+    public Builder mergeMetaData(com.instagram_clone.image_service.Metadata value) {
+      if (metaDataBuilder_ == null) {
+        if (partCase_ == 1 &&
+            part_ != com.instagram_clone.image_service.Metadata.getDefaultInstance()) {
+          part_ = com.instagram_clone.image_service.Metadata.newBuilder((com.instagram_clone.image_service.Metadata) part_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          part_ = value;
+        }
+        onChanged();
+      } else {
+        if (partCase_ == 1) {
+          metaDataBuilder_.mergeFrom(value);
+        }
+        metaDataBuilder_.setMessage(value);
+      }
+      partCase_ = 1;
+      return this;
+    }
+    /**
+     * <code>.Image.Metadata meta_data = 1;</code>
+     */
+    public Builder clearMetaData() {
+      if (metaDataBuilder_ == null) {
+        if (partCase_ == 1) {
+          partCase_ = 0;
+          part_ = null;
+          onChanged();
+        }
+      } else {
+        if (partCase_ == 1) {
+          partCase_ = 0;
+          part_ = null;
+        }
+        metaDataBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.Image.Metadata meta_data = 1;</code>
+     */
+    public com.instagram_clone.image_service.Metadata.Builder getMetaDataBuilder() {
+      return getMetaDataFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.Image.Metadata meta_data = 1;</code>
+     */
+    public com.instagram_clone.image_service.MetadataOrBuilder getMetaDataOrBuilder() {
+      if ((partCase_ == 1) && (metaDataBuilder_ != null)) {
+        return metaDataBuilder_.getMessageOrBuilder();
+      } else {
+        if (partCase_ == 1) {
+          return (com.instagram_clone.image_service.Metadata) part_;
+        }
+        return com.instagram_clone.image_service.Metadata.getDefaultInstance();
       }
     }
     /**
-     * <code>string creator_id = 2;</code>
+     * <code>.Image.Metadata meta_data = 1;</code>
      */
-    public Builder setCreatorId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      creatorId_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string creator_id = 2;</code>
-     */
-    public Builder clearCreatorId() {
-      
-      creatorId_ = getDefaultInstance().getCreatorId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string creator_id = 2;</code>
-     */
-    public Builder setCreatorIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      creatorId_ = value;
-      onChanged();
-      return this;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.instagram_clone.image_service.Metadata, com.instagram_clone.image_service.Metadata.Builder, com.instagram_clone.image_service.MetadataOrBuilder> 
+        getMetaDataFieldBuilder() {
+      if (metaDataBuilder_ == null) {
+        if (!(partCase_ == 1)) {
+          part_ = com.instagram_clone.image_service.Metadata.getDefaultInstance();
+        }
+        metaDataBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            com.instagram_clone.image_service.Metadata, com.instagram_clone.image_service.Metadata.Builder, com.instagram_clone.image_service.MetadataOrBuilder>(
+                (com.instagram_clone.image_service.Metadata) part_,
+                getParentForChildren(),
+                isClean());
+        part_ = null;
+      }
+      partCase_ = 1;
+      onChanged();;
+      return metaDataBuilder_;
     }
 
-    private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
     /**
-     * <code>bytes data = 3;</code>
+     * <code>bytes data = 2;</code>
      */
     public com.google.protobuf.ByteString getData() {
-      return data_;
+      if (partCase_ == 2) {
+        return (com.google.protobuf.ByteString) part_;
+      }
+      return com.google.protobuf.ByteString.EMPTY;
     }
     /**
-     * <code>bytes data = 3;</code>
+     * <code>bytes data = 2;</code>
      */
     public Builder setData(com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
-  
-      data_ = value;
+  partCase_ = 2;
+      part_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>bytes data = 3;</code>
+     * <code>bytes data = 2;</code>
      */
     public Builder clearData() {
-      
-      data_ = getDefaultInstance().getData();
-      onChanged();
+      if (partCase_ == 2) {
+        partCase_ = 0;
+        part_ = null;
+        onChanged();
+      }
       return this;
     }
     public final Builder setUnknownFields(

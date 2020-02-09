@@ -7,17 +7,22 @@
 import * as jspb from "google-protobuf";
 
 export class CreateImageRequest extends jspb.Message { 
-    getCaption(): string;
-    setCaption(value: string): void;
 
-    getCreatorId(): string;
-    setCreatorId(value: string): void;
+    hasMetaData(): boolean;
+    clearMetaData(): void;
+    getMetaData(): Metadata | undefined;
+    setMetaData(value?: Metadata): void;
 
+
+    hasData(): boolean;
+    clearData(): void;
     getData(): Uint8Array | string;
     getData_asU8(): Uint8Array;
     getData_asB64(): string;
     setData(value: Uint8Array | string): void;
 
+
+    getPartCase(): CreateImageRequest.PartCase;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateImageRequest.AsObject;
@@ -31,9 +36,47 @@ export class CreateImageRequest extends jspb.Message {
 
 export namespace CreateImageRequest {
     export type AsObject = {
+        metaData?: Metadata.AsObject,
+        data: Uint8Array | string,
+    }
+
+    export enum PartCase {
+        PART_NOT_SET = 0,
+    
+    META_DATA = 1,
+
+    DATA = 2,
+
+    }
+
+}
+
+export class Metadata extends jspb.Message { 
+    getCaption(): string;
+    setCaption(value: string): void;
+
+    getCreatorId(): string;
+    setCreatorId(value: string): void;
+
+    getImageType(): ImageType;
+    setImageType(value: ImageType): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Metadata.AsObject;
+    static toObject(includeInstance: boolean, msg: Metadata): Metadata.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Metadata, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Metadata;
+    static deserializeBinaryFromReader(message: Metadata, reader: jspb.BinaryReader): Metadata;
+}
+
+export namespace Metadata {
+    export type AsObject = {
         caption: string,
         creatorId: string,
-        data: Uint8Array | string,
+        imageType: ImageType,
     }
 }
 
@@ -217,6 +260,12 @@ export class GetImageDataResponse extends jspb.Message {
     setData(value: Uint8Array | string): void;
 
 
+    hasImageType(): boolean;
+    clearImageType(): void;
+    getImageType(): ImageType;
+    setImageType(value: ImageType): void;
+
+
     hasError(): boolean;
     clearError(): void;
     getError(): GetImageErrorStatus;
@@ -238,6 +287,7 @@ export class GetImageDataResponse extends jspb.Message {
 export namespace GetImageDataResponse {
     export type AsObject = {
         data: Uint8Array | string,
+        imageType: ImageType,
         error: GetImageErrorStatus,
     }
 
@@ -246,7 +296,9 @@ export namespace GetImageDataResponse {
     
     DATA = 1,
 
-    ERROR = 2,
+    IMAGE_TYPE = 2,
+
+    ERROR = 3,
 
     }
 
@@ -506,8 +558,8 @@ export class Image extends jspb.Message {
     getId(): string;
     setId(value: string): void;
 
-    getType(): string;
-    setType(value: string): void;
+    getMimeType(): string;
+    setMimeType(value: string): void;
 
     getWidth(): number;
     setWidth(value: number): void;
@@ -524,6 +576,16 @@ export class Image extends jspb.Message {
     getCreatedAt(): string;
     setCreatedAt(value: string): void;
 
+    clearUserTagsList(): void;
+    getUserTagsList(): Array<string>;
+    setUserTagsList(value: Array<string>): void;
+    addUserTags(value: string, index?: number): string;
+
+    clearHashTagsList(): void;
+    getHashTagsList(): Array<string>;
+    setHashTagsList(value: Array<string>): void;
+    addHashTags(value: string, index?: number): string;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Image.AsObject;
@@ -538,13 +600,20 @@ export class Image extends jspb.Message {
 export namespace Image {
     export type AsObject = {
         id: string,
-        type: string,
+        mimeType: string,
         width: number,
         height: number,
         userId: string,
         caption: string,
         createdAt: string,
+        userTagsList: Array<string>,
+        hashTagsList: Array<string>,
     }
+}
+
+export enum ImageType {
+    PNG = 0,
+    JPG = 1,
 }
 
 export enum CreateImageErrorStatus {

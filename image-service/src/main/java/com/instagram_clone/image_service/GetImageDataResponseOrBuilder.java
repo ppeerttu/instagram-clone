@@ -13,11 +13,20 @@ public interface GetImageDataResponseOrBuilder extends
   com.google.protobuf.ByteString getData();
 
   /**
-   * <code>.Image.GetImageErrorStatus error = 2;</code>
+   * <code>.Image.ImageType image_type = 2;</code>
+   */
+  int getImageTypeValue();
+  /**
+   * <code>.Image.ImageType image_type = 2;</code>
+   */
+  com.instagram_clone.image_service.ImageType getImageType();
+
+  /**
+   * <code>.Image.GetImageErrorStatus error = 3;</code>
    */
   int getErrorValue();
   /**
-   * <code>.Image.GetImageErrorStatus error = 2;</code>
+   * <code>.Image.GetImageErrorStatus error = 3;</code>
    */
   com.instagram_clone.image_service.GetImageErrorStatus getError();
 

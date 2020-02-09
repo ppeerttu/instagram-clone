@@ -84,7 +84,7 @@ public enum DeleteImageStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(1);
+    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(2);
   }
 
   private static final DeleteImageStatus[] VALUES = values();

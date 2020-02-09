@@ -9,7 +9,7 @@ package Image;
 service Images {
 
   // Create a new image
-  rpc CreateImage(CreateImageRequest) returns (CreateImageResponse) {}
+  rpc CreateImage(stream CreateImageRequest) returns (CreateImageResponse) {}
 
   // Delete an image
   rpc DeleteImage(DeleteImageRequest) returns (DeleteImageResponse) {}
@@ -18,7 +18,7 @@ service Images {
   rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
 
   // Get image data
-  rpc GetImageData(GetImageDataRequest) returns (GetImageDataResponse) {}
+  rpc GetImageData(GetImageDataRequest) returns (stream GetImageDataResponse) {}
 
   // Get user's images
   rpc GetUserImages(GetUserImagesRequest) returns (GetUserImagesResponse) {}
@@ -32,9 +32,22 @@ service Images {
 // =====================
 
 message CreateImageRequest {
-  string caption = 1;
-  string creator_id = 2;
-  bytes data = 3;
+  // Streaming request; on first chunk metadata, otherwise data
+  oneof part {
+    Metadata meta_data = 1;
+    bytes data = 2;
+  }
+}
+
+message Metadata {
+  string caption = 1;         // Image caption
+  string creator_id = 2;      // Image poster
+  ImageType image_type = 3;   // Image type (png/jpg)
+}
+
+enum ImageType {
+  PNG = 0;
+  JPG = 1;
 }
 
 message CreateImageResponse {
@@ -101,7 +114,8 @@ message GetImageDataRequest {
 message GetImageDataResponse {
   oneof status {
     bytes data = 1;
-    GetImageErrorStatus error = 2;
+    ImageType image_type = 2;
+    GetImageErrorStatus error = 3;
   }
 }
 
@@ -197,8 +211,8 @@ message Image {
   // ID of the image
   string id = 1;
 
-  // Type of the image, e.g. img/png or img/jpeg
-  string type = 2;
+  // Mime type of the image, e.g. img/png or img/jpeg
+  string mime_type = 2;
 
   // Width in pixels
   int32 width = 3;
@@ -214,5 +228,11 @@ message Image {
 
   // Created at timestamp
   string created_at = 7;
+
+  // Users marked into the image caption
+  repeated string user_tags = 8;
+
+  // Hash tags marked into the image caption
+  repeated string hash_tags = 9;
 }
 

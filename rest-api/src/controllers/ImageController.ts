@@ -1,15 +1,28 @@
-import { ParameterizedContext } from "koa";
-import { body, IValidationContext, validationResults } from "koa-req-validation";
+import { body, IValidationState, validationResults, param } from "koa-req-validation";
 import Router, { RouterContext } from "@koa/router";
 import multer, { File } from "@koa/multer";
 
 import { IController } from "./Controller";
 import { ImageService } from "../client/images/ImageService";
 import { RequestError } from "../lib/RequestError";
-import { CreateImageError } from "../client/images/CreateImageError";
-import { CreateImageErrorStatus } from "../client/generated/image_service_pb";
+import { CreateImageError } from "../client/images/errors/CreateImageError";
+import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
+import { DeleteImageError, GetImageError } from "../client/images/errors";
 
-const upload = multer();
+const allowedFileTypes = [
+    "image/png",
+    "image/jpeg"
+];
+
+const upload = multer({
+    fileFilter: (req, file, cb) => {
+        if (!allowedFileTypes.includes(file.mimetype)) {
+            cb(null, false);
+        } else {
+            cb(null, true);
+        }
+    }
+});
 
 export class ImageController implements IController {
 
@@ -22,6 +35,13 @@ export class ImageController implements IController {
             .isLength({ max: 500 })
             .withMessage("The caption cannot be longer than 500 characters")
             .run()
+    ];
+
+    private imageIdValidation = [
+        param("imageId")
+            .isUUID()
+            .withMessage("The imageId parameter has to be an UUID")
+            .run(),
     ];
 
     private imageService: ImageService;
@@ -37,13 +57,28 @@ export class ImageController implements IController {
             ...this.createImageValidation,
             this.postImage,
         );
+        router.delete(
+            `${basePath}/:imageId`,
+            ...this.imageIdValidation,
+            this.deleteImage,
+        );
+        router.get(
+            `${basePath}/:imageId/meta`,
+            ...this.imageIdValidation,
+            this.getImageMeta,
+        );
+        router.get(
+            `${basePath}/:imageId/data`,
+            ...this.imageIdValidation,
+            this.getImageData,
+        );
     }
 
     /**
      * Post an image to the system.
      */
     private postImage = async (
-        ctx: ParameterizedContext<IValidationContext, RouterContext>,
+        ctx: RouterContext<IValidationState>,
     ) => {
         const results = validationResults(ctx);
         const file = (ctx as any).file as File; // For TSC
@@ -75,11 +110,11 @@ export class ImageController implements IController {
          * }
          */
         // TODO: Check file size, cancel request if too large
-
         try {
             const response = await this.imageService.createImage(
                 caption,
                 userId,
+                file.mimetype === "image/png" ? "png" : "jpeg",
                 file.buffer
             );
             ctx.body = response;
@@ -96,12 +131,105 @@ export class ImageController implements IController {
                     case CreateImageErrorStatus.INVALID_DATA:
                         throw new RequestError(400, "Invalid image data");
                     default:
-                        throw new RequestError(503);
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
                 }
             }
             ctx.log.error(e);
             throw new RequestError(503);
         }
+    }
 
+    /**
+     * Delete an image from the system.
+     */
+    private deleteImage = async (
+        ctx: RouterContext<IValidationState>,
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { imageId } = ctx.params;
+
+        try {
+            await this.imageService.deleteImage(imageId);
+            ctx.status = 204;
+        } catch (e) {
+            if (e instanceof DeleteImageError) {
+                switch (e.cause) {
+                    case "NOT_FOUND":
+                        throw new RequestError(404, `No image found with id ${imageId}`);
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Get image metadata.
+     */
+    private getImageMeta = async (
+        ctx: RouterContext<IValidationState>,
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { imageId } = ctx.params;
+
+        try {
+            const meta = await this.imageService.getImageMeta(imageId);
+            ctx.status = 200;
+            ctx.body = meta;
+        } catch (e) {
+            if (e instanceof GetImageError) {
+                switch (e.status) {
+                    case GetImageErrorStatus.IMAGE_NOT_FOUND:
+                        throw new RequestError(404, `No image found with id ${imageId}`);
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Get image data.
+     */
+    private getImageData = async (
+        ctx: RouterContext<IValidationState>,
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { imageId } = ctx.params;
+
+        try {
+            const { type, data } = await this.imageService.getImageData(imageId);
+            ctx.body = Buffer.from(data);
+            ctx.type = `image/${type}`;
+            ctx.status = 200;
+        } catch (e) {
+            if (e instanceof GetImageError) {
+                switch (e.status) {
+                    case GetImageErrorStatus.IMAGE_NOT_FOUND:
+                        throw new RequestError(404, `No image found with id ${imageId}`);
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
     }
 }

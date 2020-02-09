@@ -16,12 +16,14 @@ public  final class Image extends
   }
   private Image() {
     id_ = "";
-    type_ = "";
+    mimeType_ = "";
     width_ = 0;
     height_ = 0;
     userId_ = "";
     caption_ = "";
     createdAt_ = "";
+    userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @java.lang.Override
@@ -58,7 +60,7 @@ public  final class Image extends
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            type_ = s;
+            mimeType_ = s;
             break;
           }
           case 24: {
@@ -89,6 +91,24 @@ public  final class Image extends
             createdAt_ = s;
             break;
           }
+          case 66: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+              userTags_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000080;
+            }
+            userTags_.add(s);
+            break;
+          }
+          case 74: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+              hashTags_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000100;
+            }
+            hashTags_.add(s);
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -97,6 +117,12 @@ public  final class Image extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+        userTags_ = userTags_.getUnmodifiableView();
+      }
+      if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+        hashTags_ = hashTags_.getUnmodifiableView();
+      }
       makeExtensionsImmutable();
     }
   }
@@ -112,6 +138,7 @@ public  final class Image extends
             com.instagram_clone.image_service.Image.class, com.instagram_clone.image_service.Image.Builder.class);
   }
 
+  private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object id_;
   /**
@@ -154,42 +181,42 @@ public  final class Image extends
     }
   }
 
-  public static final int TYPE_FIELD_NUMBER = 2;
-  private volatile java.lang.Object type_;
+  public static final int MIME_TYPE_FIELD_NUMBER = 2;
+  private volatile java.lang.Object mimeType_;
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
-  public java.lang.String getType() {
-    java.lang.Object ref = type_;
+  public java.lang.String getMimeType() {
+    java.lang.Object ref = mimeType_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      type_ = s;
+      mimeType_ = s;
       return s;
     }
   }
   /**
    * <pre>
-   * Type of the image, e.g. img/png or img/jpeg
+   * Mime type of the image, e.g. img/png or img/jpeg
    * </pre>
    *
-   * <code>string type = 2;</code>
+   * <code>string mime_type = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getTypeBytes() {
-    java.lang.Object ref = type_;
+      getMimeTypeBytes() {
+    java.lang.Object ref = mimeType_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      type_ = b;
+      mimeType_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -348,6 +375,96 @@ public  final class Image extends
     }
   }
 
+  public static final int USER_TAGS_FIELD_NUMBER = 8;
+  private com.google.protobuf.LazyStringList userTags_;
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getUserTagsList() {
+    return userTags_;
+  }
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  public int getUserTagsCount() {
+    return userTags_.size();
+  }
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  public java.lang.String getUserTags(int index) {
+    return userTags_.get(index);
+  }
+  /**
+   * <pre>
+   * Users marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string user_tags = 8;</code>
+   */
+  public com.google.protobuf.ByteString
+      getUserTagsBytes(int index) {
+    return userTags_.getByteString(index);
+  }
+
+  public static final int HASH_TAGS_FIELD_NUMBER = 9;
+  private com.google.protobuf.LazyStringList hashTags_;
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getHashTagsList() {
+    return hashTags_;
+  }
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  public int getHashTagsCount() {
+    return hashTags_.size();
+  }
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  public java.lang.String getHashTags(int index) {
+    return hashTags_.get(index);
+  }
+  /**
+   * <pre>
+   * Hash tags marked into the image caption
+   * </pre>
+   *
+   * <code>repeated string hash_tags = 9;</code>
+   */
+  public com.google.protobuf.ByteString
+      getHashTagsBytes(int index) {
+    return hashTags_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -363,8 +480,8 @@ public  final class Image extends
     if (!getIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, type_);
+    if (!getMimeTypeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, mimeType_);
     }
     if (width_ != 0) {
       output.writeInt32(3, width_);
@@ -381,6 +498,12 @@ public  final class Image extends
     if (!getCreatedAtBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, createdAt_);
     }
+    for (int i = 0; i < userTags_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, userTags_.getRaw(i));
+    }
+    for (int i = 0; i < hashTags_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, hashTags_.getRaw(i));
+    }
   }
 
   public int getSerializedSize() {
@@ -391,8 +514,8 @@ public  final class Image extends
     if (!getIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
     }
-    if (!getTypeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, type_);
+    if (!getMimeTypeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, mimeType_);
     }
     if (width_ != 0) {
       size += com.google.protobuf.CodedOutputStream
@@ -410,6 +533,22 @@ public  final class Image extends
     }
     if (!getCreatedAtBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, createdAt_);
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < userTags_.size(); i++) {
+        dataSize += computeStringSizeNoTag(userTags_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getUserTagsList().size();
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < hashTags_.size(); i++) {
+        dataSize += computeStringSizeNoTag(hashTags_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getHashTagsList().size();
     }
     memoizedSize = size;
     return size;
@@ -429,8 +568,8 @@ public  final class Image extends
     boolean result = true;
     result = result && getId()
         .equals(other.getId());
-    result = result && getType()
-        .equals(other.getType());
+    result = result && getMimeType()
+        .equals(other.getMimeType());
     result = result && (getWidth()
         == other.getWidth());
     result = result && (getHeight()
@@ -441,6 +580,10 @@ public  final class Image extends
         .equals(other.getCaption());
     result = result && getCreatedAt()
         .equals(other.getCreatedAt());
+    result = result && getUserTagsList()
+        .equals(other.getUserTagsList());
+    result = result && getHashTagsList()
+        .equals(other.getHashTagsList());
     return result;
   }
 
@@ -453,8 +596,8 @@ public  final class Image extends
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType().hashCode();
+    hash = (37 * hash) + MIME_TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getMimeType().hashCode();
     hash = (37 * hash) + WIDTH_FIELD_NUMBER;
     hash = (53 * hash) + getWidth();
     hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
@@ -465,6 +608,14 @@ public  final class Image extends
     hash = (53 * hash) + getCaption().hashCode();
     hash = (37 * hash) + CREATED_AT_FIELD_NUMBER;
     hash = (53 * hash) + getCreatedAt().hashCode();
+    if (getUserTagsCount() > 0) {
+      hash = (37 * hash) + USER_TAGS_FIELD_NUMBER;
+      hash = (53 * hash) + getUserTagsList().hashCode();
+    }
+    if (getHashTagsCount() > 0) {
+      hash = (37 * hash) + HASH_TAGS_FIELD_NUMBER;
+      hash = (53 * hash) + getHashTagsList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -596,7 +747,7 @@ public  final class Image extends
       super.clear();
       id_ = "";
 
-      type_ = "";
+      mimeType_ = "";
 
       width_ = 0;
 
@@ -608,6 +759,10 @@ public  final class Image extends
 
       createdAt_ = "";
 
+      userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000080);
+      hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000100);
       return this;
     }
 
@@ -630,13 +785,26 @@ public  final class Image extends
 
     public com.instagram_clone.image_service.Image buildPartial() {
       com.instagram_clone.image_service.Image result = new com.instagram_clone.image_service.Image(this);
+      int from_bitField0_ = bitField0_;
+      int to_bitField0_ = 0;
       result.id_ = id_;
-      result.type_ = type_;
+      result.mimeType_ = mimeType_;
       result.width_ = width_;
       result.height_ = height_;
       result.userId_ = userId_;
       result.caption_ = caption_;
       result.createdAt_ = createdAt_;
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        userTags_ = userTags_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000080);
+      }
+      result.userTags_ = userTags_;
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        hashTags_ = hashTags_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000100);
+      }
+      result.hashTags_ = hashTags_;
+      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -682,8 +850,8 @@ public  final class Image extends
         id_ = other.id_;
         onChanged();
       }
-      if (!other.getType().isEmpty()) {
-        type_ = other.type_;
+      if (!other.getMimeType().isEmpty()) {
+        mimeType_ = other.mimeType_;
         onChanged();
       }
       if (other.getWidth() != 0) {
@@ -702,6 +870,26 @@ public  final class Image extends
       }
       if (!other.getCreatedAt().isEmpty()) {
         createdAt_ = other.createdAt_;
+        onChanged();
+      }
+      if (!other.userTags_.isEmpty()) {
+        if (userTags_.isEmpty()) {
+          userTags_ = other.userTags_;
+          bitField0_ = (bitField0_ & ~0x00000080);
+        } else {
+          ensureUserTagsIsMutable();
+          userTags_.addAll(other.userTags_);
+        }
+        onChanged();
+      }
+      if (!other.hashTags_.isEmpty()) {
+        if (hashTags_.isEmpty()) {
+          hashTags_ = other.hashTags_;
+          bitField0_ = (bitField0_ & ~0x00000100);
+        } else {
+          ensureHashTagsIsMutable();
+          hashTags_.addAll(other.hashTags_);
+        }
         onChanged();
       }
       onChanged();
@@ -729,6 +917,7 @@ public  final class Image extends
       }
       return this;
     }
+    private int bitField0_;
 
     private java.lang.Object id_ = "";
     /**
@@ -819,21 +1008,21 @@ public  final class Image extends
       return this;
     }
 
-    private java.lang.Object type_ = "";
+    private java.lang.Object mimeType_ = "";
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public java.lang.String getType() {
-      java.lang.Object ref = type_;
+    public java.lang.String getMimeType() {
+      java.lang.Object ref = mimeType_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        type_ = s;
+        mimeType_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
@@ -841,19 +1030,19 @@ public  final class Image extends
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getTypeBytes() {
-      java.lang.Object ref = type_;
+        getMimeTypeBytes() {
+      java.lang.Object ref = mimeType_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        type_ = b;
+        mimeType_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -861,49 +1050,49 @@ public  final class Image extends
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder setType(
+    public Builder setMimeType(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      type_ = value;
+      mimeType_ = value;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder clearType() {
+    public Builder clearMimeType() {
       
-      type_ = getDefaultInstance().getType();
+      mimeType_ = getDefaultInstance().getMimeType();
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * Type of the image, e.g. img/png or img/jpeg
+     * Mime type of the image, e.g. img/png or img/jpeg
      * </pre>
      *
-     * <code>string type = 2;</code>
+     * <code>string mime_type = 2;</code>
      */
-    public Builder setTypeBytes(
+    public Builder setMimeTypeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      type_ = value;
+      mimeType_ = value;
       onChanged();
       return this;
     }
@@ -1247,6 +1436,266 @@ public  final class Image extends
   checkByteStringIsUtf8(value);
       
       createdAt_ = value;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureUserTagsIsMutable() {
+      if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+        userTags_ = new com.google.protobuf.LazyStringArrayList(userTags_);
+        bitField0_ |= 0x00000080;
+       }
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getUserTagsList() {
+      return userTags_.getUnmodifiableView();
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public int getUserTagsCount() {
+      return userTags_.size();
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public java.lang.String getUserTags(int index) {
+      return userTags_.get(index);
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserTagsBytes(int index) {
+      return userTags_.getByteString(index);
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public Builder setUserTags(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureUserTagsIsMutable();
+      userTags_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public Builder addUserTags(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureUserTagsIsMutable();
+      userTags_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public Builder addAllUserTags(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureUserTagsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, userTags_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public Builder clearUserTags() {
+      userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000080);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Users marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string user_tags = 8;</code>
+     */
+    public Builder addUserTagsBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureUserTagsIsMutable();
+      userTags_.add(value);
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureHashTagsIsMutable() {
+      if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+        hashTags_ = new com.google.protobuf.LazyStringArrayList(hashTags_);
+        bitField0_ |= 0x00000100;
+       }
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getHashTagsList() {
+      return hashTags_.getUnmodifiableView();
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public int getHashTagsCount() {
+      return hashTags_.size();
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public java.lang.String getHashTags(int index) {
+      return hashTags_.get(index);
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHashTagsBytes(int index) {
+      return hashTags_.getByteString(index);
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public Builder setHashTags(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureHashTagsIsMutable();
+      hashTags_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public Builder addHashTags(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureHashTagsIsMutable();
+      hashTags_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public Builder addAllHashTags(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureHashTagsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, hashTags_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public Builder clearHashTags() {
+      hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000100);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Hash tags marked into the image caption
+     * </pre>
+     *
+     * <code>repeated string hash_tags = 9;</code>
+     */
+    public Builder addHashTagsBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureHashTagsIsMutable();
+      hashTags_.add(value);
       onChanged();
       return this;
     }
