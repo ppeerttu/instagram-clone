@@ -1,4 +1,4 @@
-import Router from "koa-router";
+import Router from "@koa/router";
 
 /**
  * Common controller definition that binds to `Router`.
