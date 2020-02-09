@@ -1,5 +1,4 @@
-import { ParameterizedContext } from "koa";
-import { body, IValidationContext, validationResults, param } from "koa-req-validation";
+import { body, IValidationState, validationResults, param } from "koa-req-validation";
 import Router, { RouterContext } from "@koa/router";
 import multer, { File } from "@koa/multer";
 
@@ -79,7 +78,7 @@ export class ImageController implements IController {
      * Post an image to the system.
      */
     private postImage = async (
-        ctx: ParameterizedContext<IValidationContext, RouterContext>,
+        ctx: RouterContext<IValidationState>,
     ) => {
         const results = validationResults(ctx);
         const file = (ctx as any).file as File; // For TSC
@@ -145,7 +144,7 @@ export class ImageController implements IController {
      * Delete an image from the system.
      */
     private deleteImage = async (
-        ctx: ParameterizedContext<IValidationContext, RouterContext>,
+        ctx: RouterContext<IValidationState>,
     ) => {
         const results = validationResults(ctx);
         if (results.hasErrors()) {
@@ -175,7 +174,7 @@ export class ImageController implements IController {
      * Get image metadata.
      */
     private getImageMeta = async (
-        ctx: ParameterizedContext<IValidationContext, RouterContext>,
+        ctx: RouterContext<IValidationState>,
     ) => {
         const results = validationResults(ctx);
         if (results.hasErrors()) {
@@ -206,7 +205,7 @@ export class ImageController implements IController {
      * Get image data.
      */
     private getImageData = async (
-        ctx: ParameterizedContext<IValidationContext, RouterContext>,
+        ctx: RouterContext<IValidationState>,
     ) => {
         const results = validationResults(ctx);
         if (results.hasErrors()) {
