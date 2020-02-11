@@ -9,7 +9,7 @@ services:
     command: npm start
     volumes:
       - .:/app
-      - node_modules:/app/node_modules
+      - /app/node_modules
     ports:
       - "3000:3000"
     depends_on:
@@ -19,6 +19,8 @@ services:
       POSTGRES_HOST: auth-db-dev
       CONSUL_HOST: consul-dev
       GRPC_PORT: 3000
+      REDIS_PORT: 6379
+      REID_HOST: "redis"
     networks:
       - ig-clone-dev
     env_file:
@@ -40,6 +42,8 @@ services:
     image: redis:5.0.7-alpine
     ports:
       - "6379:6379"
+    networks:
+      - ig-clone-dev
     # this line is needed when running redis with volume
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
@@ -55,4 +59,3 @@ volumes:
   auth-data-dev:
     external: true
   redis-data:
-  node_modules:

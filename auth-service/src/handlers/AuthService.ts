@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import grpc from "grpc";
 import jwt from "jsonwebtoken";
-// import { RedisClient } from "redis";
+import { RedisClient } from "redis";
 
 import { config } from "../config/auth";
 import { createAccessToken, createRefreshToken, verifyToken } from "../lib/tokens";
@@ -19,16 +19,17 @@ import {
     SignUpResponse,
     UserCredentials,
 } from "../proto/generated/auth_service_pb";
+import { getFromRedis } from "../lib/utils";
 
 /**
  * A handler for auth service.
  */
 class AuthHandler implements IAuthServer {
 
-    // private redisClient: RedisClient;
+    private redisClient: RedisClient;
 
-    constructor() {
-        // this.redisClient = client;
+    constructor(client: RedisClient) {
+        this.redisClient = client;
     }
 
     /**
@@ -102,9 +103,13 @@ class AuthHandler implements IAuthServer {
             .then((authenticatedAccount) => {
                 const tokens = new JWTTokens();
                 if (authenticatedAccount) {
+                    const refreshToken = createRefreshToken(authenticatedAccount);
                     tokens.setAccessToken(createAccessToken(authenticatedAccount));
-                    tokens.setRefreshToken(createRefreshToken(authenticatedAccount));
+                    tokens.setRefreshToken(refreshToken);
                     response.setTokens(tokens);
+                    this.redisClient.set(authenticatedAccount.id, JSON.stringify({
+                        refresh_token: refreshToken,
+                    }));
                 }
                 callback(null, response);
             })
@@ -129,11 +134,20 @@ class AuthHandler implements IAuthServer {
             const tokens = new JWTTokens();
             const account = await Account.findByPk(payload.sub);
             if (account) {
+                const tokenFromRedis = await getFromRedis(account.id, this.redisClient);
+                if (tokenFromRedis &&
+                    refreshToken === JSON.parse(tokenFromRedis).refresh_token) {
                 const newAccessToken = createAccessToken(account, config.audience);
                 const newRefreshToken = createRefreshToken(account, config.audience);
                 tokens.setAccessToken(newAccessToken);
                 tokens.setRefreshToken(newRefreshToken);
+                this.redisClient.set(account.id, JSON.stringify({
+                    refresh_token: refreshToken,
+                }));
                 response.setTokens(tokens);
+                } else {
+                    response.setError(AuthErrorStatus.EXPIRED_TOKEN);
+                }
             } else {
                 response.setError(AuthErrorStatus.NOT_FOUND);
             }

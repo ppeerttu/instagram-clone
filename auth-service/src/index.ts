@@ -17,7 +17,7 @@ const port = config.grpcPort;
 const server = new grpc.Server();
 const serviceDiscovery = ServiceDiscovery.getInstance();
 
-const redisClient = redis.createClient(6379, "0.0.0.0");
+const redisClient = redis.createClient(config.redisPort, config.redisHost);
 
 redisClient.on("connect", () => {
     console.log("Redis client connected");
@@ -26,7 +26,7 @@ redisClient.on("error", (err) => {
     console.error("Redis client got error " + err);
 });
 
-server.addService(authHandler.AuthService, new authHandler.AuthHandler());
+server.addService(authHandler.AuthService, new authHandler.AuthHandler(redisClient));
 
 server.bindAsync(
     `0.0.0.0:${port}`,
@@ -56,7 +56,9 @@ server.bindAsync(
  */
 function shutdownServer() {
     return new Promise((resolve) => {
-        server.tryShutdown(() => resolve());
+        server.tryShutdown(() => {
+            redisClient.quit(() => resolve());
+        });
     });
 }
 
