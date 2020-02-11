@@ -15,12 +15,17 @@ class ImageMetaServiceMockImpl : ImageMetaService {
    */
   private val images: MutableList<ImageMeta> = mutableListOf()
 
+  /**
+   * In-memory map of image likes <imageId, [userId, userId, userId, ...]>
+   */
+  private val likes: MutableMap<String, MutableSet<String>> = mutableMapOf()
+
   override fun saveImageMeta(imageMeta: ImageMeta): Future<ImageMeta> = Promise.promise<ImageMeta>().let {
     it.complete(imageMeta.also { meta -> images.add(meta)})
     it.future()
   }
   override fun deleteImage(imageId: String): Future<Nothing> = Promise.promise<Nothing>().let {
-    val meta = images.find { image -> image.id === imageId }
+    val meta = images.find { image -> image.id == imageId }
     if (meta != null) {
       images.remove(meta)
       it.complete()
@@ -32,6 +37,30 @@ class ImageMetaServiceMockImpl : ImageMetaService {
 
   override fun getImageMeta(imageId: String): Future<ImageMeta?> = Promise.promise<ImageMeta?>().let {
     it.complete(images.find { image -> image.id == imageId })
+    it.future()
+  }
+
+  override fun likeImage(imageId: String, userId: String): Future<Nothing> = Promise.promise<Nothing>().let {
+    val meta = images.find { image -> image.id == imageId }
+    if (meta == null) {
+      it.fail(NotFoundException("No image found with id $imageId"))
+    } else {
+      val imageLikes = likes[imageId] ?: mutableSetOf()
+      imageLikes.add(userId)
+      likes[imageId] = imageLikes
+      it.complete()
+    }
+    it.future()
+  }
+
+  override fun unlikeImage(imageId: String, userId: String): Future<Nothing> = Promise.promise<Nothing>().let {
+    val meta = images.find { image -> image.id == imageId }
+    if (meta == null) {
+      it.fail(NotFoundException("No image found with id $imageId"))
+    } else {
+      likes[imageId]?.remove(userId)
+      it.complete()
+    }
     it.future()
   }
 }

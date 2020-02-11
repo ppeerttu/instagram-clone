@@ -22,4 +22,14 @@ interface ImageMetaService {
    * Get image metadata.
    */
   fun getImageMeta(imageId: String): Future<ImageMeta?>
+
+  /**
+   * Add a like to an image.
+   */
+  fun likeImage(imageId: String, userId: String): Future<Nothing>
+
+  /**
+   * Remove a like from an image.
+   */
+  fun unlikeImage(imageId: String, userId: String): Future<Nothing>
 }

@@ -184,4 +184,13 @@ public interface ImageOrBuilder extends
    */
   com.google.protobuf.ByteString
       getHashTagsBytes(int index);
+
+  /**
+   * <pre>
+   * Like counter
+   * </pre>
+   *
+   * <code>int32 likes = 10;</code>
+   */
+  int getLikes();
 }

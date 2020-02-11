@@ -27,5 +27,15 @@ public interface SearchImagesRequestOrBuilder extends
   com.google.protobuf.ByteString
       getUserTagBytes();
 
+  /**
+   * <code>int32 size = 3;</code>
+   */
+  int getSize();
+
+  /**
+   * <code>int32 page = 4;</code>
+   */
+  int getPage();
+
   public com.instagram_clone.image_service.SearchImagesRequest.SearchCase getSearchCase();
 }

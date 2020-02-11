@@ -16,4 +16,14 @@ public interface GetUserImagesRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getUserIdBytes();
+
+  /**
+   * <code>int32 size = 2;</code>
+   */
+  int getSize();
+
+  /**
+   * <code>int32 page = 3;</code>
+   */
+  int getPage();
 }

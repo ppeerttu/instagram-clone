@@ -24,7 +24,10 @@ service Images {
   rpc GetUserImages(GetUserImagesRequest) returns (GetUserImagesResponse) {}
 
   // Search for images based on hash tags or user tags
-  rpc SearchImages (SearchImagesRequest) returns (SearchImagesResponse) {}
+  rpc SearchImages(SearchImagesRequest) returns (SearchImagesResponse) {}
+
+  // Like or unlike an image
+  rpc LikeImage(LikeImageRequest) returns (LikeImageResponse) {}
 }
 
 // =====================
@@ -125,6 +128,8 @@ message GetImageDataResponse {
 
 message GetUserImagesRequest {
   string user_id = 1;
+  int32 size = 2;
+  int32 page = 3;
 }
 
 message GetUserImagesResponse {
@@ -140,6 +145,27 @@ enum GetUserImagesErrorStatus {
 }
 
 // =====================
+// Like user's image
+// =====================
+
+message LikeImageRequest {
+  string image_id = 1;
+  string user_id = 2;
+  bool unlike = 3;
+}
+
+message LikeImageResponse {
+  LikeImageResponseStatus status = 1;
+}
+
+enum LikeImageResponseStatus {
+  LIKE_IMAGE_SERVER_ERROR = 0;
+  IMAGE_NOT_FOUND_ERROR = 1;
+  USER_NOT_FOUND_ERROR = 2;
+  LIKE_OK = 3;
+}
+
+// =====================
 // Search for images by hash tag or user tag
 // =====================
 
@@ -148,6 +174,8 @@ message SearchImagesRequest {
     string hash_tag = 1;
     string user_tag = 2;
   }
+  int32 size = 3;
+  int32 page = 4;
 }
 
 message SearchImagesResponse {
@@ -234,5 +262,8 @@ message Image {
 
   // Hash tags marked into the image caption
   repeated string hash_tags = 9;
+
+  // Like counter
+  int32 likes = 10;
 }
 

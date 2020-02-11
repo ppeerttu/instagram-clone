@@ -15,6 +15,8 @@ public  final class SearchImagesRequest extends
     super(builder);
   }
   private SearchImagesRequest() {
+    size_ = 0;
+    page_ = 0;
   }
 
   @java.lang.Override
@@ -52,6 +54,16 @@ public  final class SearchImagesRequest extends
             java.lang.String s = input.readStringRequireUtf8();
             searchCase_ = 2;
             search_ = s;
+            break;
+          }
+          case 24: {
+
+            size_ = input.readInt32();
+            break;
+          }
+          case 32: {
+
+            page_ = input.readInt32();
             break;
           }
         }
@@ -201,6 +213,24 @@ public  final class SearchImagesRequest extends
     }
   }
 
+  public static final int SIZE_FIELD_NUMBER = 3;
+  private int size_;
+  /**
+   * <code>int32 size = 3;</code>
+   */
+  public int getSize() {
+    return size_;
+  }
+
+  public static final int PAGE_FIELD_NUMBER = 4;
+  private int page_;
+  /**
+   * <code>int32 page = 4;</code>
+   */
+  public int getPage() {
+    return page_;
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -219,6 +249,12 @@ public  final class SearchImagesRequest extends
     if (searchCase_ == 2) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, search_);
     }
+    if (size_ != 0) {
+      output.writeInt32(3, size_);
+    }
+    if (page_ != 0) {
+      output.writeInt32(4, page_);
+    }
   }
 
   public int getSerializedSize() {
@@ -231,6 +267,14 @@ public  final class SearchImagesRequest extends
     }
     if (searchCase_ == 2) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, search_);
+    }
+    if (size_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, size_);
+    }
+    if (page_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, page_);
     }
     memoizedSize = size;
     return size;
@@ -248,6 +292,10 @@ public  final class SearchImagesRequest extends
     com.instagram_clone.image_service.SearchImagesRequest other = (com.instagram_clone.image_service.SearchImagesRequest) obj;
 
     boolean result = true;
+    result = result && (getSize()
+        == other.getSize());
+    result = result && (getPage()
+        == other.getPage());
     result = result && getSearchCase().equals(
         other.getSearchCase());
     if (!result) return false;
@@ -273,6 +321,10 @@ public  final class SearchImagesRequest extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + SIZE_FIELD_NUMBER;
+    hash = (53 * hash) + getSize();
+    hash = (37 * hash) + PAGE_FIELD_NUMBER;
+    hash = (53 * hash) + getPage();
     switch (searchCase_) {
       case 1:
         hash = (37 * hash) + HASH_TAG_FIELD_NUMBER;
@@ -414,6 +466,10 @@ public  final class SearchImagesRequest extends
     }
     public Builder clear() {
       super.clear();
+      size_ = 0;
+
+      page_ = 0;
+
       searchCase_ = 0;
       search_ = null;
       return this;
@@ -444,6 +500,8 @@ public  final class SearchImagesRequest extends
       if (searchCase_ == 2) {
         result.search_ = search_;
       }
+      result.size_ = size_;
+      result.page_ = page_;
       result.searchCase_ = searchCase_;
       onBuilt();
       return result;
@@ -486,6 +544,12 @@ public  final class SearchImagesRequest extends
 
     public Builder mergeFrom(com.instagram_clone.image_service.SearchImagesRequest other) {
       if (other == com.instagram_clone.image_service.SearchImagesRequest.getDefaultInstance()) return this;
+      if (other.getSize() != 0) {
+        setSize(other.getSize());
+      }
+      if (other.getPage() != 0) {
+        setPage(other.getPage());
+      }
       switch (other.getSearchCase()) {
         case HASH_TAG: {
           searchCase_ = 1;
@@ -700,6 +764,58 @@ public  final class SearchImagesRequest extends
   checkByteStringIsUtf8(value);
       searchCase_ = 2;
       search_ = value;
+      onChanged();
+      return this;
+    }
+
+    private int size_ ;
+    /**
+     * <code>int32 size = 3;</code>
+     */
+    public int getSize() {
+      return size_;
+    }
+    /**
+     * <code>int32 size = 3;</code>
+     */
+    public Builder setSize(int value) {
+      
+      size_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 size = 3;</code>
+     */
+    public Builder clearSize() {
+      
+      size_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int page_ ;
+    /**
+     * <code>int32 page = 4;</code>
+     */
+    public int getPage() {
+      return page_;
+    }
+    /**
+     * <code>int32 page = 4;</code>
+     */
+    public Builder setPage(int value) {
+      
+      page_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 page = 4;</code>
+     */
+    public Builder clearPage() {
+      
+      page_ = 0;
       onChanged();
       return this;
     }
