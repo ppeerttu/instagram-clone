@@ -66,7 +66,7 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
     .compose { newLike ->
       // Increase like counter only if the like is "new"
       if (newLike) {
-        increaseLikeCounter(imageId, 1)
+        increaseLikeCounter(imageId)
       } else {
         Future.succeededFuture()
       }
@@ -84,7 +84,7 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
     }
     .compose { removed ->
       if (removed) {
-        increaseLikeCounter(imageId, -1)
+        increaseLikeCounter(imageId, decrease = true)
       } else {
         Future.succeededFuture()
       }
@@ -144,15 +144,15 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
   }
 
   /**
-   * Increase the like counter based on [imageId], for the amount of [amount]. Please
-   * note that negative [amount] values will decrease the "likes" counter.
+   * Increase the like counter based on [imageId] by 1. If [decrease] is set to true, then
+   * it will decrease by 1.
    */
-  private fun increaseLikeCounter(imageId: String, amount: Long): Future<Nothing> {
+  private fun increaseLikeCounter(imageId: String, decrease: Boolean = false): Future<Nothing> {
     val promise = Promise.promise<Nothing>()
     val query = JsonObject()
       .put(FIELD_ID, imageId)
     val update = json {
-      obj("\$inc" to obj("likes" to amount))
+      obj("\$inc" to obj("likes" to if (decrease) -1 else 1))
     }
 
     client.updateCollection(config.imagesCollection, query, update) {
