@@ -38,6 +38,11 @@ data class ImageMeta(
   val caption: String = "",
 
   /**
+   * Like count
+   */
+  var likes: Int = 0,
+
+  /**
    * List of hash tags
    */
   var hashTags: List<String> = listOf(),

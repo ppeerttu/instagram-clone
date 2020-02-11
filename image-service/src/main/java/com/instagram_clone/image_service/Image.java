@@ -24,6 +24,7 @@ public  final class Image extends
     createdAt_ = "";
     userTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    likes_ = 0;
   }
 
   @java.lang.Override
@@ -107,6 +108,11 @@ public  final class Image extends
               mutable_bitField0_ |= 0x00000100;
             }
             hashTags_.add(s);
+            break;
+          }
+          case 80: {
+
+            likes_ = input.readInt32();
             break;
           }
         }
@@ -465,6 +471,19 @@ public  final class Image extends
     return hashTags_.getByteString(index);
   }
 
+  public static final int LIKES_FIELD_NUMBER = 10;
+  private int likes_;
+  /**
+   * <pre>
+   * Like counter
+   * </pre>
+   *
+   * <code>int32 likes = 10;</code>
+   */
+  public int getLikes() {
+    return likes_;
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -503,6 +522,9 @@ public  final class Image extends
     }
     for (int i = 0; i < hashTags_.size(); i++) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 9, hashTags_.getRaw(i));
+    }
+    if (likes_ != 0) {
+      output.writeInt32(10, likes_);
     }
   }
 
@@ -550,6 +572,10 @@ public  final class Image extends
       size += dataSize;
       size += 1 * getHashTagsList().size();
     }
+    if (likes_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(10, likes_);
+    }
     memoizedSize = size;
     return size;
   }
@@ -584,6 +610,8 @@ public  final class Image extends
         .equals(other.getUserTagsList());
     result = result && getHashTagsList()
         .equals(other.getHashTagsList());
+    result = result && (getLikes()
+        == other.getLikes());
     return result;
   }
 
@@ -616,6 +644,8 @@ public  final class Image extends
       hash = (37 * hash) + HASH_TAGS_FIELD_NUMBER;
       hash = (53 * hash) + getHashTagsList().hashCode();
     }
+    hash = (37 * hash) + LIKES_FIELD_NUMBER;
+    hash = (53 * hash) + getLikes();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -763,6 +793,8 @@ public  final class Image extends
       bitField0_ = (bitField0_ & ~0x00000080);
       hashTags_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       bitField0_ = (bitField0_ & ~0x00000100);
+      likes_ = 0;
+
       return this;
     }
 
@@ -804,6 +836,7 @@ public  final class Image extends
         bitField0_ = (bitField0_ & ~0x00000100);
       }
       result.hashTags_ = hashTags_;
+      result.likes_ = likes_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -891,6 +924,9 @@ public  final class Image extends
           hashTags_.addAll(other.hashTags_);
         }
         onChanged();
+      }
+      if (other.getLikes() != 0) {
+        setLikes(other.getLikes());
       }
       onChanged();
       return this;
@@ -1696,6 +1732,44 @@ public  final class Image extends
   checkByteStringIsUtf8(value);
       ensureHashTagsIsMutable();
       hashTags_.add(value);
+      onChanged();
+      return this;
+    }
+
+    private int likes_ ;
+    /**
+     * <pre>
+     * Like counter
+     * </pre>
+     *
+     * <code>int32 likes = 10;</code>
+     */
+    public int getLikes() {
+      return likes_;
+    }
+    /**
+     * <pre>
+     * Like counter
+     * </pre>
+     *
+     * <code>int32 likes = 10;</code>
+     */
+    public Builder setLikes(int value) {
+      
+      likes_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Like counter
+     * </pre>
+     *
+     * <code>int32 likes = 10;</code>
+     */
+    public Builder clearLikes() {
+      
+      likes_ = 0;
       onChanged();
       return this;
     }

@@ -51,6 +51,11 @@ object ConfigConstants {
   const val IMAGES_COLLECTION = "IMAGES_COLLECTION"
 
   /**
+   * MongoDB likes collection
+   */
+  const val LIKES_COLLECTION = "LIKES_COLLECTION"
+
+  /**
    * MongoDB host
    */
   const val MONGO_HOST = "MONGO_HOST"

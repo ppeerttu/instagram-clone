@@ -73,6 +73,12 @@ class AppConfig private constructor(json: JsonObject) {
   var imagesCollection: String
     private set
 
+  /**
+   * MongoDB image likes collection
+   */
+  var likesCollection: String
+    private set
+
   init {
     grpcHost = json.getString(ConfigConstants.GRPC_HOST)
     grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
@@ -85,6 +91,7 @@ class AppConfig private constructor(json: JsonObject) {
     mongoPort = json.getInteger(ConfigConstants.MONGO_PORT, 27017)
     mongoDatabase = json.getString(ConfigConstants.MONGO_DATABASE)
     imagesCollection = json.getString(ConfigConstants.IMAGES_COLLECTION, "image_meta")
+    likesCollection = json.getString(ConfigConstants.LIKES_COLLECTION, "image_likes")
   }
 
   companion object {

@@ -221,6 +221,33 @@ public final class ImagesGrpc {
      return getSearchImagesMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.instagram_clone.image_service.LikeImageRequest,
+      com.instagram_clone.image_service.LikeImageResponse> getLikeImageMethod;
+
+  public static io.grpc.MethodDescriptor<com.instagram_clone.image_service.LikeImageRequest,
+      com.instagram_clone.image_service.LikeImageResponse> getLikeImageMethod() {
+    io.grpc.MethodDescriptor<com.instagram_clone.image_service.LikeImageRequest, com.instagram_clone.image_service.LikeImageResponse> getLikeImageMethod;
+    if ((getLikeImageMethod = ImagesGrpc.getLikeImageMethod) == null) {
+      synchronized (ImagesGrpc.class) {
+        if ((getLikeImageMethod = ImagesGrpc.getLikeImageMethod) == null) {
+          ImagesGrpc.getLikeImageMethod = getLikeImageMethod = 
+              io.grpc.MethodDescriptor.<com.instagram_clone.image_service.LikeImageRequest, com.instagram_clone.image_service.LikeImageResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Image.Images", "LikeImage"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.image_service.LikeImageRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.instagram_clone.image_service.LikeImageResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new ImagesMethodDescriptorSupplier("LikeImage"))
+                  .build();
+          }
+        }
+     }
+     return getLikeImageMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -318,6 +345,16 @@ public final class ImagesGrpc {
       asyncUnimplementedUnaryCall(getSearchImagesMethod(), responseObserver);
     }
 
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public void likeImage(com.instagram_clone.image_service.LikeImageRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.image_service.LikeImageResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getLikeImageMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -362,6 +399,13 @@ public final class ImagesGrpc {
                 com.instagram_clone.image_service.SearchImagesRequest,
                 com.instagram_clone.image_service.SearchImagesResponse>(
                   this, METHODID_SEARCH_IMAGES)))
+          .addMethod(
+            getLikeImageMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.instagram_clone.image_service.LikeImageRequest,
+                com.instagram_clone.image_service.LikeImageResponse>(
+                  this, METHODID_LIKE_IMAGE)))
           .build();
     }
   }
@@ -452,6 +496,17 @@ public final class ImagesGrpc {
       asyncUnaryCall(
           getChannel().newCall(getSearchImagesMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public void likeImage(com.instagram_clone.image_service.LikeImageRequest request,
+        io.grpc.stub.StreamObserver<com.instagram_clone.image_service.LikeImageResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getLikeImageMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -525,6 +580,16 @@ public final class ImagesGrpc {
       return blockingUnaryCall(
           getChannel(), getSearchImagesMethod(), getCallOptions(), request);
     }
+
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public com.instagram_clone.image_service.LikeImageResponse likeImage(com.instagram_clone.image_service.LikeImageRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getLikeImageMethod(), getCallOptions(), request);
+    }
   }
 
   /**
@@ -590,6 +655,17 @@ public final class ImagesGrpc {
         com.instagram_clone.image_service.SearchImagesRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getSearchImagesMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.image_service.LikeImageResponse> likeImage(
+        com.instagram_clone.image_service.LikeImageRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getLikeImageMethod(), getCallOptions()), request);
     }
   }
 
@@ -660,6 +736,16 @@ public final class ImagesGrpc {
       asyncUnimplementedUnaryCall(getSearchImagesMethod(), ImagesGrpc.toObserver(response.completer()));
     }
 
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public void likeImage(com.instagram_clone.image_service.LikeImageRequest request,
+        io.vertx.core.Future<com.instagram_clone.image_service.LikeImageResponse> response) {
+      asyncUnimplementedUnaryCall(getLikeImageMethod(), ImagesGrpc.toObserver(response.completer()));
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -704,6 +790,13 @@ public final class ImagesGrpc {
                 com.instagram_clone.image_service.SearchImagesRequest,
                 com.instagram_clone.image_service.SearchImagesResponse>(
                   this, METHODID_SEARCH_IMAGES)))
+          .addMethod(
+            getLikeImageMethod(),
+            asyncUnaryCall(
+              new VertxMethodHandlers<
+                com.instagram_clone.image_service.LikeImageRequest,
+                com.instagram_clone.image_service.LikeImageResponse>(
+                  this, METHODID_LIKE_IMAGE)))
           .build();
     }
   }
@@ -801,6 +894,17 @@ public final class ImagesGrpc {
       asyncUnaryCall(
           getChannel().newCall(getSearchImagesMethod(), getCallOptions()), request, ImagesGrpc.toObserver(response));
     }
+
+    /**
+     * <pre>
+     * Like or unlike about an image
+     * </pre>
+     */
+    public void likeImage(com.instagram_clone.image_service.LikeImageRequest request,
+        io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.image_service.LikeImageResponse>> response) {
+      asyncUnaryCall(
+          getChannel().newCall(getLikeImageMethod(), getCallOptions()), request, ImagesGrpc.toObserver(response));
+    }
   }
 
   private static final int METHODID_DELETE_IMAGE = 0;
@@ -808,7 +912,8 @@ public final class ImagesGrpc {
   private static final int METHODID_GET_IMAGE_DATA = 2;
   private static final int METHODID_GET_USER_IMAGES = 3;
   private static final int METHODID_SEARCH_IMAGES = 4;
-  private static final int METHODID_CREATE_IMAGE = 5;
+  private static final int METHODID_LIKE_IMAGE = 5;
+  private static final int METHODID_CREATE_IMAGE = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -846,6 +951,10 @@ public final class ImagesGrpc {
         case METHODID_SEARCH_IMAGES:
           serviceImpl.searchImages((com.instagram_clone.image_service.SearchImagesRequest) request,
               (io.grpc.stub.StreamObserver<com.instagram_clone.image_service.SearchImagesResponse>) responseObserver);
+          break;
+        case METHODID_LIKE_IMAGE:
+          serviceImpl.likeImage((com.instagram_clone.image_service.LikeImageRequest) request,
+              (io.grpc.stub.StreamObserver<com.instagram_clone.image_service.LikeImageResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -931,6 +1040,17 @@ public final class ImagesGrpc {
                 }
               }));
           break;
+        case METHODID_LIKE_IMAGE:
+          serviceImpl.likeImage((com.instagram_clone.image_service.LikeImageRequest) request,
+              (io.vertx.core.Future<com.instagram_clone.image_service.LikeImageResponse>) io.vertx.core.Future.<com.instagram_clone.image_service.LikeImageResponse>future().setHandler(ar -> {
+                if (ar.succeeded()) {
+                  ((io.grpc.stub.StreamObserver<com.instagram_clone.image_service.LikeImageResponse>) responseObserver).onNext(ar.result());
+                  responseObserver.onCompleted();
+                } else {
+                  responseObserver.onError(ar.cause());
+                }
+              }));
+          break;
         default:
           throw new AssertionError();
       }
@@ -1009,6 +1129,7 @@ public final class ImagesGrpc {
               .addMethod(getGetImageDataMethod())
               .addMethod(getGetUserImagesMethod())
               .addMethod(getSearchImagesMethod())
+              .addMethod(getLikeImageMethod())
               .build();
         }
       }

@@ -83,7 +83,7 @@ public enum SearchImagesErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(5);
+    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(6);
   }
 
   private static final SearchImagesErrorStatus[] VALUES = values();

@@ -69,5 +69,6 @@ fun fromImageMeta(meta: ImageMeta): Image = Image.newBuilder()
   .setCreatedAt(meta.createdAt)
   .addAllUserTags(meta.userTags)
   .addAllHashTags(meta.hashTags)
+  .setLikes(meta.likes)
   .build()
 

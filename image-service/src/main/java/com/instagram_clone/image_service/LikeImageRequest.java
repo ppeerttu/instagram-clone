@@ -4,20 +4,20 @@
 package com.instagram_clone.image_service;
 
 /**
- * Protobuf type {@code Image.GetUserImagesRequest}
+ * Protobuf type {@code Image.LikeImageRequest}
  */
-public  final class GetUserImagesRequest extends
+public  final class LikeImageRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:Image.GetUserImagesRequest)
-    GetUserImagesRequestOrBuilder {
-  // Use GetUserImagesRequest.newBuilder() to construct.
-  private GetUserImagesRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:Image.LikeImageRequest)
+    LikeImageRequestOrBuilder {
+  // Use LikeImageRequest.newBuilder() to construct.
+  private LikeImageRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private GetUserImagesRequest() {
+  private LikeImageRequest() {
+    imageId_ = "";
     userId_ = "";
-    size_ = 0;
-    page_ = 0;
+    unlike_ = false;
   }
 
   @java.lang.Override
@@ -25,7 +25,7 @@ public  final class GetUserImagesRequest extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private GetUserImagesRequest(
+  private LikeImageRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -48,17 +48,18 @@ public  final class GetUserImagesRequest extends
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            userId_ = s;
+            imageId_ = s;
             break;
           }
-          case 16: {
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            size_ = input.readInt32();
+            userId_ = s;
             break;
           }
           case 24: {
 
-            page_ = input.readInt32();
+            unlike_ = input.readBool();
             break;
           }
         }
@@ -74,20 +75,54 @@ public  final class GetUserImagesRequest extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.internal_static_Image_GetUserImagesRequest_descriptor;
+    return com.instagram_clone.image_service.ImageService.internal_static_Image_LikeImageRequest_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.instagram_clone.image_service.ImageService.internal_static_Image_GetUserImagesRequest_fieldAccessorTable
+    return com.instagram_clone.image_service.ImageService.internal_static_Image_LikeImageRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.instagram_clone.image_service.GetUserImagesRequest.class, com.instagram_clone.image_service.GetUserImagesRequest.Builder.class);
+            com.instagram_clone.image_service.LikeImageRequest.class, com.instagram_clone.image_service.LikeImageRequest.Builder.class);
   }
 
-  public static final int USER_ID_FIELD_NUMBER = 1;
+  public static final int IMAGE_ID_FIELD_NUMBER = 1;
+  private volatile java.lang.Object imageId_;
+  /**
+   * <code>string image_id = 1;</code>
+   */
+  public java.lang.String getImageId() {
+    java.lang.Object ref = imageId_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      imageId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string image_id = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getImageIdBytes() {
+    java.lang.Object ref = imageId_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      imageId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int USER_ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object userId_;
   /**
-   * <code>string user_id = 1;</code>
+   * <code>string user_id = 2;</code>
    */
   public java.lang.String getUserId() {
     java.lang.Object ref = userId_;
@@ -102,7 +137,7 @@ public  final class GetUserImagesRequest extends
     }
   }
   /**
-   * <code>string user_id = 1;</code>
+   * <code>string user_id = 2;</code>
    */
   public com.google.protobuf.ByteString
       getUserIdBytes() {
@@ -118,22 +153,13 @@ public  final class GetUserImagesRequest extends
     }
   }
 
-  public static final int SIZE_FIELD_NUMBER = 2;
-  private int size_;
+  public static final int UNLIKE_FIELD_NUMBER = 3;
+  private boolean unlike_;
   /**
-   * <code>int32 size = 2;</code>
+   * <code>bool unlike = 3;</code>
    */
-  public int getSize() {
-    return size_;
-  }
-
-  public static final int PAGE_FIELD_NUMBER = 3;
-  private int page_;
-  /**
-   * <code>int32 page = 3;</code>
-   */
-  public int getPage() {
-    return page_;
+  public boolean getUnlike() {
+    return unlike_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -148,14 +174,14 @@ public  final class GetUserImagesRequest extends
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getImageIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, imageId_);
+    }
     if (!getUserIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, userId_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, userId_);
     }
-    if (size_ != 0) {
-      output.writeInt32(2, size_);
-    }
-    if (page_ != 0) {
-      output.writeInt32(3, page_);
+    if (unlike_ != false) {
+      output.writeBool(3, unlike_);
     }
   }
 
@@ -164,16 +190,15 @@ public  final class GetUserImagesRequest extends
     if (size != -1) return size;
 
     size = 0;
+    if (!getImageIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, imageId_);
+    }
     if (!getUserIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, userId_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, userId_);
     }
-    if (size_ != 0) {
+    if (unlike_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, size_);
-    }
-    if (page_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, page_);
+        .computeBoolSize(3, unlike_);
     }
     memoizedSize = size;
     return size;
@@ -185,18 +210,18 @@ public  final class GetUserImagesRequest extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.instagram_clone.image_service.GetUserImagesRequest)) {
+    if (!(obj instanceof com.instagram_clone.image_service.LikeImageRequest)) {
       return super.equals(obj);
     }
-    com.instagram_clone.image_service.GetUserImagesRequest other = (com.instagram_clone.image_service.GetUserImagesRequest) obj;
+    com.instagram_clone.image_service.LikeImageRequest other = (com.instagram_clone.image_service.LikeImageRequest) obj;
 
     boolean result = true;
+    result = result && getImageId()
+        .equals(other.getImageId());
     result = result && getUserId()
         .equals(other.getUserId());
-    result = result && (getSize()
-        == other.getSize());
-    result = result && (getPage()
-        == other.getPage());
+    result = result && (getUnlike()
+        == other.getUnlike());
     return result;
   }
 
@@ -207,80 +232,81 @@ public  final class GetUserImagesRequest extends
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + IMAGE_ID_FIELD_NUMBER;
+    hash = (53 * hash) + getImageId().hashCode();
     hash = (37 * hash) + USER_ID_FIELD_NUMBER;
     hash = (53 * hash) + getUserId().hashCode();
-    hash = (37 * hash) + SIZE_FIELD_NUMBER;
-    hash = (53 * hash) + getSize();
-    hash = (37 * hash) + PAGE_FIELD_NUMBER;
-    hash = (53 * hash) + getPage();
+    hash = (37 * hash) + UNLIKE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getUnlike());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(byte[] data)
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(java.io.InputStream input)
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseDelimitedFrom(java.io.InputStream input)
+  public static com.instagram_clone.image_service.LikeImageRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseDelimitedFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.instagram_clone.image_service.GetUserImagesRequest parseFrom(
+  public static com.instagram_clone.image_service.LikeImageRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -292,7 +318,7 @@ public  final class GetUserImagesRequest extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.instagram_clone.image_service.GetUserImagesRequest prototype) {
+  public static Builder newBuilder(com.instagram_clone.image_service.LikeImageRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -307,25 +333,25 @@ public  final class GetUserImagesRequest extends
     return builder;
   }
   /**
-   * Protobuf type {@code Image.GetUserImagesRequest}
+   * Protobuf type {@code Image.LikeImageRequest}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:Image.GetUserImagesRequest)
-      com.instagram_clone.image_service.GetUserImagesRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:Image.LikeImageRequest)
+      com.instagram_clone.image_service.LikeImageRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.instagram_clone.image_service.ImageService.internal_static_Image_GetUserImagesRequest_descriptor;
+      return com.instagram_clone.image_service.ImageService.internal_static_Image_LikeImageRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.instagram_clone.image_service.ImageService.internal_static_Image_GetUserImagesRequest_fieldAccessorTable
+      return com.instagram_clone.image_service.ImageService.internal_static_Image_LikeImageRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.instagram_clone.image_service.GetUserImagesRequest.class, com.instagram_clone.image_service.GetUserImagesRequest.Builder.class);
+              com.instagram_clone.image_service.LikeImageRequest.class, com.instagram_clone.image_service.LikeImageRequest.Builder.class);
     }
 
-    // Construct using com.instagram_clone.image_service.GetUserImagesRequest.newBuilder()
+    // Construct using com.instagram_clone.image_service.LikeImageRequest.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -342,37 +368,37 @@ public  final class GetUserImagesRequest extends
     }
     public Builder clear() {
       super.clear();
+      imageId_ = "";
+
       userId_ = "";
 
-      size_ = 0;
-
-      page_ = 0;
+      unlike_ = false;
 
       return this;
     }
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.instagram_clone.image_service.ImageService.internal_static_Image_GetUserImagesRequest_descriptor;
+      return com.instagram_clone.image_service.ImageService.internal_static_Image_LikeImageRequest_descriptor;
     }
 
-    public com.instagram_clone.image_service.GetUserImagesRequest getDefaultInstanceForType() {
-      return com.instagram_clone.image_service.GetUserImagesRequest.getDefaultInstance();
+    public com.instagram_clone.image_service.LikeImageRequest getDefaultInstanceForType() {
+      return com.instagram_clone.image_service.LikeImageRequest.getDefaultInstance();
     }
 
-    public com.instagram_clone.image_service.GetUserImagesRequest build() {
-      com.instagram_clone.image_service.GetUserImagesRequest result = buildPartial();
+    public com.instagram_clone.image_service.LikeImageRequest build() {
+      com.instagram_clone.image_service.LikeImageRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public com.instagram_clone.image_service.GetUserImagesRequest buildPartial() {
-      com.instagram_clone.image_service.GetUserImagesRequest result = new com.instagram_clone.image_service.GetUserImagesRequest(this);
+    public com.instagram_clone.image_service.LikeImageRequest buildPartial() {
+      com.instagram_clone.image_service.LikeImageRequest result = new com.instagram_clone.image_service.LikeImageRequest(this);
+      result.imageId_ = imageId_;
       result.userId_ = userId_;
-      result.size_ = size_;
-      result.page_ = page_;
+      result.unlike_ = unlike_;
       onBuilt();
       return result;
     }
@@ -404,25 +430,26 @@ public  final class GetUserImagesRequest extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.instagram_clone.image_service.GetUserImagesRequest) {
-        return mergeFrom((com.instagram_clone.image_service.GetUserImagesRequest)other);
+      if (other instanceof com.instagram_clone.image_service.LikeImageRequest) {
+        return mergeFrom((com.instagram_clone.image_service.LikeImageRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.instagram_clone.image_service.GetUserImagesRequest other) {
-      if (other == com.instagram_clone.image_service.GetUserImagesRequest.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.instagram_clone.image_service.LikeImageRequest other) {
+      if (other == com.instagram_clone.image_service.LikeImageRequest.getDefaultInstance()) return this;
+      if (!other.getImageId().isEmpty()) {
+        imageId_ = other.imageId_;
+        onChanged();
+      }
       if (!other.getUserId().isEmpty()) {
         userId_ = other.userId_;
         onChanged();
       }
-      if (other.getSize() != 0) {
-        setSize(other.getSize());
-      }
-      if (other.getPage() != 0) {
-        setPage(other.getPage());
+      if (other.getUnlike() != false) {
+        setUnlike(other.getUnlike());
       }
       onChanged();
       return this;
@@ -436,11 +463,11 @@ public  final class GetUserImagesRequest extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.instagram_clone.image_service.GetUserImagesRequest parsedMessage = null;
+      com.instagram_clone.image_service.LikeImageRequest parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.instagram_clone.image_service.GetUserImagesRequest) e.getUnfinishedMessage();
+        parsedMessage = (com.instagram_clone.image_service.LikeImageRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -450,9 +477,78 @@ public  final class GetUserImagesRequest extends
       return this;
     }
 
+    private java.lang.Object imageId_ = "";
+    /**
+     * <code>string image_id = 1;</code>
+     */
+    public java.lang.String getImageId() {
+      java.lang.Object ref = imageId_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        imageId_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string image_id = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getImageIdBytes() {
+      java.lang.Object ref = imageId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        imageId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string image_id = 1;</code>
+     */
+    public Builder setImageId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      imageId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string image_id = 1;</code>
+     */
+    public Builder clearImageId() {
+      
+      imageId_ = getDefaultInstance().getImageId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string image_id = 1;</code>
+     */
+    public Builder setImageIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      imageId_ = value;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object userId_ = "";
     /**
-     * <code>string user_id = 1;</code>
+     * <code>string user_id = 2;</code>
      */
     public java.lang.String getUserId() {
       java.lang.Object ref = userId_;
@@ -467,7 +563,7 @@ public  final class GetUserImagesRequest extends
       }
     }
     /**
-     * <code>string user_id = 1;</code>
+     * <code>string user_id = 2;</code>
      */
     public com.google.protobuf.ByteString
         getUserIdBytes() {
@@ -483,7 +579,7 @@ public  final class GetUserImagesRequest extends
       }
     }
     /**
-     * <code>string user_id = 1;</code>
+     * <code>string user_id = 2;</code>
      */
     public Builder setUserId(
         java.lang.String value) {
@@ -496,7 +592,7 @@ public  final class GetUserImagesRequest extends
       return this;
     }
     /**
-     * <code>string user_id = 1;</code>
+     * <code>string user_id = 2;</code>
      */
     public Builder clearUserId() {
       
@@ -505,7 +601,7 @@ public  final class GetUserImagesRequest extends
       return this;
     }
     /**
-     * <code>string user_id = 1;</code>
+     * <code>string user_id = 2;</code>
      */
     public Builder setUserIdBytes(
         com.google.protobuf.ByteString value) {
@@ -519,54 +615,28 @@ public  final class GetUserImagesRequest extends
       return this;
     }
 
-    private int size_ ;
+    private boolean unlike_ ;
     /**
-     * <code>int32 size = 2;</code>
+     * <code>bool unlike = 3;</code>
      */
-    public int getSize() {
-      return size_;
+    public boolean getUnlike() {
+      return unlike_;
     }
     /**
-     * <code>int32 size = 2;</code>
+     * <code>bool unlike = 3;</code>
      */
-    public Builder setSize(int value) {
+    public Builder setUnlike(boolean value) {
       
-      size_ = value;
+      unlike_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 size = 2;</code>
+     * <code>bool unlike = 3;</code>
      */
-    public Builder clearSize() {
+    public Builder clearUnlike() {
       
-      size_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int page_ ;
-    /**
-     * <code>int32 page = 3;</code>
-     */
-    public int getPage() {
-      return page_;
-    }
-    /**
-     * <code>int32 page = 3;</code>
-     */
-    public Builder setPage(int value) {
-      
-      page_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 page = 3;</code>
-     */
-    public Builder clearPage() {
-      
-      page_ = 0;
+      unlike_ = false;
       onChanged();
       return this;
     }
@@ -581,39 +651,39 @@ public  final class GetUserImagesRequest extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:Image.GetUserImagesRequest)
+    // @@protoc_insertion_point(builder_scope:Image.LikeImageRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:Image.GetUserImagesRequest)
-  private static final com.instagram_clone.image_service.GetUserImagesRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:Image.LikeImageRequest)
+  private static final com.instagram_clone.image_service.LikeImageRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.instagram_clone.image_service.GetUserImagesRequest();
+    DEFAULT_INSTANCE = new com.instagram_clone.image_service.LikeImageRequest();
   }
 
-  public static com.instagram_clone.image_service.GetUserImagesRequest getDefaultInstance() {
+  public static com.instagram_clone.image_service.LikeImageRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<GetUserImagesRequest>
-      PARSER = new com.google.protobuf.AbstractParser<GetUserImagesRequest>() {
-    public GetUserImagesRequest parsePartialFrom(
+  private static final com.google.protobuf.Parser<LikeImageRequest>
+      PARSER = new com.google.protobuf.AbstractParser<LikeImageRequest>() {
+    public LikeImageRequest parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GetUserImagesRequest(input, extensionRegistry);
+        return new LikeImageRequest(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<GetUserImagesRequest> parser() {
+  public static com.google.protobuf.Parser<LikeImageRequest> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<GetUserImagesRequest> getParserForType() {
+  public com.google.protobuf.Parser<LikeImageRequest> getParserForType() {
     return PARSER;
   }
 
-  public com.instagram_clone.image_service.GetUserImagesRequest getDefaultInstanceForType() {
+  public com.instagram_clone.image_service.LikeImageRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

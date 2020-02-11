@@ -225,6 +225,43 @@ class ImageServiceGrpcImpl(
   }
 
   /**
+   * Add/remove a like to/of an image
+   */
+  override fun likeImage(request: LikeImageRequest, responseObserver: StreamObserver<LikeImageResponse>) {
+    val imageId = request.imageId
+    val userId = request.userId
+    val unlike = request.unlike
+
+    val future = when (unlike) {
+      false -> metaService.likeImage(imageId, userId)
+      else -> metaService.unlikeImage(imageId, userId)
+    }
+    future
+      .onSuccess {
+        responseObserver.onNext(
+          LikeImageResponse.newBuilder()
+            .setStatus(LikeImageResponseStatus.LIKE_OK)
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        responseObserver.onNext(
+          LikeImageResponse.newBuilder()
+            .setStatus(when (e) {
+              is NotFoundException -> LikeImageResponseStatus.IMAGE_NOT_FOUND_ERROR
+              else -> {
+                logger.error("Failed to ${if (unlike) "unlike" else "like"} image $imageId", e)
+                LikeImageResponseStatus.LIKE_IMAGE_SERVER_ERROR
+              }
+            })
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+  }
+
+  /**
    * Slice the given [bytes] into chunks of size [CHUNK_SIZE].
    */
   private fun chunkBytes(bytes: ByteString): List<ByteString> {
