@@ -4,37 +4,29 @@
 package com.instagram_clone.image_service;
 
 /**
- * Protobuf enum {@code Image.SearchImagesErrorStatus}
+ * Protobuf enum {@code Image.GetLikesErrorStatus}
  */
-public enum SearchImagesErrorStatus
+public enum GetLikesErrorStatus
     implements com.google.protobuf.ProtocolMessageEnum {
   /**
-   * <code>SEARCH_IMAGES_SERVER_ERROR = 0;</code>
+   * <code>GET_LIKES_SERVER_ERROR = 0;</code>
    */
-  SEARCH_IMAGES_SERVER_ERROR(0),
+  GET_LIKES_SERVER_ERROR(0),
   /**
-   * <pre>
-   * Empty search string
-   * </pre>
-   *
-   * <code>EMPTY_SEARCH = 1;</code>
+   * <code>GET_LIKES_IMAGE_NOT_FOUND = 1;</code>
    */
-  EMPTY_SEARCH(1),
+  GET_LIKES_IMAGE_NOT_FOUND(1),
   UNRECOGNIZED(-1),
   ;
 
   /**
-   * <code>SEARCH_IMAGES_SERVER_ERROR = 0;</code>
+   * <code>GET_LIKES_SERVER_ERROR = 0;</code>
    */
-  public static final int SEARCH_IMAGES_SERVER_ERROR_VALUE = 0;
+  public static final int GET_LIKES_SERVER_ERROR_VALUE = 0;
   /**
-   * <pre>
-   * Empty search string
-   * </pre>
-   *
-   * <code>EMPTY_SEARCH = 1;</code>
+   * <code>GET_LIKES_IMAGE_NOT_FOUND = 1;</code>
    */
-  public static final int EMPTY_SEARCH_VALUE = 1;
+  public static final int GET_LIKES_IMAGE_NOT_FOUND_VALUE = 1;
 
 
   public final int getNumber() {
@@ -49,27 +41,27 @@ public enum SearchImagesErrorStatus
    * @deprecated Use {@link #forNumber(int)} instead.
    */
   @java.lang.Deprecated
-  public static SearchImagesErrorStatus valueOf(int value) {
+  public static GetLikesErrorStatus valueOf(int value) {
     return forNumber(value);
   }
 
-  public static SearchImagesErrorStatus forNumber(int value) {
+  public static GetLikesErrorStatus forNumber(int value) {
     switch (value) {
-      case 0: return SEARCH_IMAGES_SERVER_ERROR;
-      case 1: return EMPTY_SEARCH;
+      case 0: return GET_LIKES_SERVER_ERROR;
+      case 1: return GET_LIKES_IMAGE_NOT_FOUND;
       default: return null;
     }
   }
 
-  public static com.google.protobuf.Internal.EnumLiteMap<SearchImagesErrorStatus>
+  public static com.google.protobuf.Internal.EnumLiteMap<GetLikesErrorStatus>
       internalGetValueMap() {
     return internalValueMap;
   }
   private static final com.google.protobuf.Internal.EnumLiteMap<
-      SearchImagesErrorStatus> internalValueMap =
-        new com.google.protobuf.Internal.EnumLiteMap<SearchImagesErrorStatus>() {
-          public SearchImagesErrorStatus findValueByNumber(int number) {
-            return SearchImagesErrorStatus.forNumber(number);
+      GetLikesErrorStatus> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<GetLikesErrorStatus>() {
+          public GetLikesErrorStatus findValueByNumber(int number) {
+            return GetLikesErrorStatus.forNumber(number);
           }
         };
 
@@ -83,12 +75,12 @@ public enum SearchImagesErrorStatus
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(7);
+    return com.instagram_clone.image_service.ImageService.getDescriptor().getEnumTypes().get(6);
   }
 
-  private static final SearchImagesErrorStatus[] VALUES = values();
+  private static final GetLikesErrorStatus[] VALUES = values();
 
-  public static SearchImagesErrorStatus valueOf(
+  public static GetLikesErrorStatus valueOf(
       com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
     if (desc.getType() != getDescriptor()) {
       throw new java.lang.IllegalArgumentException(
@@ -102,10 +94,10 @@ public enum SearchImagesErrorStatus
 
   private final int value;
 
-  private SearchImagesErrorStatus(int value) {
+  private GetLikesErrorStatus(int value) {
     this.value = value;
   }
 
-  // @@protoc_insertion_point(enum_scope:Image.SearchImagesErrorStatus)
+  // @@protoc_insertion_point(enum_scope:Image.GetLikesErrorStatus)
 }
 

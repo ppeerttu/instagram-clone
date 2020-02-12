@@ -28,6 +28,9 @@ service Images {
 
   // Like or unlike an image
   rpc LikeImage(LikeImageRequest) returns (LikeImageResponse) {}
+
+  // Get image likes as paginated result set
+  rpc GetImageLikes(GetLikesRequest) returns (GetLikesResponse) {}
 }
 
 // =====================
@@ -166,6 +169,28 @@ enum LikeImageResponseStatus {
 }
 
 // =====================
+// Get image likes
+// =====================
+
+message GetLikesRequest {
+  string image_id = 1;
+  int32 size = 2;
+  int32 page = 3;
+}
+
+message GetLikesResponse {
+  oneof status {
+    GetLikesErrorStatus error = 1;
+    ImageLikesPage page = 2;
+  }
+}
+
+enum GetLikesErrorStatus {
+  GET_LIKES_SERVER_ERROR = 0;
+  GET_LIKES_IMAGE_NOT_FOUND = 1;
+}
+
+// =====================
 // Search for images by hash tag or user tag
 // =====================
 
@@ -267,3 +292,23 @@ message Image {
   int32 likes = 10;
 }
 
+message ImageLikesPage {
+
+  // Image ID
+  string image_id = 1;
+
+  // Page size (e.g. 20); guaranteed maximum of retrieved likes
+  int32 size = 2;
+
+  // Page number (e.g. 2)
+  int32 page = 3;
+
+  // User count in this page
+  int32 users_count = 4;
+
+  // Total user count
+  int32 total_users_count = 5;
+
+  // Array of user IDs who have liked the image
+  repeated string users = 6;
+}

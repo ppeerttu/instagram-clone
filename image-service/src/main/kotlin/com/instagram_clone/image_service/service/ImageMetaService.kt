@@ -1,5 +1,6 @@
 package com.instagram_clone.image_service.service
 
+import com.instagram_clone.image_service.data.ImageLikePageWrapper
 import com.instagram_clone.image_service.data.ImageMeta
 import io.vertx.core.Future
 
@@ -32,4 +33,9 @@ interface ImageMetaService {
    * Remove a like from an image.
    */
   fun unlikeImage(imageId: String, userId: String): Future<Nothing>
+
+  /**
+   * Get image likes
+   */
+  fun getImageLikes(imageId: String, page: Int, size: Int): Future<ImageLikePageWrapper>
 }
