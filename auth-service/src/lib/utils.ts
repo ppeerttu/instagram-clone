@@ -1,3 +1,4 @@
+import { RedisClient } from "redis";
 
 /**
  * Get a variable from `process.env` and throw if not found.
@@ -29,5 +30,23 @@ export function getProcessEnv(
 export function delay(ms: number) {
     return new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
+    });
+}
+
+/**
+ * Return item from redis wrapped in promise
+ * 
+ * @param key key of the item
+ * @param redis RedisClient
+ */
+export function getFromRedis(key: string, redis: RedisClient): Promise<any> {
+    return new Promise((resolve, reject) => {
+        redis.get(key, (err, value) => {
+            if (err) {
+                reject(err);
+            } else {
+                value ? resolve(value) : reject(null);
+            }
+        });
     });
 }
