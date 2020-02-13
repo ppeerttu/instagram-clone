@@ -2,8 +2,7 @@ package com.instagram_clone.image_service
 
 import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.service.ImageFileServiceVertxImpl
-import com.instagram_clone.image_service.service.ImageServiceGrpcImpl
-import com.instagram_clone.image_service.service.ImageMetaServiceMockImpl
+import com.instagram_clone.image_service.grpc.ImageServiceGrpcImpl
 import com.instagram_clone.image_service.service.ImageMetaServiceMongoImpl
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
@@ -19,7 +18,6 @@ import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
-import io.vertx.kotlin.ext.consul.deregisterServiceAwait
 import java.net.InetAddress
 import java.util.*
 import kotlin.concurrent.fixedRateTimer

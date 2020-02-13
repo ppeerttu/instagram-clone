@@ -45,10 +45,19 @@ public interface UserImagePageOrBuilder extends
 
   /**
    * <pre>
+   * Count of images in this response
+   * </pre>
+   *
+   * <code>int32 count = 4;</code>
+   */
+  int getCount();
+
+  /**
+   * <pre>
    * Total count of images for the user (e.g. 284)
    * </pre>
    *
-   * <code>int32 total_count = 4;</code>
+   * <code>int32 total_count = 5;</code>
    */
   int getTotalCount();
 
@@ -57,7 +66,7 @@ public interface UserImagePageOrBuilder extends
    * Array of images; less or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 5;</code>
+   * <code>repeated .Image.Image images = 6;</code>
    */
   java.util.List<com.instagram_clone.image_service.Image> 
       getImagesList();
@@ -66,7 +75,7 @@ public interface UserImagePageOrBuilder extends
    * Array of images; less or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 5;</code>
+   * <code>repeated .Image.Image images = 6;</code>
    */
   com.instagram_clone.image_service.Image getImages(int index);
   /**
@@ -74,7 +83,7 @@ public interface UserImagePageOrBuilder extends
    * Array of images; less or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 5;</code>
+   * <code>repeated .Image.Image images = 6;</code>
    */
   int getImagesCount();
   /**
@@ -82,7 +91,7 @@ public interface UserImagePageOrBuilder extends
    * Array of images; less or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 5;</code>
+   * <code>repeated .Image.Image images = 6;</code>
    */
   java.util.List<? extends com.instagram_clone.image_service.ImageOrBuilder> 
       getImagesOrBuilderList();
@@ -91,7 +100,7 @@ public interface UserImagePageOrBuilder extends
    * Array of images; less or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 5;</code>
+   * <code>repeated .Image.Image images = 6;</code>
    */
   com.instagram_clone.image_service.ImageOrBuilder getImagesOrBuilder(
       int index);

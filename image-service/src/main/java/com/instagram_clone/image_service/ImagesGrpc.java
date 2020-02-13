@@ -383,6 +383,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public void getImageLikes(com.instagram_clone.image_service.GetLikesRequest request,
         io.grpc.stub.StreamObserver<com.instagram_clone.image_service.GetLikesResponse> responseObserver) {
@@ -550,6 +553,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public void getImageLikes(com.instagram_clone.image_service.GetLikesRequest request,
         io.grpc.stub.StreamObserver<com.instagram_clone.image_service.GetLikesResponse> responseObserver) {
@@ -641,6 +647,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public com.instagram_clone.image_service.GetLikesResponse getImageLikes(com.instagram_clone.image_service.GetLikesRequest request) {
       return blockingUnaryCall(
@@ -725,6 +734,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.instagram_clone.image_service.GetLikesResponse> getImageLikes(
         com.instagram_clone.image_service.GetLikesRequest request) {
@@ -811,6 +823,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public void getImageLikes(com.instagram_clone.image_service.GetLikesRequest request,
         io.vertx.core.Future<com.instagram_clone.image_service.GetLikesResponse> response) {
@@ -985,6 +1000,9 @@ public final class ImagesGrpc {
     }
 
     /**
+     * <pre>
+     * Get image likes as paginated result set
+     * </pre>
      */
     public void getImageLikes(com.instagram_clone.image_service.GetLikesRequest request,
         io.vertx.core.Handler<io.vertx.core.AsyncResult<com.instagram_clone.image_service.GetLikesResponse>> response) {

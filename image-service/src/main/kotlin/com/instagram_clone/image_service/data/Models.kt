@@ -93,3 +93,36 @@ data class ImageLikePageWrapper(
    */
   val users: List<String>
 )
+
+data class UserImagesPageWrapper(
+
+  /**
+   * User ID
+   */
+  val userId: String,
+
+  /**
+   * Page number
+   */
+  val page: Int,
+
+  /**
+   * Page size
+   */
+  val size: Int,
+
+  /**
+   * Count of images in this page
+   */
+  val count: Int,
+
+  /**
+   * Total count of images for the user
+   */
+  val totalCount: Int,
+
+  /**
+   * Content of this page (list of image metadata)
+   */
+  val images: List<ImageMeta>
+)

@@ -3,6 +3,7 @@ package com.instagram_clone.image_service.service
 import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.data.ImageLikePageWrapper
 import com.instagram_clone.image_service.data.ImageMeta
+import com.instagram_clone.image_service.data.UserImagesPageWrapper
 import com.instagram_clone.image_service.exception.NotFoundException
 import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
@@ -25,7 +26,6 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
    * Persist image metadata.
    */
   override fun saveImageMeta(imageMeta: ImageMeta): Future<ImageMeta> {
-    // TODO: Check that users exist
     return insertMeta(imageMeta)
   }
 
@@ -144,6 +144,33 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
         )
       )
     }
+
+  /**
+   * Get user's images based on given [userId], [page] and [size].
+   */
+  override fun getUserImages(userId: String, page: Int, size: Int): Future<UserImagesPageWrapper> {
+    val query = json {
+      obj("userId" to userId)
+    }
+    return CompositeFuture.all(
+      paginatedQuery(config.imagesCollection, query, page, size),
+      getCount(config.imagesCollection, query)
+    )
+      .compose { composite ->
+        val pageResult = composite.resultAt<PaginatedQueryResults>(0)
+        val count = composite.resultAt<Int>(1)
+        Future.succeededFuture(
+          UserImagesPageWrapper(
+            userId,
+            page = pageResult.page,
+            size = pageResult.size,
+            count = pageResult.results.size,
+            totalCount = count,
+            images = pageResult.results.map { it.mapTo(ImageMeta::class.java) }
+          )
+        )
+      }
+  }
 
   /**
    * Issue a paginated request to given [collection] with [query]. Given
