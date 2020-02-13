@@ -1,26 +1,37 @@
 package com.instagram_clone.image_service.service
 
 import com.instagram_clone.image_service.config.AppConfig
+import com.instagram_clone.image_service.data.ImageLikePageWrapper
 import com.instagram_clone.image_service.data.ImageMeta
 import com.instagram_clone.image_service.exception.NotFoundException
+import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
 import io.vertx.core.Promise
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.*
 import io.vertx.kotlin.core.json.json
 import io.vertx.kotlin.core.json.obj
+import kotlin.math.max
+import kotlin.math.min
 
 private const val FIELD_ID = "_id"
+private const val MAX_PAGE_SIZE = 100
 
 class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaService {
 
   private val config = AppConfig.getInstance()
 
+  /**
+   * Persist image metadata.
+   */
   override fun saveImageMeta(imageMeta: ImageMeta): Future<ImageMeta> {
     // TODO: Check that users exist
     return insertMeta(imageMeta)
   }
 
+  /**
+   * Delete image metadata.
+   */
   override fun deleteImage(imageId: String): Future<Nothing> {
     val promise = Promise.promise<Nothing>()
     val query = JsonObject().put(FIELD_ID, imageId)
@@ -35,6 +46,9 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
     return promise.future()
   }
 
+  /**
+   * Get image metadata.
+   */
   override fun getImageMeta(imageId: String): Future<ImageMeta?> {
     val promise = Promise.promise<ImageMeta?>()
     val query = JsonObject().put(FIELD_ID, imageId)
@@ -53,6 +67,9 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
     return promise.future()
   }
 
+  /**
+   * Like about an image.
+   */
   override fun likeImage(
     imageId: String,
     userId: String
@@ -72,6 +89,9 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
       }
     }
 
+  /**
+   * Remove a like from image.
+   */
   override fun unlikeImage(
     imageId: String,
     userId: String
@@ -89,6 +109,94 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
         Future.succeededFuture()
       }
     }
+
+  /**
+   * Get image likes as paginated result.
+   */
+  override fun getImageLikes(
+    imageId: String,
+    page: Int,
+    size: Int
+  ): Future<ImageLikePageWrapper> = getImageMeta(imageId)
+    .compose { meta ->
+      if (meta == null) {
+        throw NotFoundException("No image found with id $imageId")
+      }
+      val query = json {
+        obj("imageId" to imageId)
+      }
+      CompositeFuture.join(
+        paginatedQuery(config.likesCollection, query, page, size),
+        getCount(config.likesCollection, query)
+      )
+    }
+    .compose { composite ->
+      val pageResult = composite.resultAt<PaginatedQueryResults>(0)
+      val count = composite.resultAt<Int>(1)
+      Future.succeededFuture(
+        ImageLikePageWrapper(
+          imageId,
+          page = pageResult.page,
+          size = pageResult.size,
+          usersCount =  pageResult.results.size,
+          totalUsersCount = count,
+          users = pageResult.results.map { it.getString("userId") }
+        )
+      )
+    }
+
+  /**
+   * Issue a paginated request to given [collection] with [query]. Given
+   * [pageNum] is the page number (starting from 1) and [pageSize] is the page
+   * size (max value is [MAX_PAGE_SIZE]). Use [sort] for sorting the results,
+   * which defaults to "_id" field with desc order.
+   */
+  private fun paginatedQuery(
+    collection: String,
+    query: JsonObject,
+    pageNum: Int,
+    pageSize: Int,
+    sort: JsonObject = json {
+      obj(FIELD_ID to -1)
+    }
+  ): Future<PaginatedQueryResults> {
+    val promise = Promise.promise<PaginatedQueryResults>()
+    val page = if (pageNum < 1) 1 else pageNum // Anything between 1 and max Int value
+    val size = max(min(pageSize, MAX_PAGE_SIZE), 1) // Between 1 and MAX_PAGE_SIZE
+    val options = FindOptions().also {
+      it.limit = size
+      it.skip = (page - 1) * size
+      it.sort = sort
+    }
+    client.findWithOptions(collection, query, options) {
+      if (it.succeeded()) {
+        promise.complete(PaginatedQueryResults(
+          page,
+          size,
+          it.result()
+        ))
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
+
+  /**
+   * Get count of records within [collection] based on given [query].
+   */
+  private fun getCount(collection: String, query: JsonObject): Future<Int> {
+    val promise = Promise.promise<Int>()
+
+    client.count(collection, query) {
+      if (it.succeeded()) {
+        promise.complete(it.result().toInt())
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
 
   /**
    * Remove the like of [imageId] from [userId]. Return boolean indicating whether
@@ -183,4 +291,25 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
     }
     return promise.future()
   }
+
+  /**
+   * Internal helper class for managing paginated query results.
+   */
+  private data class PaginatedQueryResults(
+
+    /**
+     * Effective page number (after sanitation)
+     */
+    val page: Int,
+
+    /**
+     * Effective page size (after sanitation)
+     */
+    val size: Int,
+
+    /**
+     * Actual list of results
+     */
+    val results: List<JsonObject>
+  )
 }
