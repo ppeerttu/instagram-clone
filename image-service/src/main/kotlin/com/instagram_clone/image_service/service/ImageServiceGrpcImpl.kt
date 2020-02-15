@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
 import com.instagram_clone.image_service.data.ImageMeta
+import com.instagram_clone.image_service.data.fromImageLikePage
 import com.instagram_clone.image_service.data.fromImageMeta
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.InvalidDataException
@@ -21,8 +22,7 @@ private const val CHUNK_SIZE = 1024 * 16
  */
 class ImageServiceGrpcImpl(
   private val metaService: ImageMetaService,
-  private val fileService: ImageFileService,
-  private val vertx: io.vertx.core.Vertx
+  private val fileService: ImageFileService
 ) : ImagesImplBase() {
 
   private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
@@ -255,6 +255,42 @@ class ImageServiceGrpcImpl(
                 LikeImageResponseStatus.LIKE_IMAGE_SERVER_ERROR
               }
             })
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+  }
+
+  /**
+   * Get image likes as paginated result set.
+   */
+  override fun getImageLikes(request: GetLikesRequest, responseObserver: StreamObserver<GetLikesResponse>) {
+    val imageId = request.imageId
+    val page = request.page
+    val size = request.size
+    val response = GetLikesResponse.newBuilder()
+
+    metaService.getImageLikes(imageId, page, size)
+      .onSuccess { page ->
+        responseObserver.onNext(
+          response
+            .setPage(fromImageLikePage(page))
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        responseObserver.onNext(
+          response
+            .setError(
+              when (e) {
+                is NotFoundException -> GetLikesErrorStatus.GET_LIKES_IMAGE_NOT_FOUND
+                else -> {
+                  logger.error("Get image likes failed", e)
+                  GetLikesErrorStatus.GET_LIKES_SERVER_ERROR
+                }
+              }
+            )
             .build()
         )
         responseObserver.onCompleted()

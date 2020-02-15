@@ -57,3 +57,39 @@ data class ImageMeta(
    */
   val createdAt: String = LocalDateTime.now().toString()
 )
+
+/**
+ * Class representing a page of image likes
+ */
+data class ImageLikePageWrapper(
+
+  /**
+   * Image ID
+   */
+  val imageId: String,
+
+  /**
+   * Page number
+   */
+  val page: Int,
+
+  /**
+   * Page size
+   */
+  val size: Int,
+
+  /**
+   * Current users count
+   */
+  val usersCount: Int,
+
+  /**
+   * Total count of users
+   */
+  val totalUsersCount: Int,
+
+  /**
+   * User IDs
+   */
+  val users: List<String>
+)

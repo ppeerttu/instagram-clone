@@ -52,8 +52,7 @@ class MainVerticle : AbstractVerticle() {
         val imageFileService = ImageFileServiceVertxImpl(vertx)
         val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(
           imageMetaService,
-          imageFileService,
-          vertx
+          imageFileService
         )
 
         val rpcServer = VertxServerBuilder
