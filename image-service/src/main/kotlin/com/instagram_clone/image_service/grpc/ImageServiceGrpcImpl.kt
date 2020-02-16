@@ -1,4 +1,4 @@
-package com.instagram_clone.image_service.service
+package com.instagram_clone.image_service.grpc
 
 import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.*
@@ -6,9 +6,12 @@ import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
 import com.instagram_clone.image_service.data.ImageMeta
 import com.instagram_clone.image_service.data.fromImageLikePage
 import com.instagram_clone.image_service.data.fromImageMeta
+import com.instagram_clone.image_service.data.fromUserImagesPage
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.InvalidDataException
 import com.instagram_clone.image_service.exception.NotFoundException
+import com.instagram_clone.image_service.service.ImageFileService
+import com.instagram_clone.image_service.service.ImageMetaService
 import com.instagram_clone.image_service.util.ImageRecorder
 import io.grpc.stub.StreamObserver
 import io.vertx.core.logging.LoggerFactory
@@ -66,6 +69,7 @@ class ImageServiceGrpcImpl(
         }
         val bytes = recorder.chunks!!.toByteArray()
 
+        // TODO: Maybe check if user exists first
         metaService.saveImageMeta(meta)
           .onSuccess { meta ->
             fileService.saveImageFile(meta.id, bytes)
@@ -288,6 +292,43 @@ class ImageServiceGrpcImpl(
                 else -> {
                   logger.error("Get image likes failed", e)
                   GetLikesErrorStatus.GET_LIKES_SERVER_ERROR
+                }
+              }
+            )
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+  }
+
+  /**
+   * Get user images as a paginated response.
+   */
+  override fun getUserImages(request: GetUserImagesRequest, responseObserver: StreamObserver<GetUserImagesResponse>) {
+    val userId = request.userId
+    val page = request.page
+    val size = request.size
+    val response = GetUserImagesResponse.newBuilder()
+
+    // TODO: Maybe check if user exists first
+    metaService.getUserImages(userId, page, size)
+      .onSuccess { page ->
+        responseObserver.onNext(
+          response
+            .setPage(fromUserImagesPage(page))
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        responseObserver.onNext(
+          response
+            .setError(
+              when (e) {
+                is NotFoundException -> GetUserImagesErrorStatus.USER_NOT_FOUND
+                else -> {
+                  logger.error("Get user images failed", e)
+                  GetUserImagesErrorStatus.GET_USER_IMAGES_SERVER_ERROR
                 }
               }
             )

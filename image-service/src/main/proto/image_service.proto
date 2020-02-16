@@ -252,11 +252,14 @@ message UserImagePage {
   // Page number (e.g. 2)
   int32 page = 3;
 
+  // Count of images in this response
+  int32 count = 4;
+
   // Total count of images for the user (e.g. 284)
-  int32 total_count = 4;
+  int32 total_count = 5;
 
   // Array of images; less or equal to "size"
-  repeated Image images = 5;
+  repeated Image images = 6;
 }
 
 message Image {

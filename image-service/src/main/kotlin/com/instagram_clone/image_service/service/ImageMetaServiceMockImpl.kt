@@ -2,6 +2,7 @@ package com.instagram_clone.image_service.service
 
 import com.instagram_clone.image_service.data.ImageLikePageWrapper
 import com.instagram_clone.image_service.data.ImageMeta
+import com.instagram_clone.image_service.data.UserImagesPageWrapper
 import com.instagram_clone.image_service.exception.NotFoundException
 import io.vertx.core.Future
 import io.vertx.core.Promise
@@ -104,5 +105,26 @@ class ImageMetaServiceMockImpl : ImageMetaService {
     }
 
     return promise.future()
+  }
+
+  override fun getUserImages(userId: String, page: Int, size: Int): Future<UserImagesPageWrapper> {
+    val s = if (size < 1) DEFAULT_PAGE_SIZE else size
+    val p = if (page < 1) 1 else page
+    val startIndex = (p - 1) * s
+    val totalHits = images
+      .filter { image -> image.userId == userId }
+    val results = totalHits
+      .subList(startIndex, startIndex + s)
+
+    return Future.succeededFuture(
+      UserImagesPageWrapper(
+        userId,
+        p,
+        s,
+        results.size,
+        totalHits.size,
+        results
+      )
+    )
   }
 }
