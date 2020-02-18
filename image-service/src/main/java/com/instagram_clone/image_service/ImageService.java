@@ -164,55 +164,56 @@ public final class ImageService {
       "\n\004page\030\004 \001(\005B\010\n\006search\"y\n\024SearchImagesRe" +
       "sponse\022&\n\004page\030\001 \001(\0132\026.Image.ImageSearch" +
       "PageH\000\022/\n\005error\030\002 \001(\0162\036.Image.SearchImag" +
-      "esErrorStatusH\000B\010\n\006status\"\222\001\n\017ImageSearc" +
+      "esErrorStatusH\000B\010\n\006status\"\241\001\n\017ImageSearc" +
       "hPage\022\022\n\010hash_tag\030\001 \001(\tH\000\022\022\n\010user_tag\030\002 " +
-      "\001(\tH\000\022\014\n\004size\030\003 \001(\005\022\014\n\004page\030\004 \001(\005\022\023\n\013tot" +
-      "al_count\030\005 \001(\005\022\034\n\006images\030\006 \003(\0132\014.Image.I",
-      "mageB\010\n\006search\"~\n\rUserImagePage\022\017\n\007user_" +
-      "id\030\001 \001(\t\022\014\n\004size\030\002 \001(\005\022\014\n\004page\030\003 \001(\005\022\r\n\005" +
-      "count\030\004 \001(\005\022\023\n\013total_count\030\005 \001(\005\022\034\n\006imag" +
-      "es\030\006 \003(\0132\014.Image.Image\"\260\001\n\005Image\022\n\n\002id\030\001" +
-      " \001(\t\022\021\n\tmime_type\030\002 \001(\t\022\r\n\005width\030\003 \001(\005\022\016" +
-      "\n\006height\030\004 \001(\005\022\017\n\007user_id\030\005 \001(\t\022\017\n\007capti" +
-      "on\030\006 \001(\t\022\022\n\ncreated_at\030\007 \001(\t\022\021\n\tuser_tag" +
-      "s\030\010 \003(\t\022\021\n\thash_tags\030\t \003(\t\022\r\n\005likes\030\n \001(" +
-      "\005\"}\n\016ImageLikesPage\022\020\n\010image_id\030\001 \001(\t\022\014\n" +
-      "\004size\030\002 \001(\005\022\014\n\004page\030\003 \001(\005\022\023\n\013users_count",
-      "\030\004 \001(\005\022\031\n\021total_users_count\030\005 \001(\005\022\r\n\005use" +
-      "rs\030\006 \003(\t*\035\n\tImageType\022\007\n\003PNG\020\000\022\007\n\003JPG\020\001*" +
-      "\214\001\n\026CreateImageErrorStatus\022\035\n\031CREATE_IMA" +
-      "GE_SERVER_ERROR\020\000\022\024\n\020CONTENT_TOO_LONG\020\001\022" +
-      "\025\n\021CREATOR_NOT_FOUND\020\002\022\020\n\014INVALID_DATA\020\003" +
-      "\022\024\n\020CAPTION_TOO_LONG\020\004*S\n\021DeleteImageSta" +
-      "tus\022\035\n\031DELETE_IMAGE_SERVER_ERROR\020\000\022\027\n\023DE" +
-      "LETABLE_NOT_FOUND\020\001\022\006\n\002OK\020\002*F\n\023GetImageE" +
-      "rrorStatus\022\032\n\026GET_IMAGE_SERVER_ERROR\020\000\022\023" +
-      "\n\017IMAGE_NOT_FOUND\020\001*P\n\030GetUserImagesErro",
-      "rStatus\022 \n\034GET_USER_IMAGES_SERVER_ERROR\020" +
-      "\000\022\022\n\016USER_NOT_FOUND\020\001*x\n\027LikeImageRespon" +
-      "seStatus\022\033\n\027LIKE_IMAGE_SERVER_ERROR\020\000\022\031\n" +
-      "\025IMAGE_NOT_FOUND_ERROR\020\001\022\030\n\024USER_NOT_FOU" +
-      "ND_ERROR\020\002\022\013\n\007LIKE_OK\020\003*P\n\023GetLikesError" +
-      "Status\022\032\n\026GET_LIKES_SERVER_ERROR\020\000\022\035\n\031GE" +
-      "T_LIKES_IMAGE_NOT_FOUND\020\001*K\n\027SearchImage" +
-      "sErrorStatus\022\036\n\032SEARCH_IMAGES_SERVER_ERR" +
-      "OR\020\000\022\020\n\014EMPTY_SEARCH\020\0012\305\004\n\006Images\022H\n\013Cre" +
-      "ateImage\022\031.Image.CreateImageRequest\032\032.Im",
-      "age.CreateImageResponse\"\000(\001\022F\n\013DeleteIma" +
-      "ge\022\031.Image.DeleteImageRequest\032\032.Image.De" +
-      "leteImageResponse\"\000\022=\n\010GetImage\022\026.Image." +
-      "GetImageRequest\032\027.Image.GetImageResponse" +
-      "\"\000\022K\n\014GetImageData\022\032.Image.GetImageDataR" +
-      "equest\032\033.Image.GetImageDataResponse\"\0000\001\022" +
-      "L\n\rGetUserImages\022\033.Image.GetUserImagesRe" +
-      "quest\032\034.Image.GetUserImagesResponse\"\000\022I\n" +
-      "\014SearchImages\022\032.Image.SearchImagesReques" +
-      "t\032\033.Image.SearchImagesResponse\"\000\022@\n\tLike",
-      "Image\022\027.Image.LikeImageRequest\032\030.Image.L" +
-      "ikeImageResponse\"\000\022B\n\rGetImageLikes\022\026.Im" +
-      "age.GetLikesRequest\032\027.Image.GetLikesResp" +
-      "onse\"\000B3\n!com.instagram_clone.image_serv" +
-      "iceB\014ImageServiceP\001b\006proto3"
+      "\001(\tH\000\022\014\n\004size\030\003 \001(\005\022\014\n\004page\030\004 \001(\005\022\r\n\005cou" +
+      "nt\030\005 \001(\005\022\023\n\013total_count\030\006 \001(\005\022\034\n\006images\030",
+      "\007 \003(\0132\014.Image.ImageB\010\n\006search\"~\n\rUserIma" +
+      "gePage\022\017\n\007user_id\030\001 \001(\t\022\014\n\004size\030\002 \001(\005\022\014\n" +
+      "\004page\030\003 \001(\005\022\r\n\005count\030\004 \001(\005\022\023\n\013total_coun" +
+      "t\030\005 \001(\005\022\034\n\006images\030\006 \003(\0132\014.Image.Image\"\260\001" +
+      "\n\005Image\022\n\n\002id\030\001 \001(\t\022\021\n\tmime_type\030\002 \001(\t\022\r" +
+      "\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022\017\n\007user_id" +
+      "\030\005 \001(\t\022\017\n\007caption\030\006 \001(\t\022\022\n\ncreated_at\030\007 " +
+      "\001(\t\022\021\n\tuser_tags\030\010 \003(\t\022\021\n\thash_tags\030\t \003(" +
+      "\t\022\r\n\005likes\030\n \001(\005\"}\n\016ImageLikesPage\022\020\n\010im" +
+      "age_id\030\001 \001(\t\022\014\n\004size\030\002 \001(\005\022\014\n\004page\030\003 \001(\005",
+      "\022\023\n\013users_count\030\004 \001(\005\022\031\n\021total_users_cou" +
+      "nt\030\005 \001(\005\022\r\n\005users\030\006 \003(\t*\035\n\tImageType\022\007\n\003" +
+      "PNG\020\000\022\007\n\003JPG\020\001*\214\001\n\026CreateImageErrorStatu" +
+      "s\022\035\n\031CREATE_IMAGE_SERVER_ERROR\020\000\022\024\n\020CONT" +
+      "ENT_TOO_LONG\020\001\022\025\n\021CREATOR_NOT_FOUND\020\002\022\020\n" +
+      "\014INVALID_DATA\020\003\022\024\n\020CAPTION_TOO_LONG\020\004*S\n" +
+      "\021DeleteImageStatus\022\035\n\031DELETE_IMAGE_SERVE" +
+      "R_ERROR\020\000\022\027\n\023DELETABLE_NOT_FOUND\020\001\022\006\n\002OK" +
+      "\020\002*F\n\023GetImageErrorStatus\022\032\n\026GET_IMAGE_S" +
+      "ERVER_ERROR\020\000\022\023\n\017IMAGE_NOT_FOUND\020\001*P\n\030Ge",
+      "tUserImagesErrorStatus\022 \n\034GET_USER_IMAGE" +
+      "S_SERVER_ERROR\020\000\022\022\n\016USER_NOT_FOUND\020\001*x\n\027" +
+      "LikeImageResponseStatus\022\033\n\027LIKE_IMAGE_SE" +
+      "RVER_ERROR\020\000\022\031\n\025IMAGE_NOT_FOUND_ERROR\020\001\022" +
+      "\030\n\024USER_NOT_FOUND_ERROR\020\002\022\013\n\007LIKE_OK\020\003*P" +
+      "\n\023GetLikesErrorStatus\022\032\n\026GET_LIKES_SERVE" +
+      "R_ERROR\020\000\022\035\n\031GET_LIKES_IMAGE_NOT_FOUND\020\001" +
+      "*K\n\027SearchImagesErrorStatus\022\036\n\032SEARCH_IM" +
+      "AGES_SERVER_ERROR\020\000\022\020\n\014EMPTY_SEARCH\020\0012\305\004" +
+      "\n\006Images\022H\n\013CreateImage\022\031.Image.CreateIm",
+      "ageRequest\032\032.Image.CreateImageResponse\"\000" +
+      "(\001\022F\n\013DeleteImage\022\031.Image.DeleteImageReq" +
+      "uest\032\032.Image.DeleteImageResponse\"\000\022=\n\010Ge" +
+      "tImage\022\026.Image.GetImageRequest\032\027.Image.G" +
+      "etImageResponse\"\000\022K\n\014GetImageData\022\032.Imag" +
+      "e.GetImageDataRequest\032\033.Image.GetImageDa" +
+      "taResponse\"\0000\001\022L\n\rGetUserImages\022\033.Image." +
+      "GetUserImagesRequest\032\034.Image.GetUserImag" +
+      "esResponse\"\000\022I\n\014SearchImages\022\032.Image.Sea" +
+      "rchImagesRequest\032\033.Image.SearchImagesRes",
+      "ponse\"\000\022@\n\tLikeImage\022\027.Image.LikeImageRe" +
+      "quest\032\030.Image.LikeImageResponse\"\000\022B\n\rGet" +
+      "ImageLikes\022\026.Image.GetLikesRequest\032\027.Ima" +
+      "ge.GetLikesResponse\"\000B3\n!com.instagram_c" +
+      "lone.image_serviceB\014ImageServiceP\001b\006prot" +
+      "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -333,7 +334,7 @@ public final class ImageService {
     internal_static_Image_ImageSearchPage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Image_ImageSearchPage_descriptor,
-        new java.lang.String[] { "HashTag", "UserTag", "Size", "Page", "TotalCount", "Images", "Search", });
+        new java.lang.String[] { "HashTag", "UserTag", "Size", "Page", "Count", "TotalCount", "Images", "Search", });
     internal_static_Image_UserImagePage_descriptor =
       getDescriptor().getMessageTypes().get(18);
     internal_static_Image_UserImagePage_fieldAccessorTable = new

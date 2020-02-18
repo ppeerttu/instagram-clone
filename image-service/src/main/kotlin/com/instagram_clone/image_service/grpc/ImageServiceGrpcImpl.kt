@@ -3,11 +3,9 @@ package com.instagram_clone.image_service.grpc
 import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
-import com.instagram_clone.image_service.data.ImageMeta
-import com.instagram_clone.image_service.data.fromImageLikePage
-import com.instagram_clone.image_service.data.fromImageMeta
-import com.instagram_clone.image_service.data.fromUserImagesPage
+import com.instagram_clone.image_service.data.*
 import com.instagram_clone.image_service.exception.CaptionTooLongException
+import com.instagram_clone.image_service.exception.EmptySearchException
 import com.instagram_clone.image_service.exception.InvalidDataException
 import com.instagram_clone.image_service.exception.NotFoundException
 import com.instagram_clone.image_service.service.ImageFileService
@@ -329,6 +327,52 @@ class ImageServiceGrpcImpl(
                 else -> {
                   logger.error("Get user images failed", e)
                   GetUserImagesErrorStatus.GET_USER_IMAGES_SERVER_ERROR
+                }
+              }
+            )
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+  }
+
+  override fun searchImages(request: SearchImagesRequest, responseObserver: StreamObserver<SearchImagesResponse>) {
+    val response = SearchImagesResponse.newBuilder()
+    val searchType = when (request.searchCase) {
+      SearchImagesRequest.SearchCase.HASH_TAG -> ImageSearchType.HashTag
+      SearchImagesRequest.SearchCase.USER_TAG -> ImageSearchType.UserTag
+      else -> {
+        responseObserver.onNext(
+          response.setError(SearchImagesErrorStatus.EMPTY_SEARCH)
+            .build()
+        )
+        responseObserver.onCompleted()
+        return
+      }
+    }
+    val tag = when (searchType) {
+      ImageSearchType.UserTag -> request.userTag
+      else -> request.hashTag
+    }
+    val page = request.page
+    val size = request.size
+    metaService.searchImagesByTag(tag, page, size, searchType)
+      .onSuccess { pageWrapper ->
+        responseObserver.onNext(
+          response.setPage(fromImageSearchPage(pageWrapper))
+            .build()
+        )
+        responseObserver.onCompleted()
+      }
+      .onFailure { e ->
+        responseObserver.onNext(
+          response
+            .setError(
+              when (e) {
+                is EmptySearchException -> SearchImagesErrorStatus.EMPTY_SEARCH
+                else -> {
+                  logger.error("Failed to search images", e)
+                  SearchImagesErrorStatus.SEARCH_IMAGES_SERVER_ERROR
                 }
               }
             )

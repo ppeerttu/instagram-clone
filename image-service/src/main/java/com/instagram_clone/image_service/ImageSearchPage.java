@@ -17,6 +17,7 @@ public  final class ImageSearchPage extends
   private ImageSearchPage() {
     size_ = 0;
     page_ = 0;
+    count_ = 0;
     totalCount_ = 0;
     images_ = java.util.Collections.emptyList();
   }
@@ -70,13 +71,18 @@ public  final class ImageSearchPage extends
           }
           case 40: {
 
+            count_ = input.readInt32();
+            break;
+          }
+          case 48: {
+
             totalCount_ = input.readInt32();
             break;
           }
-          case 50: {
-            if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          case 58: {
+            if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
               images_ = new java.util.ArrayList<com.instagram_clone.image_service.Image>();
-              mutable_bitField0_ |= 0x00000020;
+              mutable_bitField0_ |= 0x00000040;
             }
             images_.add(
                 input.readMessage(com.instagram_clone.image_service.Image.parser(), extensionRegistry));
@@ -90,7 +96,7 @@ public  final class ImageSearchPage extends
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
         images_ = java.util.Collections.unmodifiableList(images_);
       }
       makeExtensionsImmutable();
@@ -259,27 +265,40 @@ public  final class ImageSearchPage extends
     return page_;
   }
 
-  public static final int TOTAL_COUNT_FIELD_NUMBER = 5;
+  public static final int COUNT_FIELD_NUMBER = 5;
+  private int count_;
+  /**
+   * <pre>
+   * Count of images in this response
+   * </pre>
+   *
+   * <code>int32 count = 5;</code>
+   */
+  public int getCount() {
+    return count_;
+  }
+
+  public static final int TOTAL_COUNT_FIELD_NUMBER = 6;
   private int totalCount_;
   /**
    * <pre>
    * Total count of results for the given search
    * </pre>
    *
-   * <code>int32 total_count = 5;</code>
+   * <code>int32 total_count = 6;</code>
    */
   public int getTotalCount() {
     return totalCount_;
   }
 
-  public static final int IMAGES_FIELD_NUMBER = 6;
+  public static final int IMAGES_FIELD_NUMBER = 7;
   private java.util.List<com.instagram_clone.image_service.Image> images_;
   /**
    * <pre>
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   public java.util.List<com.instagram_clone.image_service.Image> getImagesList() {
     return images_;
@@ -289,7 +308,7 @@ public  final class ImageSearchPage extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   public java.util.List<? extends com.instagram_clone.image_service.ImageOrBuilder> 
       getImagesOrBuilderList() {
@@ -300,7 +319,7 @@ public  final class ImageSearchPage extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   public int getImagesCount() {
     return images_.size();
@@ -310,7 +329,7 @@ public  final class ImageSearchPage extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   public com.instagram_clone.image_service.Image getImages(int index) {
     return images_.get(index);
@@ -320,7 +339,7 @@ public  final class ImageSearchPage extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   public com.instagram_clone.image_service.ImageOrBuilder getImagesOrBuilder(
       int index) {
@@ -351,11 +370,14 @@ public  final class ImageSearchPage extends
     if (page_ != 0) {
       output.writeInt32(4, page_);
     }
+    if (count_ != 0) {
+      output.writeInt32(5, count_);
+    }
     if (totalCount_ != 0) {
-      output.writeInt32(5, totalCount_);
+      output.writeInt32(6, totalCount_);
     }
     for (int i = 0; i < images_.size(); i++) {
-      output.writeMessage(6, images_.get(i));
+      output.writeMessage(7, images_.get(i));
     }
   }
 
@@ -378,13 +400,17 @@ public  final class ImageSearchPage extends
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(4, page_);
     }
+    if (count_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(5, count_);
+    }
     if (totalCount_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, totalCount_);
+        .computeInt32Size(6, totalCount_);
     }
     for (int i = 0; i < images_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, images_.get(i));
+        .computeMessageSize(7, images_.get(i));
     }
     memoizedSize = size;
     return size;
@@ -406,6 +432,8 @@ public  final class ImageSearchPage extends
         == other.getSize());
     result = result && (getPage()
         == other.getPage());
+    result = result && (getCount()
+        == other.getCount());
     result = result && (getTotalCount()
         == other.getTotalCount());
     result = result && getImagesList()
@@ -439,6 +467,8 @@ public  final class ImageSearchPage extends
     hash = (53 * hash) + getSize();
     hash = (37 * hash) + PAGE_FIELD_NUMBER;
     hash = (53 * hash) + getPage();
+    hash = (37 * hash) + COUNT_FIELD_NUMBER;
+    hash = (53 * hash) + getCount();
     hash = (37 * hash) + TOTAL_COUNT_FIELD_NUMBER;
     hash = (53 * hash) + getTotalCount();
     if (getImagesCount() > 0) {
@@ -591,11 +621,13 @@ public  final class ImageSearchPage extends
 
       page_ = 0;
 
+      count_ = 0;
+
       totalCount_ = 0;
 
       if (imagesBuilder_ == null) {
         images_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
       } else {
         imagesBuilder_.clear();
       }
@@ -633,11 +665,12 @@ public  final class ImageSearchPage extends
       }
       result.size_ = size_;
       result.page_ = page_;
+      result.count_ = count_;
       result.totalCount_ = totalCount_;
       if (imagesBuilder_ == null) {
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
           images_ = java.util.Collections.unmodifiableList(images_);
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.images_ = images_;
       } else {
@@ -692,6 +725,9 @@ public  final class ImageSearchPage extends
       if (other.getPage() != 0) {
         setPage(other.getPage());
       }
+      if (other.getCount() != 0) {
+        setCount(other.getCount());
+      }
       if (other.getTotalCount() != 0) {
         setTotalCount(other.getTotalCount());
       }
@@ -699,7 +735,7 @@ public  final class ImageSearchPage extends
         if (!other.images_.isEmpty()) {
           if (images_.isEmpty()) {
             images_ = other.images_;
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000040);
           } else {
             ensureImagesIsMutable();
             images_.addAll(other.images_);
@@ -712,7 +748,7 @@ public  final class ImageSearchPage extends
             imagesBuilder_.dispose();
             imagesBuilder_ = null;
             images_ = other.images_;
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000040);
             imagesBuilder_ = 
               com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                  getImagesFieldBuilder() : null;
@@ -1016,13 +1052,51 @@ public  final class ImageSearchPage extends
       return this;
     }
 
+    private int count_ ;
+    /**
+     * <pre>
+     * Count of images in this response
+     * </pre>
+     *
+     * <code>int32 count = 5;</code>
+     */
+    public int getCount() {
+      return count_;
+    }
+    /**
+     * <pre>
+     * Count of images in this response
+     * </pre>
+     *
+     * <code>int32 count = 5;</code>
+     */
+    public Builder setCount(int value) {
+      
+      count_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Count of images in this response
+     * </pre>
+     *
+     * <code>int32 count = 5;</code>
+     */
+    public Builder clearCount() {
+      
+      count_ = 0;
+      onChanged();
+      return this;
+    }
+
     private int totalCount_ ;
     /**
      * <pre>
      * Total count of results for the given search
      * </pre>
      *
-     * <code>int32 total_count = 5;</code>
+     * <code>int32 total_count = 6;</code>
      */
     public int getTotalCount() {
       return totalCount_;
@@ -1032,7 +1106,7 @@ public  final class ImageSearchPage extends
      * Total count of results for the given search
      * </pre>
      *
-     * <code>int32 total_count = 5;</code>
+     * <code>int32 total_count = 6;</code>
      */
     public Builder setTotalCount(int value) {
       
@@ -1045,7 +1119,7 @@ public  final class ImageSearchPage extends
      * Total count of results for the given search
      * </pre>
      *
-     * <code>int32 total_count = 5;</code>
+     * <code>int32 total_count = 6;</code>
      */
     public Builder clearTotalCount() {
       
@@ -1057,9 +1131,9 @@ public  final class ImageSearchPage extends
     private java.util.List<com.instagram_clone.image_service.Image> images_ =
       java.util.Collections.emptyList();
     private void ensureImagesIsMutable() {
-      if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (!((bitField0_ & 0x00000040) == 0x00000040)) {
         images_ = new java.util.ArrayList<com.instagram_clone.image_service.Image>(images_);
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
        }
     }
 
@@ -1071,7 +1145,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public java.util.List<com.instagram_clone.image_service.Image> getImagesList() {
       if (imagesBuilder_ == null) {
@@ -1085,7 +1159,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public int getImagesCount() {
       if (imagesBuilder_ == null) {
@@ -1099,7 +1173,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public com.instagram_clone.image_service.Image getImages(int index) {
       if (imagesBuilder_ == null) {
@@ -1113,7 +1187,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder setImages(
         int index, com.instagram_clone.image_service.Image value) {
@@ -1134,7 +1208,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder setImages(
         int index, com.instagram_clone.image_service.Image.Builder builderForValue) {
@@ -1152,7 +1226,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder addImages(com.instagram_clone.image_service.Image value) {
       if (imagesBuilder_ == null) {
@@ -1172,7 +1246,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder addImages(
         int index, com.instagram_clone.image_service.Image value) {
@@ -1193,7 +1267,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder addImages(
         com.instagram_clone.image_service.Image.Builder builderForValue) {
@@ -1211,7 +1285,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder addImages(
         int index, com.instagram_clone.image_service.Image.Builder builderForValue) {
@@ -1229,7 +1303,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder addAllImages(
         java.lang.Iterable<? extends com.instagram_clone.image_service.Image> values) {
@@ -1248,12 +1322,12 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder clearImages() {
       if (imagesBuilder_ == null) {
         images_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
       } else {
         imagesBuilder_.clear();
@@ -1265,7 +1339,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public Builder removeImages(int index) {
       if (imagesBuilder_ == null) {
@@ -1282,7 +1356,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public com.instagram_clone.image_service.Image.Builder getImagesBuilder(
         int index) {
@@ -1293,7 +1367,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public com.instagram_clone.image_service.ImageOrBuilder getImagesOrBuilder(
         int index) {
@@ -1307,7 +1381,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public java.util.List<? extends com.instagram_clone.image_service.ImageOrBuilder> 
          getImagesOrBuilderList() {
@@ -1322,7 +1396,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public com.instagram_clone.image_service.Image.Builder addImagesBuilder() {
       return getImagesFieldBuilder().addBuilder(
@@ -1333,7 +1407,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public com.instagram_clone.image_service.Image.Builder addImagesBuilder(
         int index) {
@@ -1345,7 +1419,7 @@ public  final class ImageSearchPage extends
      * Array of images; less than or equal to "size"
      * </pre>
      *
-     * <code>repeated .Image.Image images = 6;</code>
+     * <code>repeated .Image.Image images = 7;</code>
      */
     public java.util.List<com.instagram_clone.image_service.Image.Builder> 
          getImagesBuilderList() {
@@ -1358,7 +1432,7 @@ public  final class ImageSearchPage extends
         imagesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
             com.instagram_clone.image_service.Image, com.instagram_clone.image_service.Image.Builder, com.instagram_clone.image_service.ImageOrBuilder>(
                 images_,
-                ((bitField0_ & 0x00000020) == 0x00000020),
+                ((bitField0_ & 0x00000040) == 0x00000040),
                 getParentForChildren(),
                 isClean());
         images_ = null;

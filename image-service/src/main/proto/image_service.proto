@@ -234,11 +234,14 @@ message ImageSearchPage {
   // Page number (e.g. 2)
   int32 page = 4;
 
+  // Count of images in this response
+  int32 count = 5;
+
   // Total count of results for the given search
-  int32 total_count = 5;
+  int32 total_count = 6;
 
   // Array of images; less than or equal to "size"
-  repeated Image images = 6;
+  repeated Image images = 7;
 }
 
 message UserImagePage {
