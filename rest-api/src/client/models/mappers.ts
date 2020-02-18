@@ -1,6 +1,7 @@
-import { Image } from "../generated/image_service_pb";
+import { Image, ImageSearchPage as SearchPage } from "../generated/image_service_pb";
 import { ImageMeta, CommentWrapper } from ".";
 import { Comment } from "../generated/comment_service_pb";
+import { ImageSearchPageWrapper, TagType } from "./pages";
 
 /**
  * Map Image instance into object matching ImageMeta interface.
@@ -36,4 +37,24 @@ export function mapComment(comment: Comment): CommentWrapper {
         tags: comment.getTagsList(),
         userTags: comment.getUsertagsList()
     }
+}
+
+/**
+ * Map gRPC proto search page into ImageSearchPageWrapper.
+ *
+ * @param page The gRPC search page
+ */
+export function mapImageSearchPage(page: SearchPage): ImageSearchPageWrapper {
+    const tagType: TagType = page.getSearchCase() === SearchPage.SearchCase.HASH_TAG
+        ? "hash-tag"
+        : "user-tag";
+    return {
+        tagType,
+        searchTag: tagType === "user-tag" ? page.getUserTag() : page.getHashTag(),
+        page: page.getPage(),
+        size: page.getSize(),
+        count: page.getCount(),
+        totalCount: page.getTotalCount(),
+        content: page.getImagesList().map((image) => metaFromImage(image)),
+    };
 }
