@@ -1,5 +1,6 @@
 import { Image } from "../generated/image_service_pb";
-import { ImageMeta } from ".";
+import { ImageMeta, CommentWrapper } from ".";
+import { Comment } from "../generated/comment_service_pb";
 
 /**
  * Map Image instance into object matching ImageMeta interface.
@@ -18,4 +19,21 @@ export function metaFromImage(image: Image): ImageMeta {
         userTags: image.getUserTagsList(),
         createdAt: image.getCreatedAt(),
     };
+}
+
+/**
+ * Map Grpc proto comment to non-grpc CommentWrapper. 
+ *
+ * @param comment Grpc image
+ *
+ */
+export function mapComment(comment: Comment): CommentWrapper {
+    return {
+        content: comment.getContent(),
+        id: comment.getId(),
+        userId: comment.getUserId(),
+        createdAt: comment.getCreatedAt(),
+        tags: comment.getTagsList(),
+        userTags: comment.getUsertagsList()
+    }
 }

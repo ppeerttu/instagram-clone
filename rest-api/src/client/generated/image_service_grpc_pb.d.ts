@@ -14,6 +14,7 @@ interface IImagesService extends grpc.ServiceDefinition<grpc.UntypedServiceImple
     getImageData: IImagesService_IGetImageData;
     getUserImages: IImagesService_IGetUserImages;
     searchImages: IImagesService_ISearchImages;
+    likeImage: IImagesService_ILikeImage;
 }
 
 interface IImagesService_ICreateImage extends grpc.MethodDefinition<image_service_pb.CreateImageRequest, image_service_pb.CreateImageResponse> {
@@ -70,6 +71,15 @@ interface IImagesService_ISearchImages extends grpc.MethodDefinition<image_servi
     responseSerialize: grpc.serialize<image_service_pb.SearchImagesResponse>;
     responseDeserialize: grpc.deserialize<image_service_pb.SearchImagesResponse>;
 }
+interface IImagesService_ILikeImage extends grpc.MethodDefinition<image_service_pb.LikeImageRequest, image_service_pb.LikeImageResponse> {
+    path: string; // "/Image.Images/LikeImage"
+    requestStream: boolean; // false
+    responseStream: boolean; // false
+    requestSerialize: grpc.serialize<image_service_pb.LikeImageRequest>;
+    requestDeserialize: grpc.deserialize<image_service_pb.LikeImageRequest>;
+    responseSerialize: grpc.serialize<image_service_pb.LikeImageResponse>;
+    responseDeserialize: grpc.deserialize<image_service_pb.LikeImageResponse>;
+}
 
 export const ImagesService: IImagesService;
 
@@ -80,6 +90,7 @@ export interface IImagesServer {
     getImageData: grpc.handleServerStreamingCall<image_service_pb.GetImageDataRequest, image_service_pb.GetImageDataResponse>;
     getUserImages: grpc.handleUnaryCall<image_service_pb.GetUserImagesRequest, image_service_pb.GetUserImagesResponse>;
     searchImages: grpc.handleUnaryCall<image_service_pb.SearchImagesRequest, image_service_pb.SearchImagesResponse>;
+    likeImage: grpc.handleUnaryCall<image_service_pb.LikeImageRequest, image_service_pb.LikeImageResponse>;
 }
 
 export interface IImagesClient {
@@ -101,6 +112,9 @@ export interface IImagesClient {
     searchImages(request: image_service_pb.SearchImagesRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
     searchImages(request: image_service_pb.SearchImagesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
     searchImages(request: image_service_pb.SearchImagesRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
+    likeImage(request: image_service_pb.LikeImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
+    likeImage(request: image_service_pb.LikeImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
+    likeImage(request: image_service_pb.LikeImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class ImagesClient extends grpc.Client implements IImagesClient {
@@ -123,4 +137,7 @@ export class ImagesClient extends grpc.Client implements IImagesClient {
     public searchImages(request: image_service_pb.SearchImagesRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
     public searchImages(request: image_service_pb.SearchImagesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
     public searchImages(request: image_service_pb.SearchImagesRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.SearchImagesResponse) => void): grpc.ClientUnaryCall;
+    public likeImage(request: image_service_pb.LikeImageRequest, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
+    public likeImage(request: image_service_pb.LikeImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
+    public likeImage(request: image_service_pb.LikeImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: image_service_pb.LikeImageResponse) => void): grpc.ClientUnaryCall;
 }

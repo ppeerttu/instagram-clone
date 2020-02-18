@@ -114,6 +114,28 @@ function deserialize_Image_GetUserImagesResponse(buffer_arg) {
   return image_service_pb.GetUserImagesResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_Image_LikeImageRequest(arg) {
+  if (!(arg instanceof image_service_pb.LikeImageRequest)) {
+    throw new Error('Expected argument of type Image.LikeImageRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Image_LikeImageRequest(buffer_arg) {
+  return image_service_pb.LikeImageRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_Image_LikeImageResponse(arg) {
+  if (!(arg instanceof image_service_pb.LikeImageResponse)) {
+    throw new Error('Expected argument of type Image.LikeImageResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Image_LikeImageResponse(buffer_arg) {
+  return image_service_pb.LikeImageResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_Image_SearchImagesRequest(arg) {
   if (!(arg instanceof image_service_pb.SearchImagesRequest)) {
     throw new Error('Expected argument of type Image.SearchImagesRequest');
@@ -210,6 +232,18 @@ searchImages: {
     requestDeserialize: deserialize_Image_SearchImagesRequest,
     responseSerialize: serialize_Image_SearchImagesResponse,
     responseDeserialize: deserialize_Image_SearchImagesResponse,
+  },
+  // Like or unlike an image
+likeImage: {
+    path: '/Image.Images/LikeImage',
+    requestStream: false,
+    responseStream: false,
+    requestType: image_service_pb.LikeImageRequest,
+    responseType: image_service_pb.LikeImageResponse,
+    requestSerialize: serialize_Image_LikeImageRequest,
+    requestDeserialize: deserialize_Image_LikeImageRequest,
+    responseSerialize: serialize_Image_LikeImageResponse,
+    responseDeserialize: deserialize_Image_LikeImageResponse,
   },
 };
 

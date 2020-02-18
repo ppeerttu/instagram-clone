@@ -308,6 +308,12 @@ export class GetUserImagesRequest extends jspb.Message {
     getUserId(): string;
     setUserId(value: string): void;
 
+    getSize(): number;
+    setSize(value: number): void;
+
+    getPage(): number;
+    setPage(value: number): void;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetUserImagesRequest.AsObject;
@@ -322,6 +328,8 @@ export class GetUserImagesRequest extends jspb.Message {
 export namespace GetUserImagesRequest {
     export type AsObject = {
         userId: string,
+        size: number,
+        page: number,
     }
 }
 
@@ -368,6 +376,56 @@ export namespace GetUserImagesResponse {
 
 }
 
+export class LikeImageRequest extends jspb.Message { 
+    getImageId(): string;
+    setImageId(value: string): void;
+
+    getUserId(): string;
+    setUserId(value: string): void;
+
+    getUnlike(): boolean;
+    setUnlike(value: boolean): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): LikeImageRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: LikeImageRequest): LikeImageRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: LikeImageRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): LikeImageRequest;
+    static deserializeBinaryFromReader(message: LikeImageRequest, reader: jspb.BinaryReader): LikeImageRequest;
+}
+
+export namespace LikeImageRequest {
+    export type AsObject = {
+        imageId: string,
+        userId: string,
+        unlike: boolean,
+    }
+}
+
+export class LikeImageResponse extends jspb.Message { 
+    getStatus(): LikeImageResponseStatus;
+    setStatus(value: LikeImageResponseStatus): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): LikeImageResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: LikeImageResponse): LikeImageResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: LikeImageResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): LikeImageResponse;
+    static deserializeBinaryFromReader(message: LikeImageResponse, reader: jspb.BinaryReader): LikeImageResponse;
+}
+
+export namespace LikeImageResponse {
+    export type AsObject = {
+        status: LikeImageResponseStatus,
+    }
+}
+
 export class SearchImagesRequest extends jspb.Message { 
 
     hasHashTag(): boolean;
@@ -380,6 +438,12 @@ export class SearchImagesRequest extends jspb.Message {
     clearUserTag(): void;
     getUserTag(): string;
     setUserTag(value: string): void;
+
+    getSize(): number;
+    setSize(value: number): void;
+
+    getPage(): number;
+    setPage(value: number): void;
 
 
     getSearchCase(): SearchImagesRequest.SearchCase;
@@ -398,6 +462,8 @@ export namespace SearchImagesRequest {
     export type AsObject = {
         hashTag: string,
         userTag: string,
+        size: number,
+        page: number,
     }
 
     export enum SearchCase {
@@ -586,6 +652,9 @@ export class Image extends jspb.Message {
     setHashTagsList(value: Array<string>): void;
     addHashTags(value: string, index?: number): string;
 
+    getLikes(): number;
+    setLikes(value: number): void;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Image.AsObject;
@@ -608,6 +677,7 @@ export namespace Image {
         createdAt: string,
         userTagsList: Array<string>,
         hashTagsList: Array<string>,
+        likes: number,
     }
 }
 
@@ -638,6 +708,13 @@ export enum GetImageErrorStatus {
 export enum GetUserImagesErrorStatus {
     GET_USER_IMAGES_SERVER_ERROR = 0,
     USER_NOT_FOUND = 1,
+}
+
+export enum LikeImageResponseStatus {
+    LIKE_IMAGE_SERVER_ERROR = 0,
+    IMAGE_NOT_FOUND_ERROR = 1,
+    USER_NOT_FOUND_ERROR = 2,
+    LIKE_OK = 3,
 }
 
 export enum SearchImagesErrorStatus {

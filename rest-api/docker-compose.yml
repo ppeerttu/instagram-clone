@@ -25,3 +25,4 @@ services:
       AUTH_SERVICE: auth-service
       CONSUL_HOST: consul-dev
       IMAGE_SERVICE: image-service
+      COMMENT_SERVICE: comments-service

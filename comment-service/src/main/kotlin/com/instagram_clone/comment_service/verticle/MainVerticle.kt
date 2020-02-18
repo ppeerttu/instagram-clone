@@ -14,13 +14,16 @@ import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
+import io.vertx.ext.consul.CheckOptions
 import io.vertx.ext.consul.ConsulClient
 import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
 import java.lang.ClassCastException
+import java.net.InetAddress
 import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 
 private const val SERVICE_NAME = "comments-service"
@@ -30,6 +33,7 @@ class MainVerticle : AbstractVerticle() {
   private lateinit var logger: Logger
   private lateinit var mongoClient: MongoClient
   private lateinit var config: JsonObject
+  private var timer: Timer? = null
 
   override fun init(vertx: Vertx, context: Context) {
     super.init(vertx, context)
@@ -49,8 +53,9 @@ class MainVerticle : AbstractVerticle() {
           .forAddress(vertx, config.getString(Constants.GRPC_KEY_HOST), grpcPort.toInt())
           .addService(service)
           .build()
-        rpcServer.start()
-        logger.info("Grpc server started")
+        rpcServer.start {
+          logger.info("Grpc server started on port: $grpcPort")
+        }
         configureConsul(config)
       } else {
         logger.error("Failed to retrieve configurations")
@@ -73,10 +78,23 @@ class MainVerticle : AbstractVerticle() {
     options.name = SERVICE_NAME
     options.id = UUID.randomUUID().toString()
     options.port = retrieveProblematicString(config, Constants.GRPC_KEY_PORT).toInt()
+    options.address = InetAddress.getLocalHost().hostName
+    options.checkOptions = CheckOptions().also {
+      it.ttl = "10s"
+      it.deregisterAfter = "5m"
+    }
 
     client.registerService(options) {
       if (it.succeeded()) {
         logger.info("Registered service to consul with name: $SERVICE_NAME")
+        registerOnShutdownHook(client, options.id)
+        timer = fixedRateTimer("health-check", period = 5000) {
+          client.passCheck("service:${options.id}") {
+            if (!it.succeeded()) {
+              logger.error("Heartbeat failed:", it.cause())
+            }
+          }
+        }
       } else {
         logger.error("Failed to register service to consul, cause:", it.cause())
       }
@@ -99,5 +117,22 @@ class MainVerticle : AbstractVerticle() {
     mongoConfig.put("db_name", mongoDb)
     mongoConfig.put("connection_string", connString)
     return MongoClient.createShared(vertx, mongoConfig)
+  }
+
+  /**
+   * Register cleanup operations before shutting down.
+   *
+   * @todo Implement this properly
+   */
+  private fun registerOnShutdownHook(client: ConsulClient, id: String) {
+    Runtime.getRuntime().addShutdownHook(Thread {
+      fun run() {
+        logger.info("Cleaning up...")
+        timer?.cancel()
+        client.deregisterService(id) {
+          logger.info("Service $id deregistered from consul")
+        }
+      }
+    })
   }
 }
