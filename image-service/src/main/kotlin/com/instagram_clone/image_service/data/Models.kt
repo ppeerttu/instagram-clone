@@ -126,3 +126,49 @@ data class UserImagesPageWrapper(
    */
   val images: List<ImageMeta>
 )
+
+/**
+ * Enum value describing image search type
+ */
+enum class ImageSearchType {
+  HashTag,
+  UserTag,
+}
+
+data class ImageSearchPageWrapper(
+
+  /**
+   * The search tag
+   */
+  val search: String,
+
+  /**
+   * The search type
+   */
+  val searchType: ImageSearchType,
+
+  /**
+   * Page number
+   */
+  val page: Int,
+
+  /**
+   * Page size
+   */
+  val size: Int,
+
+  /**
+   * Count of images in this page
+   */
+  val count: Int,
+
+  /**
+   * Total count of images for the user
+   */
+  val totalCount: Int,
+
+  /**
+   * Content of this page (list of image metadata)
+   */
+  val images: List<ImageMeta>
+)

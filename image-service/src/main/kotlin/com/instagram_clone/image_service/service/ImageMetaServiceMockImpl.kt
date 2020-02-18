@@ -1,8 +1,6 @@
 package com.instagram_clone.image_service.service
 
-import com.instagram_clone.image_service.data.ImageLikePageWrapper
-import com.instagram_clone.image_service.data.ImageMeta
-import com.instagram_clone.image_service.data.UserImagesPageWrapper
+import com.instagram_clone.image_service.data.*
 import com.instagram_clone.image_service.exception.NotFoundException
 import io.vertx.core.Future
 import io.vertx.core.Promise
@@ -124,6 +122,30 @@ class ImageMetaServiceMockImpl : ImageMetaService {
         results.size,
         totalHits.size,
         results
+      )
+    )
+  }
+
+  override fun searchImagesByTag(tag: String, page: Int, size: Int, searchType: ImageSearchType): Future<ImageSearchPageWrapper> {
+    val s = if (size < 1) DEFAULT_PAGE_SIZE else size
+    val p = if (page < 1) 1 else page
+    val startIndex = (p - 1) * s
+    val totalHits = when (searchType) {
+      ImageSearchType.HashTag -> images.filter { image -> image.hashTags.contains(tag) }
+      else -> images.filter { image -> image.userTags.contains(tag) }
+    }
+    val results = totalHits
+      .subList(startIndex, startIndex + s)
+
+    return Future.succeededFuture(
+      ImageSearchPageWrapper(
+        tag,
+        searchType,
+        page = p,
+        size = s,
+        count = results.size,
+        totalCount = totalHits.size,
+        images = results
       )
     )
   }

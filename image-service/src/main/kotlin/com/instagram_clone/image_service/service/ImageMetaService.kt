@@ -1,8 +1,6 @@
 package com.instagram_clone.image_service.service
 
-import com.instagram_clone.image_service.data.ImageLikePageWrapper
-import com.instagram_clone.image_service.data.ImageMeta
-import com.instagram_clone.image_service.data.UserImagesPageWrapper
+import com.instagram_clone.image_service.data.*
 import io.vertx.core.Future
 
 /**
@@ -44,4 +42,9 @@ interface ImageMetaService {
    * Get user's images as a page.
    */
   fun getUserImages(userId: String, page: Int, size: Int): Future<UserImagesPageWrapper>
+
+  /**
+   * Get images based on search tag.
+   */
+  fun searchImagesByTag(tag: String, page: Int, size: Int, searchType: ImageSearchType): Future<ImageSearchPageWrapper>
 }

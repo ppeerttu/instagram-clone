@@ -47,10 +47,19 @@ public interface ImageSearchPageOrBuilder extends
 
   /**
    * <pre>
+   * Count of images in this response
+   * </pre>
+   *
+   * <code>int32 count = 5;</code>
+   */
+  int getCount();
+
+  /**
+   * <pre>
    * Total count of results for the given search
    * </pre>
    *
-   * <code>int32 total_count = 5;</code>
+   * <code>int32 total_count = 6;</code>
    */
   int getTotalCount();
 
@@ -59,7 +68,7 @@ public interface ImageSearchPageOrBuilder extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   java.util.List<com.instagram_clone.image_service.Image> 
       getImagesList();
@@ -68,7 +77,7 @@ public interface ImageSearchPageOrBuilder extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   com.instagram_clone.image_service.Image getImages(int index);
   /**
@@ -76,7 +85,7 @@ public interface ImageSearchPageOrBuilder extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   int getImagesCount();
   /**
@@ -84,7 +93,7 @@ public interface ImageSearchPageOrBuilder extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   java.util.List<? extends com.instagram_clone.image_service.ImageOrBuilder> 
       getImagesOrBuilderList();
@@ -93,7 +102,7 @@ public interface ImageSearchPageOrBuilder extends
    * Array of images; less than or equal to "size"
    * </pre>
    *
-   * <code>repeated .Image.Image images = 6;</code>
+   * <code>repeated .Image.Image images = 7;</code>
    */
   com.instagram_clone.image_service.ImageOrBuilder getImagesOrBuilder(
       int index);

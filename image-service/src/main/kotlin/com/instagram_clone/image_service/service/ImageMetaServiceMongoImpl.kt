@@ -1,9 +1,8 @@
 package com.instagram_clone.image_service.service
 
 import com.instagram_clone.image_service.config.AppConfig
-import com.instagram_clone.image_service.data.ImageLikePageWrapper
-import com.instagram_clone.image_service.data.ImageMeta
-import com.instagram_clone.image_service.data.UserImagesPageWrapper
+import com.instagram_clone.image_service.data.*
+import com.instagram_clone.image_service.exception.EmptySearchException
 import com.instagram_clone.image_service.exception.NotFoundException
 import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
@@ -167,6 +166,49 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
             count = pageResult.results.size,
             totalCount = count,
             images = pageResult.results.map { it.mapTo(ImageMeta::class.java) }
+          )
+        )
+      }
+  }
+
+  /**
+   * Search images based on given [tag] and [searchType].
+   */
+  override fun searchImagesByTag(tag: String, page: Int, size: Int, searchType: ImageSearchType): Future<ImageSearchPageWrapper> {
+    val selector = when (searchType) {
+      ImageSearchType.HashTag -> "hashTags"
+      ImageSearchType.UserTag -> "userTags"
+    }
+    val query = json {
+      obj(selector to tag)
+    }
+    return Future.future<Nothing> {
+      if (tag.isEmpty()) {
+        it.fail(
+          EmptySearchException("Received empty search tag: $tag")
+        )
+      } else {
+        it.complete()
+      }
+    }
+      .compose {
+        CompositeFuture.all(
+          paginatedQuery(config.imagesCollection, query, page, size),
+          getCount(config.imagesCollection, query)
+        )
+      }
+      .compose { composite ->
+        val pageResults = composite.resultAt<PaginatedQueryResults>(0)
+        val count = composite.resultAt<Int>(1)
+        Future.succeededFuture(
+          ImageSearchPageWrapper(
+            tag,
+            searchType,
+            pageResults.page,
+            pageResults.size,
+            pageResults.results.size,
+            count,
+            pageResults.results.map { it.mapTo(ImageMeta::class.java) }
           )
         )
       }
