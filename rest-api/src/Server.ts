@@ -9,6 +9,8 @@ import { RequestError } from "./lib/RequestError";
 import { AuthService } from "./client/auth";
 import { ImageService } from "./client/images/ImageService";
 import { ImageController } from "./controllers/ImageController";
+import { CommentService } from "./client/comments/CommentService";
+import { CommentController } from "./controllers/CommentController";
 
 /**
  * Class containing the application server logic
@@ -72,15 +74,20 @@ export default class Server {
      * Bind controller routes into the application.
      *
      * @param authService Implementation for `AuthService`
+     * @param imageService image service
+     * @param commenService comment service
      */
     public bindRoutes(
         authService: AuthService,
         imageService: ImageService,
+        commentService: CommentService
     ) {
         const authController = new AuthController(authService);
         authController.bind(this.router);
         const imageController = new ImageController(imageService);
         imageController.bind(this.router);
+        const commentController = new CommentController(commentService);
+        commentController.bind(this.router);
 
         this.app
             .use(this.router.routes())

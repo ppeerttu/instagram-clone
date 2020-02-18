@@ -55,9 +55,11 @@ export abstract class GrpcClient {
         if (Array.isArray(data)) {
             const newEndpoints = [];
             for (const entry of data) {
-                newEndpoints.push(
-                    `${entry.Service.Address}:${entry.Service.Port}`,
-                );
+                if (entry.Service.Address && entry.Service.Port) {
+                    newEndpoints.push(
+                        `${entry.Service.Address}:${entry.Service.Port}`,
+                        );
+                }
             }
             this.knownEndpoints = newEndpoints;
             // Update the client if we notice that currently picked has gone away

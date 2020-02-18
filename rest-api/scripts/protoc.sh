@@ -8,7 +8,7 @@ GRPC_TOOLS_NODE_PROTOC_PLUGIN="./node_modules/.bin/grpc_tools_node_protoc_plugin
 GRPC_TOOLS_NODE_PROTOC="./node_modules/.bin/grpc_tools_node_protoc"
 
 # Services that we want to use
-INPUT_DIRS=("../auth-service/proto" "../image-service/src/main/proto")
+INPUT_DIRS=("../auth-service/proto" "../image-service/src/main/proto" "../comment-service/src/main/proto")
 # Output for JavaScript and type definition files
 OUT_DIR=src/client/generated
 

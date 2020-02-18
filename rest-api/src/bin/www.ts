@@ -8,6 +8,7 @@ import { delay } from "../lib/utils";
 import Server from "../Server";
 import { AuthServiceClient } from "../client/auth";
 import { ImageServiceClient } from "../client/images/ImageServiceClient";
+import { CommentServiceClient } from "../client/comments/CommentServiceClient";
 
 const MAX_RE_REGITER_COUNT = 5;
 const INITIAL_RE_REGISTER_INTERVAL = 5000;
@@ -16,12 +17,14 @@ const serviceDiscovery = ServiceDiscovery.getInstance();
 const logger = pino();
 const authClient = new AuthServiceClient();
 const imageClient = new ImageServiceClient();
+const commentClient = new CommentServiceClient();
 authClient.bindWatch(serviceDiscovery);
 imageClient.bindWatch(serviceDiscovery);
+commentClient.bindWatch(serviceDiscovery);
 
 const application = new Server(logger);
 application.configure();
-application.bindRoutes(authClient, imageClient);
+application.bindRoutes(authClient, imageClient, commentClient);
 
 const server = http.createServer(application.app.callback());
 

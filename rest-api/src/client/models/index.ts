@@ -67,3 +67,4 @@ export interface ImageMeta {
 }
 
 export * from "./mappers";
+export * from "./comment";
