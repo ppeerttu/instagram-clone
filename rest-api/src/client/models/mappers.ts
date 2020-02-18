@@ -19,6 +19,7 @@ export function metaFromImage(image: Image): ImageMeta {
         hashTags: image.getHashTagsList(),
         userTags: image.getUserTagsList(),
         createdAt: image.getCreatedAt(),
+        likes: image.getLikes(),
     };
 }
 

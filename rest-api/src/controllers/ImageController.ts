@@ -6,7 +6,7 @@ import { IController } from "./Controller";
 import { ImageService } from "../client/images/ImageService";
 import { RequestError } from "../lib/RequestError";
 import { CreateImageError } from "../client/images/errors/CreateImageError";
-import { CreateImageErrorStatus, GetImageErrorStatus, SearchImagesErrorStatus } from "../client/generated/image_service_pb";
+import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
 import { DeleteImageError, GetImageError } from "../client/images/errors";
 import { TagType } from "../client/models";
 import { SearchImagesError } from "../client/images/errors/SearchImagesError";

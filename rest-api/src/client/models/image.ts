@@ -49,4 +49,9 @@ export interface ImageMeta {
      * Creatd at timestap
      */
     createdAt: string;
+
+    /**
+     * Like count
+     */
+    likes: number;
 }
