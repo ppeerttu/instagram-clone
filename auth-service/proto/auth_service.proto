@@ -16,7 +16,10 @@ service Auth {
     rpc RenewToken(RenewRequest) returns (RenewResponse) {}
 
     // Get account details based on access token
-    rpc GetAccount(AccountRequest) returns (AccountInfo) {}
+    rpc GetAccount(AccountRequest) returns (AccountResponse) {}
+
+    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {}
+    
 }
 
 message NewAccount {
@@ -39,8 +42,43 @@ enum AuthErrorStatus {
     EXPIRED_TOKEN = 4;
 }
 
+enum SignUpErrorStatus {
+    USERNAME_IN_USE = 0;
+    SIGNUP_SERVER_ERROR = 1;
+    SIGNUP_INVALID_PASSWORD = 3;
+    SIGNUP_INVALID_USERNAME = 4;
+}
+
+enum DeleteAccountErrorStatus {
+    DELETE_SERVER_ERROR = 0;
+    DELETE_NOT_FOUND = 1;
+    DELETE_INVALID_TOKEN = 2;
+    DELETE_TOKEN_EXPIRED = 3;
+}
+
 message SignUpResponse {
-    string message = 1;
+    oneof status {
+        AccountInfo account = 1;
+        SignUpErrorStatus error = 2;
+    }
+}
+
+message DeleteAccountRequest {
+    string access_token = 1;
+}
+
+message DeleteAccountResponse {
+    oneof status {
+        string id = 1;
+        DeleteAccountErrorStatus error = 2;
+    }
+}
+
+message AccountResponse {
+    oneof status {
+        AccountInfo account = 1;
+        AuthErrorStatus error = 2;
+    }
 }
 
 message UserCredentials {

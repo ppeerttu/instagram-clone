@@ -1,4 +1,6 @@
 import { RedisClient } from "redis";
+import { AccountInfo } from "../proto/generated/auth_service_pb";
+import { Account, IAccount } from "../models/Account";
 
 /**
  * Get a variable from `process.env` and throw if not found.
@@ -35,7 +37,7 @@ export function delay(ms: number) {
 
 /**
  * Return item from redis wrapped in promise
- * 
+ *
  * @param key key of the item
  * @param redis RedisClient
  */
@@ -49,4 +51,34 @@ export function getFromRedis(key: string, redis: RedisClient): Promise<any> {
             }
         });
     });
+}
+
+/**
+ * Maps account to grpc AccountInfo
+ *
+ * @param account account
+ */
+export function accountToAccountInfo(account: IAccount): AccountInfo {
+    const accountInfo = new AccountInfo();
+    accountInfo.setId(account.id);
+    accountInfo.setCreatedAt(account.createdAt.toJSON());
+    accountInfo.setUpdatedAt(account.updatedAt.toJSON());
+    accountInfo.setUsername(account.username);
+
+    return accountInfo;
+}
+
+/**
+ * Validate that given credential > 3 and < 30.
+ * Same rule is applied to username and password.
+ *
+ * @param credential string credential username / password
+ */
+export function validateCredential(credential: string): boolean {
+    if (credential) {
+        if (credential.length > 3 && credential.length < 30) {
+            return true;
+        }
+    }
+    return false;
 }

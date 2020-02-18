@@ -75,9 +75,20 @@ export namespace SignInResponse {
 }
 
 export class SignUpResponse extends jspb.Message { 
-    getMessage(): string;
-    setMessage(value: string): void;
 
+    hasAccount(): boolean;
+    clearAccount(): void;
+    getAccount(): AccountInfo | undefined;
+    setAccount(value?: AccountInfo): void;
+
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): SignUpErrorStatus;
+    setError(value: SignUpErrorStatus): void;
+
+
+    getStatusCase(): SignUpResponse.StatusCase;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SignUpResponse.AsObject;
@@ -91,8 +102,126 @@ export class SignUpResponse extends jspb.Message {
 
 export namespace SignUpResponse {
     export type AsObject = {
-        message: string,
+        account?: AccountInfo.AsObject,
+        error: SignUpErrorStatus,
     }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    ACCOUNT = 1,
+
+    ERROR = 2,
+
+    }
+
+}
+
+export class DeleteAccountRequest extends jspb.Message { 
+    getAccessToken(): string;
+    setAccessToken(value: string): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteAccountRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteAccountRequest): DeleteAccountRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteAccountRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteAccountRequest;
+    static deserializeBinaryFromReader(message: DeleteAccountRequest, reader: jspb.BinaryReader): DeleteAccountRequest;
+}
+
+export namespace DeleteAccountRequest {
+    export type AsObject = {
+        accessToken: string,
+    }
+}
+
+export class DeleteAccountResponse extends jspb.Message { 
+
+    hasId(): boolean;
+    clearId(): void;
+    getId(): string;
+    setId(value: string): void;
+
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): DeleteAccountErrorStatus;
+    setError(value: DeleteAccountErrorStatus): void;
+
+
+    getStatusCase(): DeleteAccountResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteAccountResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteAccountResponse): DeleteAccountResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteAccountResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteAccountResponse;
+    static deserializeBinaryFromReader(message: DeleteAccountResponse, reader: jspb.BinaryReader): DeleteAccountResponse;
+}
+
+export namespace DeleteAccountResponse {
+    export type AsObject = {
+        id: string,
+        error: DeleteAccountErrorStatus,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    ID = 1,
+
+    ERROR = 2,
+
+    }
+
+}
+
+export class AccountResponse extends jspb.Message { 
+
+    hasAccount(): boolean;
+    clearAccount(): void;
+    getAccount(): AccountInfo | undefined;
+    setAccount(value?: AccountInfo): void;
+
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): AuthErrorStatus;
+    setError(value: AuthErrorStatus): void;
+
+
+    getStatusCase(): AccountResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): AccountResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: AccountResponse): AccountResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: AccountResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): AccountResponse;
+    static deserializeBinaryFromReader(message: AccountResponse, reader: jspb.BinaryReader): AccountResponse;
+}
+
+export namespace AccountResponse {
+    export type AsObject = {
+        account?: AccountInfo.AsObject,
+        error: AuthErrorStatus,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    ACCOUNT = 1,
+
+    ERROR = 2,
+
+    }
+
 }
 
 export class UserCredentials extends jspb.Message { 
@@ -269,4 +398,18 @@ export enum AuthErrorStatus {
     BAD_CREDENTIALS = 2,
     INVALID_TOKEN = 3,
     EXPIRED_TOKEN = 4,
+}
+
+export enum SignUpErrorStatus {
+    USERNAME_IN_USE = 0,
+    SIGNUP_SERVER_ERROR = 1,
+    SIGNUP_INVALID_PASSWORD = 3,
+    SIGNUP_INVALID_USERNAME = 4,
+}
+
+export enum DeleteAccountErrorStatus {
+    DELETE_SERVER_ERROR = 0,
+    DELETE_NOT_FOUND = 1,
+    DELETE_INVALID_TOKEN = 2,
+    DELETE_TOKEN_EXPIRED = 3,
 }
