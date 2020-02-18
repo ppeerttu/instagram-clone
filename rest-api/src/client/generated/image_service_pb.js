@@ -22,10 +22,14 @@ goog.exportSymbol('proto.Image.GetImageDataResponse', null, global);
 goog.exportSymbol('proto.Image.GetImageErrorStatus', null, global);
 goog.exportSymbol('proto.Image.GetImageRequest', null, global);
 goog.exportSymbol('proto.Image.GetImageResponse', null, global);
+goog.exportSymbol('proto.Image.GetLikesErrorStatus', null, global);
+goog.exportSymbol('proto.Image.GetLikesRequest', null, global);
+goog.exportSymbol('proto.Image.GetLikesResponse', null, global);
 goog.exportSymbol('proto.Image.GetUserImagesErrorStatus', null, global);
 goog.exportSymbol('proto.Image.GetUserImagesRequest', null, global);
 goog.exportSymbol('proto.Image.GetUserImagesResponse', null, global);
 goog.exportSymbol('proto.Image.Image', null, global);
+goog.exportSymbol('proto.Image.ImageLikesPage', null, global);
 goog.exportSymbol('proto.Image.ImageSearchPage', null, global);
 goog.exportSymbol('proto.Image.ImageType', null, global);
 goog.exportSymbol('proto.Image.LikeImageRequest', null, global);
@@ -2564,6 +2568,428 @@ proto.Image.LikeImageResponse.prototype.setStatus = function(value) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.Image.GetLikesRequest = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.Image.GetLikesRequest, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Image.GetLikesRequest.displayName = 'proto.Image.GetLikesRequest';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Image.GetLikesRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.Image.GetLikesRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Image.GetLikesRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.GetLikesRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    imageId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    size: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    page: jspb.Message.getFieldWithDefault(msg, 3, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Image.GetLikesRequest}
+ */
+proto.Image.GetLikesRequest.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Image.GetLikesRequest;
+  return proto.Image.GetLikesRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Image.GetLikesRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Image.GetLikesRequest}
+ */
+proto.Image.GetLikesRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setImageId(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setSize(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setPage(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Image.GetLikesRequest.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Image.GetLikesRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Image.GetLikesRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.GetLikesRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getImageId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getSize();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getPage();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string image_id = 1;
+ * @return {string}
+ */
+proto.Image.GetLikesRequest.prototype.getImageId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.Image.GetLikesRequest.prototype.setImageId = function(value) {
+  jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional int32 size = 2;
+ * @return {number}
+ */
+proto.Image.GetLikesRequest.prototype.getSize = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.GetLikesRequest.prototype.setSize = function(value) {
+  jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int32 page = 3;
+ * @return {number}
+ */
+proto.Image.GetLikesRequest.prototype.getPage = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.GetLikesRequest.prototype.setPage = function(value) {
+  jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Image.GetLikesResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Image.GetLikesResponse.oneofGroups_);
+};
+goog.inherits(proto.Image.GetLikesResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Image.GetLikesResponse.displayName = 'proto.Image.GetLikesResponse';
+}
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.Image.GetLikesResponse.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.Image.GetLikesResponse.StatusCase = {
+  STATUS_NOT_SET: 0,
+  ERROR: 1,
+  PAGE: 2
+};
+
+/**
+ * @return {proto.Image.GetLikesResponse.StatusCase}
+ */
+proto.Image.GetLikesResponse.prototype.getStatusCase = function() {
+  return /** @type {proto.Image.GetLikesResponse.StatusCase} */(jspb.Message.computeOneofCase(this, proto.Image.GetLikesResponse.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Image.GetLikesResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.Image.GetLikesResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Image.GetLikesResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.GetLikesResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    error: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    page: (f = msg.getPage()) && proto.Image.ImageLikesPage.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Image.GetLikesResponse}
+ */
+proto.Image.GetLikesResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Image.GetLikesResponse;
+  return proto.Image.GetLikesResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Image.GetLikesResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Image.GetLikesResponse}
+ */
+proto.Image.GetLikesResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.Image.GetLikesErrorStatus} */ (reader.readEnum());
+      msg.setError(value);
+      break;
+    case 2:
+      var value = new proto.Image.ImageLikesPage;
+      reader.readMessage(value,proto.Image.ImageLikesPage.deserializeBinaryFromReader);
+      msg.setPage(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Image.GetLikesResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Image.GetLikesResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Image.GetLikesResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.GetLikesResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {!proto.Image.GetLikesErrorStatus} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getPage();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.Image.ImageLikesPage.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional GetLikesErrorStatus error = 1;
+ * @return {!proto.Image.GetLikesErrorStatus}
+ */
+proto.Image.GetLikesResponse.prototype.getError = function() {
+  return /** @type {!proto.Image.GetLikesErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/** @param {!proto.Image.GetLikesErrorStatus} value */
+proto.Image.GetLikesResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 1, proto.Image.GetLikesResponse.oneofGroups_[0], value);
+};
+
+
+proto.Image.GetLikesResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 1, proto.Image.GetLikesResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.GetLikesResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional ImageLikesPage page = 2;
+ * @return {?proto.Image.ImageLikesPage}
+ */
+proto.Image.GetLikesResponse.prototype.getPage = function() {
+  return /** @type{?proto.Image.ImageLikesPage} */ (
+    jspb.Message.getWrapperField(this, proto.Image.ImageLikesPage, 2));
+};
+
+
+/** @param {?proto.Image.ImageLikesPage|undefined} value */
+proto.Image.GetLikesResponse.prototype.setPage = function(value) {
+  jspb.Message.setOneofWrapperField(this, 2, proto.Image.GetLikesResponse.oneofGroups_[0], value);
+};
+
+
+proto.Image.GetLikesResponse.prototype.clearPage = function() {
+  this.setPage(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Image.GetLikesResponse.prototype.hasPage = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.Image.SearchImagesRequest = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Image.SearchImagesRequest.oneofGroups_);
 };
@@ -3079,7 +3505,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.Image.ImageSearchPage.repeatedFields_ = [6];
+proto.Image.ImageSearchPage.repeatedFields_ = [7];
 
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -3140,7 +3566,8 @@ proto.Image.ImageSearchPage.toObject = function(includeInstance, msg) {
     userTag: jspb.Message.getFieldWithDefault(msg, 2, ""),
     size: jspb.Message.getFieldWithDefault(msg, 3, 0),
     page: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    totalCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    count: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    totalCount: jspb.Message.getFieldWithDefault(msg, 6, 0),
     imagesList: jspb.Message.toObjectList(msg.getImagesList(),
     proto.Image.Image.toObject, includeInstance)
   };
@@ -3197,9 +3624,13 @@ proto.Image.ImageSearchPage.deserializeBinaryFromReader = function(msg, reader) 
       break;
     case 5:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setTotalCount(value);
+      msg.setCount(value);
       break;
     case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setTotalCount(value);
+      break;
+    case 7:
       var value = new proto.Image.Image;
       reader.readMessage(value,proto.Image.Image.deserializeBinaryFromReader);
       msg.addImages(value);
@@ -3261,17 +3692,24 @@ proto.Image.ImageSearchPage.serializeBinaryToWriter = function(message, writer) 
       f
     );
   }
-  f = message.getTotalCount();
+  f = message.getCount();
   if (f !== 0) {
     writer.writeInt32(
       5,
       f
     );
   }
+  f = message.getTotalCount();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
   f = message.getImagesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      6,
+      7,
       f,
       proto.Image.Image.serializeBinaryToWriter
     );
@@ -3368,33 +3806,48 @@ proto.Image.ImageSearchPage.prototype.setPage = function(value) {
 
 
 /**
- * optional int32 total_count = 5;
+ * optional int32 count = 5;
  * @return {number}
  */
-proto.Image.ImageSearchPage.prototype.getTotalCount = function() {
+proto.Image.ImageSearchPage.prototype.getCount = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
-proto.Image.ImageSearchPage.prototype.setTotalCount = function(value) {
+proto.Image.ImageSearchPage.prototype.setCount = function(value) {
   jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * repeated Image images = 6;
+ * optional int32 total_count = 6;
+ * @return {number}
+ */
+proto.Image.ImageSearchPage.prototype.getTotalCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.ImageSearchPage.prototype.setTotalCount = function(value) {
+  jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * repeated Image images = 7;
  * @return {!Array<!proto.Image.Image>}
  */
 proto.Image.ImageSearchPage.prototype.getImagesList = function() {
   return /** @type{!Array<!proto.Image.Image>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.Image.Image, 6));
+    jspb.Message.getRepeatedWrapperField(this, proto.Image.Image, 7));
 };
 
 
 /** @param {!Array<!proto.Image.Image>} value */
 proto.Image.ImageSearchPage.prototype.setImagesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  jspb.Message.setRepeatedWrapperField(this, 7, value);
 };
 
 
@@ -3404,7 +3857,7 @@ proto.Image.ImageSearchPage.prototype.setImagesList = function(value) {
  * @return {!proto.Image.Image}
  */
 proto.Image.ImageSearchPage.prototype.addImages = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.Image.Image, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 7, opt_value, proto.Image.Image, opt_index);
 };
 
 
@@ -3436,7 +3889,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.Image.UserImagePage.repeatedFields_ = [5];
+proto.Image.UserImagePage.repeatedFields_ = [6];
 
 
 
@@ -3470,7 +3923,8 @@ proto.Image.UserImagePage.toObject = function(includeInstance, msg) {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     size: jspb.Message.getFieldWithDefault(msg, 2, 0),
     page: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    totalCount: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    count: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    totalCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
     imagesList: jspb.Message.toObjectList(msg.getImagesList(),
     proto.Image.Image.toObject, includeInstance)
   };
@@ -3523,9 +3977,13 @@ proto.Image.UserImagePage.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 4:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setTotalCount(value);
+      msg.setCount(value);
       break;
     case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setTotalCount(value);
+      break;
+    case 6:
       var value = new proto.Image.Image;
       reader.readMessage(value,proto.Image.Image.deserializeBinaryFromReader);
       msg.addImages(value);
@@ -3580,17 +4038,24 @@ proto.Image.UserImagePage.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getTotalCount();
+  f = message.getCount();
   if (f !== 0) {
     writer.writeInt32(
       4,
       f
     );
   }
+  f = message.getTotalCount();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
   f = message.getImagesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      5,
+      6,
       f,
       proto.Image.Image.serializeBinaryToWriter
     );
@@ -3644,33 +4109,48 @@ proto.Image.UserImagePage.prototype.setPage = function(value) {
 
 
 /**
- * optional int32 total_count = 4;
+ * optional int32 count = 4;
  * @return {number}
  */
-proto.Image.UserImagePage.prototype.getTotalCount = function() {
+proto.Image.UserImagePage.prototype.getCount = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.Image.UserImagePage.prototype.setTotalCount = function(value) {
+proto.Image.UserImagePage.prototype.setCount = function(value) {
   jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * repeated Image images = 5;
+ * optional int32 total_count = 5;
+ * @return {number}
+ */
+proto.Image.UserImagePage.prototype.getTotalCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.UserImagePage.prototype.setTotalCount = function(value) {
+  jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * repeated Image images = 6;
  * @return {!Array<!proto.Image.Image>}
  */
 proto.Image.UserImagePage.prototype.getImagesList = function() {
   return /** @type{!Array<!proto.Image.Image>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.Image.Image, 5));
+    jspb.Message.getRepeatedWrapperField(this, proto.Image.Image, 6));
 };
 
 
 /** @param {!Array<!proto.Image.Image>} value */
 proto.Image.UserImagePage.prototype.setImagesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 5, value);
+  jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -3680,7 +4160,7 @@ proto.Image.UserImagePage.prototype.setImagesList = function(value) {
  * @return {!proto.Image.Image}
  */
 proto.Image.UserImagePage.prototype.addImages = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.Image.Image, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.Image.Image, opt_index);
 };
 
 
@@ -4109,6 +4589,304 @@ proto.Image.Image.prototype.setLikes = function(value) {
 };
 
 
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Image.ImageLikesPage = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.Image.ImageLikesPage.repeatedFields_, null);
+};
+goog.inherits(proto.Image.ImageLikesPage, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Image.ImageLikesPage.displayName = 'proto.Image.ImageLikesPage';
+}
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.Image.ImageLikesPage.repeatedFields_ = [6];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Image.ImageLikesPage.prototype.toObject = function(opt_includeInstance) {
+  return proto.Image.ImageLikesPage.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Image.ImageLikesPage} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.ImageLikesPage.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    imageId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    size: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    page: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    usersCount: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    totalUsersCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    usersList: jspb.Message.getRepeatedField(msg, 6)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Image.ImageLikesPage}
+ */
+proto.Image.ImageLikesPage.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Image.ImageLikesPage;
+  return proto.Image.ImageLikesPage.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Image.ImageLikesPage} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Image.ImageLikesPage}
+ */
+proto.Image.ImageLikesPage.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setImageId(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setSize(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setPage(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setUsersCount(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setTotalUsersCount(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addUsers(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Image.ImageLikesPage.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Image.ImageLikesPage.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Image.ImageLikesPage} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Image.ImageLikesPage.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getImageId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getSize();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getPage();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = message.getUsersCount();
+  if (f !== 0) {
+    writer.writeInt32(
+      4,
+      f
+    );
+  }
+  f = message.getTotalUsersCount();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getUsersList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      6,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string image_id = 1;
+ * @return {string}
+ */
+proto.Image.ImageLikesPage.prototype.getImageId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.Image.ImageLikesPage.prototype.setImageId = function(value) {
+  jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional int32 size = 2;
+ * @return {number}
+ */
+proto.Image.ImageLikesPage.prototype.getSize = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.ImageLikesPage.prototype.setSize = function(value) {
+  jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int32 page = 3;
+ * @return {number}
+ */
+proto.Image.ImageLikesPage.prototype.getPage = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.ImageLikesPage.prototype.setPage = function(value) {
+  jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional int32 users_count = 4;
+ * @return {number}
+ */
+proto.Image.ImageLikesPage.prototype.getUsersCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.ImageLikesPage.prototype.setUsersCount = function(value) {
+  jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int32 total_users_count = 5;
+ * @return {number}
+ */
+proto.Image.ImageLikesPage.prototype.getTotalUsersCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.Image.ImageLikesPage.prototype.setTotalUsersCount = function(value) {
+  jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * repeated string users = 6;
+ * @return {!Array<string>}
+ */
+proto.Image.ImageLikesPage.prototype.getUsersList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 6));
+};
+
+
+/** @param {!Array<string>} value */
+proto.Image.ImageLikesPage.prototype.setUsersList = function(value) {
+  jspb.Message.setField(this, 6, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.Image.ImageLikesPage.prototype.addUsers = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 6, value, opt_index);
+};
+
+
+proto.Image.ImageLikesPage.prototype.clearUsersList = function() {
+  this.setUsersList([]);
+};
+
+
 /**
  * @enum {number}
  */
@@ -4161,6 +4939,14 @@ proto.Image.LikeImageResponseStatus = {
   IMAGE_NOT_FOUND_ERROR: 1,
   USER_NOT_FOUND_ERROR: 2,
   LIKE_OK: 3
+};
+
+/**
+ * @enum {number}
+ */
+proto.Image.GetLikesErrorStatus = {
+  GET_LIKES_SERVER_ERROR: 0,
+  GET_LIKES_IMAGE_NOT_FOUND: 1
 };
 
 /**
