@@ -1,4 +1,4 @@
-import { body, IValidationState, validationResults, param } from "koa-req-validation";
+import { body, IValidationState, validationResults, param, query } from "koa-req-validation";
 import Router, { RouterContext } from "@koa/router";
 import multer, { File } from "@koa/multer";
 
@@ -6,8 +6,11 @@ import { IController } from "./Controller";
 import { ImageService } from "../client/images/ImageService";
 import { RequestError } from "../lib/RequestError";
 import { CreateImageError } from "../client/images/errors/CreateImageError";
-import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
+import { CreateImageErrorStatus, GetImageErrorStatus, SearchImagesErrorStatus } from "../client/generated/image_service_pb";
 import { DeleteImageError, GetImageError } from "../client/images/errors";
+import { TagType } from "../client/models";
+import { SearchImagesError } from "../client/images/errors/SearchImagesError";
+import { isContext } from "vm";
 
 const allowedFileTypes = [
     "image/png",
@@ -23,6 +26,8 @@ const upload = multer({
         }
     }
 });
+
+const tagTypes: TagType[] = ["hash-tag", "user-tag"];
 
 export class ImageController implements IController {
 
@@ -41,6 +46,34 @@ export class ImageController implements IController {
         param("imageId")
             .isUUID()
             .withMessage("The imageId parameter has to be an UUID")
+            .run(),
+    ];
+
+    private pageValidation = [
+        query("page")
+            .optional()
+            .isInt({ min: 1 })
+            .withMessage("Page number has to be greater than 0")
+            .run(),
+        query("size")
+            .optional()
+            .isInt({ min: 1, max: 100 })
+            .withMessage("Page size has to be between 1 and 100")
+            .run(),
+    ];
+
+    private searchValidation = [
+        ...this.pageValidation,
+        query("search")
+            .trim()
+            .isLength({ min: 3 })
+            .withMessage(
+                "Please specify search string that is at least 3 characters long"
+            )
+            .run(),
+        query("type")
+            .isIn(tagTypes)
+            .withMessage(`The tag type has to be either of the values: ${tagTypes.join(", ")}`)
             .run(),
     ];
 
@@ -71,6 +104,11 @@ export class ImageController implements IController {
             `${basePath}/:imageId/data`,
             ...this.imageIdValidation,
             this.getImageData,
+        );
+        router.get(
+            `${basePath}`,
+            ...this.searchValidation,
+            this.searchImages,
         );
     }
 
@@ -229,6 +267,41 @@ export class ImageController implements IController {
                 }
             }
             ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Search images handler.
+     */
+    private searchImages = async (
+        ctx: RouterContext<IValidationState>,
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { search, type } = results.passedData();
+        const page = ctx.query.page
+            ? parseInt(ctx.query.page, 10)
+            : 1;
+        const size = ctx.query.size
+            ? parseInt(ctx.query.size, 10)
+            : 10;
+        try {
+            const result = await this.imageService.searchImagesByTag(
+                search,
+                type,
+                page,
+                size,
+            );
+            ctx.body = result;
+        } catch (e) {
+            if (e instanceof SearchImagesError) {
+                // This should be really rare
+                ctx.log.error("Failed to search images", e);
+                throw new RequestError(500);
+            }
             throw new RequestError(503);
         }
     }

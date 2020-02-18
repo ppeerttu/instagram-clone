@@ -23,7 +23,7 @@ export function metaFromImage(image: Image): ImageMeta {
 }
 
 /**
- * Map Grpc proto comment to non-grpc CommentWrapper. 
+ * Map Grpc proto comment to non-grpc CommentWrapper.
  *
  * @param comment Grpc image
  *
