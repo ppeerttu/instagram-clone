@@ -10,14 +10,19 @@ import { CreateImageErrorStatus, GetImageErrorStatus, SearchImagesErrorStatus } 
 import { DeleteImageError, GetImageError } from "../client/images/errors";
 import { TagType } from "../client/models";
 import { SearchImagesError } from "../client/images/errors/SearchImagesError";
-import { isContext } from "vm";
 
 const allowedFileTypes = [
     "image/png",
     "image/jpeg"
 ];
 
+const MAX_IMAGE_SIZE_BYTES = 15728640; // 15MB
+
 const upload = multer({
+
+    /**
+     * Control on which file types we accept.
+     */
     fileFilter: (req, file, cb) => {
         if (!allowedFileTypes.includes(file.mimetype)) {
             cb(null, false);
@@ -39,7 +44,7 @@ export class ImageController implements IController {
         body("caption")
             .isLength({ max: 500 })
             .withMessage("The caption cannot be longer than 500 characters")
-            .run()
+            .run(),
     ];
 
     private imageIdValidation = [
@@ -121,12 +126,19 @@ export class ImageController implements IController {
         const results = validationResults(ctx);
         const file = (ctx as any).file as File; // For TSC
 
-        if (results.hasErrors() || !file ) {
+        if (results.hasErrors() || !file || file.size > MAX_IMAGE_SIZE_BYTES) {
             const errors = results.array();
             if (!file) {
                 errors.push({
                     param: "image",
                     msg: "Image file has to be set",
+                    value: "",
+                    location: "body",
+                });
+            } else if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                errors.push({
+                    param: "image",
+                    msg: "Image size too large",
                     value: "",
                     location: "body",
                 });
@@ -136,18 +148,6 @@ export class ImageController implements IController {
 
         const { userId, caption } = ctx.request.body;
 
-        /**
-         * structure of file:
-         * {
-         *   fieldname: 'image',
-         *   originalname: 'newplot (1).png',
-         *   encoding: '7bit',
-         *   mimetype: 'image/png',
-         *   buffer: <Buffer 89 50 4e ...>,
-         *   size: 392803
-         * }
-         */
-        // TODO: Check file size, cancel request if too large
         try {
             const response = await this.imageService.createImage(
                 caption,
@@ -281,25 +281,22 @@ export class ImageController implements IController {
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
         }
-        const { search, type } = results.passedData();
-        const page = ctx.query.page
-            ? parseInt(ctx.query.page, 10)
-            : 1;
-        const size = ctx.query.size
-            ? parseInt(ctx.query.size, 10)
-            : 10;
+        // Data that has passed validation & sanitation
+        const { search, type, page, size } = results.passedData();
+        const parsedPage = page ? parseInt(page, 10) : 1;
+        const parsedSize = size ? parseInt(size, 10) : 10;
         try {
             const result = await this.imageService.searchImagesByTag(
                 search,
                 type,
-                page,
-                size,
+                parsedPage,
+                parsedSize,
             );
             ctx.body = result;
         } catch (e) {
             if (e instanceof SearchImagesError) {
                 // This should be really rare
-                ctx.log.error("Failed to search images", e);
+                ctx.log.warn(e);
                 throw new RequestError(500);
             }
             throw new RequestError(503);
