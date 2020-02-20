@@ -1,4 +1,4 @@
-import { body, IValidationState, validationResults, param } from "koa-req-validation";
+import { body, IValidationState, validationResults, param, query } from "koa-req-validation";
 import Router, { RouterContext } from "@koa/router";
 import multer, { File } from "@koa/multer";
 
@@ -8,13 +8,21 @@ import { RequestError } from "../lib/RequestError";
 import { CreateImageError } from "../client/images/errors/CreateImageError";
 import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
 import { DeleteImageError, GetImageError } from "../client/images/errors";
+import { TagType } from "../client/models";
+import { SearchImagesError } from "../client/images/errors/SearchImagesError";
 
 const allowedFileTypes = [
     "image/png",
     "image/jpeg"
 ];
 
+const MAX_IMAGE_SIZE_BYTES = 15728640; // 15MB
+
 const upload = multer({
+
+    /**
+     * Control on which file types we accept.
+     */
     fileFilter: (req, file, cb) => {
         if (!allowedFileTypes.includes(file.mimetype)) {
             cb(null, false);
@@ -23,6 +31,8 @@ const upload = multer({
         }
     }
 });
+
+const tagTypes: TagType[] = ["hash-tag", "user-tag"];
 
 export class ImageController implements IController {
 
@@ -34,13 +44,41 @@ export class ImageController implements IController {
         body("caption")
             .isLength({ max: 500 })
             .withMessage("The caption cannot be longer than 500 characters")
-            .run()
+            .run(),
     ];
 
     private imageIdValidation = [
         param("imageId")
             .isUUID()
             .withMessage("The imageId parameter has to be an UUID")
+            .run(),
+    ];
+
+    private pageValidation = [
+        query("page")
+            .optional()
+            .isInt({ min: 1 })
+            .withMessage("Page number has to be greater than 0")
+            .run(),
+        query("size")
+            .optional()
+            .isInt({ min: 1, max: 100 })
+            .withMessage("Page size has to be between 1 and 100")
+            .run(),
+    ];
+
+    private searchValidation = [
+        ...this.pageValidation,
+        query("search")
+            .trim()
+            .isLength({ min: 3 })
+            .withMessage(
+                "Please specify search string that is at least 3 characters long"
+            )
+            .run(),
+        query("type")
+            .isIn(tagTypes)
+            .withMessage(`The tag type has to be either of the values: ${tagTypes.join(", ")}`)
             .run(),
     ];
 
@@ -72,6 +110,11 @@ export class ImageController implements IController {
             ...this.imageIdValidation,
             this.getImageData,
         );
+        router.get(
+            `${basePath}`,
+            ...this.searchValidation,
+            this.searchImages,
+        );
     }
 
     /**
@@ -83,12 +126,19 @@ export class ImageController implements IController {
         const results = validationResults(ctx);
         const file = (ctx as any).file as File; // For TSC
 
-        if (results.hasErrors() || !file ) {
+        if (results.hasErrors() || !file || file.size > MAX_IMAGE_SIZE_BYTES) {
             const errors = results.array();
             if (!file) {
                 errors.push({
                     param: "image",
                     msg: "Image file has to be set",
+                    value: "",
+                    location: "body",
+                });
+            } else if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                errors.push({
+                    param: "image",
+                    msg: "Image size too large",
                     value: "",
                     location: "body",
                 });
@@ -98,18 +148,6 @@ export class ImageController implements IController {
 
         const { userId, caption } = ctx.request.body;
 
-        /**
-         * structure of file:
-         * {
-         *   fieldname: 'image',
-         *   originalname: 'newplot (1).png',
-         *   encoding: '7bit',
-         *   mimetype: 'image/png',
-         *   buffer: <Buffer 89 50 4e ...>,
-         *   size: 392803
-         * }
-         */
-        // TODO: Check file size, cancel request if too large
         try {
             const response = await this.imageService.createImage(
                 caption,
@@ -229,6 +267,38 @@ export class ImageController implements IController {
                 }
             }
             ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Search images handler.
+     */
+    private searchImages = async (
+        ctx: RouterContext<IValidationState>,
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        // Data that has passed validation & sanitation
+        const { search, type, page, size } = results.passedData();
+        const parsedPage = page ? parseInt(page, 10) : 1;
+        const parsedSize = size ? parseInt(size, 10) : 10;
+        try {
+            const result = await this.imageService.searchImagesByTag(
+                search,
+                type,
+                parsedPage,
+                parsedSize,
+            );
+            ctx.body = result;
+        } catch (e) {
+            if (e instanceof SearchImagesError) {
+                // This should be really rare
+                ctx.log.warn(e);
+                throw new RequestError(500);
+            }
             throw new RequestError(503);
         }
     }

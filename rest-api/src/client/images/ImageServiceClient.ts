@@ -1,7 +1,13 @@
 import { credentials, ClientWritableStream } from "grpc";
 
 import { GrpcClient } from "../GrpcClient";
-import { ImageMeta, metaFromImage } from "../models";
+import {
+    ImageMeta,
+    metaFromImage,
+    ImageSearchPageWrapper,
+    TagType,
+    mapImageSearchPage,
+} from "../models";
 import { ImageService, ImageMimeType } from "./ImageService";
 import { config } from "../../config/grpc";
 import { ImagesClient } from "../generated/image_service_grpc_pb";
@@ -14,9 +20,11 @@ import {
     Metadata,
     ImageType,
     GetImageDataResponse,
+    SearchImagesRequest,
 } from "../generated/image_service_pb";
 import { CreateImageError, GetImageError, DeleteImageError } from "./errors";
 import { ImageDataResponseRecorder } from "./helpers";
+import { SearchImagesError } from "./errors/SearchImagesError";
 
 // Chunk size in bytes
 const CHUNK_SIZE = 1024 * 16; // 16KB
@@ -241,6 +249,48 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                             new DeleteImageError(`Failed to delete image ${imageId}`)
                         );
                 }
+            });
+        });
+    }
+
+    /**
+     * Search images based on given tag.
+     *
+     * @param tag The search tag
+     * @param tagType The tag type
+     * @param page The page number
+     * @param size The page size
+     */
+    searchImagesByTag = async (
+        tag: string,
+        tagType: TagType,
+        page: number,
+        size: number
+    ): Promise<ImageSearchPageWrapper> => {
+        const client = this.getClient();
+        const req = new SearchImagesRequest();
+        req.setPage(page);
+        req.setSize(size);
+        if (tagType === "hash-tag") {
+            req.setHashTag(tag);
+        } else {
+            req.setUserTag(tag);
+        }
+        return new Promise<ImageSearchPageWrapper>((resolve, reject) => {
+            client.searchImages(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                const error = res.getError();
+                const resultPage = res.getPage();
+
+                if (!resultPage || error) {
+                    return reject(
+                        new SearchImagesError("Search request failed", error || null)
+                    );
+                }
+                return resolve(mapImageSearchPage(resultPage));
             });
         });
     }

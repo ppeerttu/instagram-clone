@@ -426,6 +426,78 @@ export namespace LikeImageResponse {
     }
 }
 
+export class GetLikesRequest extends jspb.Message { 
+    getImageId(): string;
+    setImageId(value: string): void;
+
+    getSize(): number;
+    setSize(value: number): void;
+
+    getPage(): number;
+    setPage(value: number): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetLikesRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetLikesRequest): GetLikesRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetLikesRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetLikesRequest;
+    static deserializeBinaryFromReader(message: GetLikesRequest, reader: jspb.BinaryReader): GetLikesRequest;
+}
+
+export namespace GetLikesRequest {
+    export type AsObject = {
+        imageId: string,
+        size: number,
+        page: number,
+    }
+}
+
+export class GetLikesResponse extends jspb.Message { 
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): GetLikesErrorStatus;
+    setError(value: GetLikesErrorStatus): void;
+
+
+    hasPage(): boolean;
+    clearPage(): void;
+    getPage(): ImageLikesPage | undefined;
+    setPage(value?: ImageLikesPage): void;
+
+
+    getStatusCase(): GetLikesResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetLikesResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetLikesResponse): GetLikesResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetLikesResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetLikesResponse;
+    static deserializeBinaryFromReader(message: GetLikesResponse, reader: jspb.BinaryReader): GetLikesResponse;
+}
+
+export namespace GetLikesResponse {
+    export type AsObject = {
+        error: GetLikesErrorStatus,
+        page?: ImageLikesPage.AsObject,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    ERROR = 1,
+
+    PAGE = 2,
+
+    }
+
+}
+
 export class SearchImagesRequest extends jspb.Message { 
 
     hasHashTag(): boolean;
@@ -539,6 +611,9 @@ export class ImageSearchPage extends jspb.Message {
     getPage(): number;
     setPage(value: number): void;
 
+    getCount(): number;
+    setCount(value: number): void;
+
     getTotalCount(): number;
     setTotalCount(value: number): void;
 
@@ -566,6 +641,7 @@ export namespace ImageSearchPage {
         userTag: string,
         size: number,
         page: number,
+        count: number,
         totalCount: number,
         imagesList: Array<Image.AsObject>,
     }
@@ -591,6 +667,9 @@ export class UserImagePage extends jspb.Message {
     getPage(): number;
     setPage(value: number): void;
 
+    getCount(): number;
+    setCount(value: number): void;
+
     getTotalCount(): number;
     setTotalCount(value: number): void;
 
@@ -615,6 +694,7 @@ export namespace UserImagePage {
         userId: string,
         size: number,
         page: number,
+        count: number,
         totalCount: number,
         imagesList: Array<Image.AsObject>,
     }
@@ -681,6 +761,49 @@ export namespace Image {
     }
 }
 
+export class ImageLikesPage extends jspb.Message { 
+    getImageId(): string;
+    setImageId(value: string): void;
+
+    getSize(): number;
+    setSize(value: number): void;
+
+    getPage(): number;
+    setPage(value: number): void;
+
+    getUsersCount(): number;
+    setUsersCount(value: number): void;
+
+    getTotalUsersCount(): number;
+    setTotalUsersCount(value: number): void;
+
+    clearUsersList(): void;
+    getUsersList(): Array<string>;
+    setUsersList(value: Array<string>): void;
+    addUsers(value: string, index?: number): string;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ImageLikesPage.AsObject;
+    static toObject(includeInstance: boolean, msg: ImageLikesPage): ImageLikesPage.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ImageLikesPage, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ImageLikesPage;
+    static deserializeBinaryFromReader(message: ImageLikesPage, reader: jspb.BinaryReader): ImageLikesPage;
+}
+
+export namespace ImageLikesPage {
+    export type AsObject = {
+        imageId: string,
+        size: number,
+        page: number,
+        usersCount: number,
+        totalUsersCount: number,
+        usersList: Array<string>,
+    }
+}
+
 export enum ImageType {
     PNG = 0,
     JPG = 1,
@@ -715,6 +838,11 @@ export enum LikeImageResponseStatus {
     IMAGE_NOT_FOUND_ERROR = 1,
     USER_NOT_FOUND_ERROR = 2,
     LIKE_OK = 3,
+}
+
+export enum GetLikesErrorStatus {
+    GET_LIKES_SERVER_ERROR = 0,
+    GET_LIKES_IMAGE_NOT_FOUND = 1,
 }
 
 export enum SearchImagesErrorStatus {
