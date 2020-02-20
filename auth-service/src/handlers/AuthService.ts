@@ -8,7 +8,6 @@ import { createAccessToken, createRefreshToken, verifyToken } from "../lib/token
 import { Account } from "../models/Account";
 import { AuthService, IAuthServer } from "../proto/generated/auth_service_grpc_pb";
 import {
-    AccountInfo,
     AccountRequest,
     AuthErrorStatus,
     JWTTokens,
@@ -18,8 +17,15 @@ import {
     SignInResponse,
     SignUpResponse,
     UserCredentials,
+    DeleteAccountRequest,
+    AccountResponse,
+    DeleteAccountResponse,
+    DeleteAccountErrorStatus,
+    SignUpErrorStatus,
 } from "../proto/generated/auth_service_pb";
-import { getFromRedis } from "../lib/utils";
+import { accountToAccountInfo,
+    getFromRedis,
+    validateCredential } from "../lib/utils";
 
 /**
  * A handler for auth service.
@@ -35,44 +41,32 @@ class AuthHandler implements IAuthServer {
     /**
      * Sign an account in.
      */
-    public signUp = (
+    public signUp = async (
         call: grpc.ServerUnaryCall<NewAccount>,
         callback: grpc.sendUnaryData<SignUpResponse>,
-    ): void => {
+    ): Promise<void> => {
         const username = call.request.getUsername();
-        Account.findOne({
-            where: {
-                username,
-            },
-        })
-            .then((exists) => {
-                const response = new SignUpResponse();
-                if (exists) {
-                    response.setMessage(`Username ${username} is already taken`);
-                    return response;
+        const password = call.request.getPassword();
+        const response = new SignUpResponse();
+        if (!validateCredential(password)) {
+            response.setError(SignUpErrorStatus.SIGNUP_INVALID_PASSWORD);
+        } else if (!validateCredential(username)) {
+            response.setError(SignUpErrorStatus.SIGNUP_INVALID_USERNAME);
+        } else {
+            try {
+                const account = await Account.findOne({ where: { username }});
+                if (account) {
+                    response.setError(SignUpErrorStatus.USERNAME_IN_USE);
+                } else {
+                    const passwordHash = await bcrypt.hash(password, 12);
+                    const newAccount = await Account.create({ username, passwordHash });
+                    response.setAccount(accountToAccountInfo(newAccount));
                 }
-                return bcrypt.hash(
-                    call.request.getPassword(),
-                    12, // The more rounds, the longer it takes to hash
-                )
-                    .then((passwordHash) => {
-                        return Account.create({
-                            username,
-                            passwordHash,
-                        });
-                    })
-                    .then((account) => {
-                        response.setMessage(`Created user ${account.username}`);
-                        return response;
-                    });
-            })
-            .then((response) => {
-                callback(null, response);
-            })
-            .catch((e) => {
-                console.error(e);
-                callback(null, new SignUpResponse());
-            });
+            } catch (e) {
+                response.setError(SignUpErrorStatus.SIGNUP_SERVER_ERROR);
+            }
+        }
+        return callback(null, response);
     }
 
     /**
@@ -170,41 +164,67 @@ class AuthHandler implements IAuthServer {
     /**
      * Get account information based on given access token.
      */
-    public getAccount = (
+    public getAccount = async (
         call: grpc.ServerUnaryCall<AccountRequest>,
-        callback: grpc.sendUnaryData<AccountInfo>,
-    ): void => {
+        callback: grpc.sendUnaryData<AccountResponse>,
+    ): Promise<void> => {
         const accessToken = call.request.getAccessToken();
-
+        const response = new AccountResponse();
         // This could be done synchronously as well
-        jwt.verify(
-            accessToken,
-            config.accessToken.secret,
-            (error, decoded: any) => {
-                if (error) {
-                    console.error(error);
-                    callback(null, new AccountInfo());
-                    return;
-                }
+        try {
+            const payload = await verifyToken(accessToken, config.accessToken.secret);
+            const account = await Account.findByPk(payload.sub);
+            if (!account) {
+                response.setError(AuthErrorStatus.NOT_FOUND);
+            } else {
+                const accountInfo = accountToAccountInfo(account);
+                response.setAccount(accountInfo);
+            }
+        } catch (e) {
+            switch (e.name) {
+                case "JsonWebTokenError":
+                    response.setError(AuthErrorStatus.INVALID_TOKEN);
+                    break;
+                case "TokenExpiredError":
+                    response.setError(AuthErrorStatus.EXPIRED_TOKEN);
+                    break;
+                default:
+                    console.error("Error verifying access token:", e);
+                    response.setError(AuthErrorStatus.SERVER_ERROR);
+            }
+        }
+        return callback(null, response);
+    }
 
-                Account.findByPk(decoded.sub)
-                    .then((account) => {
-                        const response = new AccountInfo();
-                        if (!account) {
-                            return callback(null, response);
-                        }
-                        response.setId(account.id);
-                        response.setUsername(account.username);
-                        response.setCreatedAt(account.createdAt.toJSON());
-                        response.setUpdatedAt(account.updatedAt.toJSON());
-                        callback(null, response);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                        return callback(null, new AccountInfo());
-                    });
-            },
-        );
+    public deleteAccount = async (
+        call: grpc.ServerUnaryCall<DeleteAccountRequest>,
+        callback: grpc.sendUnaryData<DeleteAccountResponse>,
+    ): Promise<void> => {
+        const accessToken = call.request.getAccessToken();
+        const response = new DeleteAccountResponse();
+        try {
+            const payload = await verifyToken(accessToken, config.accessToken.secret);
+            const account = await Account.findByPk(payload.sub);
+            if (!account) {
+                response.setError(DeleteAccountErrorStatus.DELETE_NOT_FOUND);
+            } else {
+                await account.destroy();
+                response.setId(payload.sub);
+            }
+        } catch (e) {
+            switch (e.name) {
+                case "JsonWebTokenError":
+                    response.setError(DeleteAccountErrorStatus.DELETE_INVALID_TOKEN);
+                    break;
+                case "TokenExpiredError":
+                    response.setError(DeleteAccountErrorStatus.DELETE_TOKEN_EXPIRED);
+                    break;
+                default:
+                    console.error("Error verifying access token:", e);
+                    response.setError(DeleteAccountErrorStatus.DELETE_SERVER_ERROR);
+            }
+        }
+        return callback(null, response);
     }
 }
 
