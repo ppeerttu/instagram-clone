@@ -6,10 +6,17 @@ import { IController } from "./Controller";
 import { ImageService } from "../client/images/ImageService";
 import { RequestError } from "../lib/RequestError";
 import { CreateImageError } from "../client/images/errors/CreateImageError";
-import { CreateImageErrorStatus, GetImageErrorStatus } from "../client/generated/image_service_pb";
+import {
+    CreateImageErrorStatus,
+    GetImageErrorStatus,
+    LikeImageResponseStatus,
+    GetLikesErrorStatus
+} from "../client/generated/image_service_pb";
 import { DeleteImageError, GetImageError } from "../client/images/errors";
 import { TagType } from "../client/models";
 import { SearchImagesError } from "../client/images/errors/SearchImagesError";
+import { LikeImageError } from "../client/images/errors/LikeImageError";
+import { GetLikesError } from "../client/images/errors/GetLikesError";
 
 const allowedFileTypes = [
     "image/png",
@@ -37,7 +44,7 @@ const tagTypes: TagType[] = ["hash-tag", "user-tag"];
 export class ImageController implements IController {
 
     private createImageValidation = [
-        body("userId")
+        body("userId") // TODO: This can be retrieved from the auth servce (access token)
             .isUUID()
             .withMessage("The user ID should be an UUID")
             .run(),
@@ -59,11 +66,13 @@ export class ImageController implements IController {
             .optional()
             .isInt({ min: 1 })
             .withMessage("Page number has to be greater than 0")
+            .toInt()
             .run(),
         query("size")
             .optional()
             .isInt({ min: 1, max: 100 })
             .withMessage("Page size has to be between 1 and 100")
+            .toInt()
             .run(),
     ];
 
@@ -79,6 +88,31 @@ export class ImageController implements IController {
         query("type")
             .isIn(tagTypes)
             .withMessage(`The tag type has to be either of the values: ${tagTypes.join(", ")}`)
+            .run(),
+    ];
+
+    private likeImageValidation = [
+        param("imageId")
+            .isUUID()
+            .withMessage("The image ID has to be an UUID")
+            .run(),
+        body("userId") // TODO: This can be retrieved from the auth servce (access token)
+            .isUUID()
+            .withMessage("The user ID has to be an UUID")
+            .run(),
+        body("unlike")
+            .optional()
+            .isBoolean()
+            .withMessage("The unlike has to be a boolean value")
+            .toBoolean()
+            .run()
+    ];
+
+    private getLikesValidation = [
+        ...this.pageValidation,
+        param("imageId")
+            .isUUID()
+            .withMessage("The image ID has to be an UUID")
             .run(),
     ];
 
@@ -114,6 +148,16 @@ export class ImageController implements IController {
             `${basePath}`,
             ...this.searchValidation,
             this.searchImages,
+        );
+        router.put(
+            `${basePath}/:imageId/likes`,
+            ...this.likeImageValidation,
+            this.likeImage,
+        );
+        router.get(
+            `${basePath}/:imageId/likes`,
+            ...this.getLikesValidation,
+            this.getLikes,
         );
     }
 
@@ -299,6 +343,76 @@ export class ImageController implements IController {
                 ctx.log.warn(e);
                 throw new RequestError(500);
             }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Like about an image.
+     */
+    private likeImage = async (
+        ctx: RouterContext<IValidationState>
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+
+        const { imageId, userId, unlike: ulike } = results.passedData();
+        const unlike = typeof ulike === "boolean" ? ulike : false;
+
+        try {
+            await this.imageService.likeImage(imageId, userId, unlike);
+            ctx.status = 204;
+        } catch (e) {
+            if (e instanceof LikeImageError) {
+                switch (e.reason) {
+                    case LikeImageResponseStatus.IMAGE_NOT_FOUND_ERROR:
+                        throw new RequestError(404, "Image not found");
+                    case LikeImageResponseStatus.USER_NOT_FOUND_ERROR:
+                        throw new RequestError(404, "User not found");
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Get image likes.
+     */
+    private getLikes = async (
+        ctx: RouterContext<IValidationState>
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { imageId, page, size } = results.passedData();
+        const parsedPage = page ? parseInt(page, 10) : 1;
+        const parsedSize = size ? parseInt(size, 10) : 10;
+        try {
+            const likes = await this.imageService.getLikes(
+                imageId,
+                parsedPage,
+                parsedSize
+            );
+            ctx.body = likes;
+        } catch (e) {
+            if (e instanceof GetLikesError) {
+                switch (e.reason) {
+                    case GetLikesErrorStatus.GET_LIKES_IMAGE_NOT_FOUND:
+                        throw new RequestError(404, "Image not found");
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
             throw new RequestError(503);
         }
     }

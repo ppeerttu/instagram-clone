@@ -26,7 +26,7 @@ export interface Page<T> {
     totalCount: number;
 
     /**
-     * The actual content
+     * The page content
      */
     content: T[];
 }
@@ -44,4 +44,15 @@ export interface ImageSearchPageWrapper extends Page<ImageMeta> {
      * Tag type, either user tag (@username) or hash tag (#hashtag)
      */
     tagType: TagType;
+}
+
+/**
+ * Image likes page containing user IDs
+ */
+export interface ImageLikesPageWrapper extends Page<string> {
+
+    /**
+     * Image ID
+     */
+    imageId: string;
 }

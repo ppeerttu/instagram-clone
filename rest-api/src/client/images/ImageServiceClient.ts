@@ -7,6 +7,8 @@ import {
     ImageSearchPageWrapper,
     TagType,
     mapImageSearchPage,
+    ImageLikesPageWrapper,
+    mapImageLikesPage,
 } from "../models";
 import { ImageService, ImageMimeType } from "./ImageService";
 import { config } from "../../config/grpc";
@@ -21,10 +23,15 @@ import {
     ImageType,
     GetImageDataResponse,
     SearchImagesRequest,
+    LikeImageRequest,
+    LikeImageResponseStatus,
+    GetLikesRequest,
 } from "../generated/image_service_pb";
 import { CreateImageError, GetImageError, DeleteImageError } from "./errors";
 import { ImageDataResponseRecorder } from "./helpers";
 import { SearchImagesError } from "./errors/SearchImagesError";
+import { LikeImageError } from "./errors/LikeImageError";
+import { GetLikesError } from "./errors/GetLikesError";
 
 // Chunk size in bytes
 const CHUNK_SIZE = 1024 * 16; // 16KB
@@ -97,7 +104,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
 
                 if (!image || error) {
                     return reject(
-                        new CreateImageError("Image creation failed", error || null)
+                        new CreateImageError("Image creation failed", error)
                     );
                 }
                 return resolve(metaFromImage(image));
@@ -199,7 +206,7 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
                         return reject(
                             new GetImageError(
                                 "Failed to fetch image data",
-                                error || null
+                                error
                             )
                         );
                     }
@@ -287,10 +294,74 @@ export class ImageServiceClient extends GrpcClient implements ImageService {
 
                 if (!resultPage || error) {
                     return reject(
-                        new SearchImagesError("Search request failed", error || null)
+                        new SearchImagesError("Search request failed", error)
                     );
                 }
                 return resolve(mapImageSearchPage(resultPage));
+            });
+        });
+    }
+
+    /**
+     * Like about an image.
+     *
+     * @param imageId The image ID
+     * @param userId The user ID
+     * @param unlike Whether to unlike instead of like (default `false`)
+     */
+    likeImage = async (
+        imageId: string,
+        userId: string,
+        unlike: boolean = false
+    ): Promise<void> => {
+        const client = this.getClient();
+        const req = new LikeImageRequest();
+        req.setImageId(imageId);
+        req.setUserId(userId);
+        req.setUnlike(unlike);
+        return new Promise<void>((resolve, reject) => {
+            client.likeImage(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                const status = res.getStatus();
+                if (status === LikeImageResponseStatus.LIKE_OK) {
+                    return resolve();
+                }
+                return reject(new LikeImageError("Liking image failed", status));
+            });
+        });
+    }
+
+    /**
+     * Get image likes as a page.
+     *
+     * @param imageId The image ID
+     * @param page The page number
+     * @param size The page size
+     */
+    getLikes = async (
+        imageId: string,
+        page: number,
+        size: number
+    ): Promise<ImageLikesPageWrapper> => {
+        const client = this.getClient();
+        const req = new GetLikesRequest();
+        req.setImageId(imageId);
+        req.setPage(page);
+        req.setSize(size);
+        return new Promise<ImageLikesPageWrapper>((resolve, reject) => {
+            client.getImageLikes(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                const error = res.getError();
+                const responsePage = res.getPage();
+                if (error || !responsePage) {
+                    return reject(new GetLikesError("Get image likes failed", error));
+                }
+                return resolve(mapImageLikesPage(responsePage));
             });
         });
     }
