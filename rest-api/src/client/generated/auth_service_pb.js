@@ -13,12 +13,17 @@ var global = Function('return this')();
 
 goog.exportSymbol('proto.Auth.AccountInfo', null, global);
 goog.exportSymbol('proto.Auth.AccountRequest', null, global);
+goog.exportSymbol('proto.Auth.AccountResponse', null, global);
 goog.exportSymbol('proto.Auth.AuthErrorStatus', null, global);
+goog.exportSymbol('proto.Auth.DeleteAccountErrorStatus', null, global);
+goog.exportSymbol('proto.Auth.DeleteAccountRequest', null, global);
+goog.exportSymbol('proto.Auth.DeleteAccountResponse', null, global);
 goog.exportSymbol('proto.Auth.JWTTokens', null, global);
 goog.exportSymbol('proto.Auth.NewAccount', null, global);
 goog.exportSymbol('proto.Auth.RenewRequest', null, global);
 goog.exportSymbol('proto.Auth.RenewResponse', null, global);
 goog.exportSymbol('proto.Auth.SignInResponse', null, global);
+goog.exportSymbol('proto.Auth.SignUpErrorStatus', null, global);
 goog.exportSymbol('proto.Auth.SignUpResponse', null, global);
 goog.exportSymbol('proto.Auth.UserCredentials', null, global);
 
@@ -428,12 +433,38 @@ proto.Auth.SignInResponse.prototype.hasError = function() {
  * @constructor
  */
 proto.Auth.SignUpResponse = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Auth.SignUpResponse.oneofGroups_);
 };
 goog.inherits(proto.Auth.SignUpResponse, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.Auth.SignUpResponse.displayName = 'proto.Auth.SignUpResponse';
 }
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.Auth.SignUpResponse.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.Auth.SignUpResponse.StatusCase = {
+  STATUS_NOT_SET: 0,
+  ACCOUNT: 1,
+  ERROR: 2
+};
+
+/**
+ * @return {proto.Auth.SignUpResponse.StatusCase}
+ */
+proto.Auth.SignUpResponse.prototype.getStatusCase = function() {
+  return /** @type {proto.Auth.SignUpResponse.StatusCase} */(jspb.Message.computeOneofCase(this, proto.Auth.SignUpResponse.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -463,7 +494,8 @@ proto.Auth.SignUpResponse.prototype.toObject = function(opt_includeInstance) {
  */
 proto.Auth.SignUpResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    message: jspb.Message.getFieldWithDefault(msg, 1, "")
+    account: (f = msg.getAccount()) && proto.Auth.AccountInfo.toObject(includeInstance, f),
+    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -501,8 +533,13 @@ proto.Auth.SignUpResponse.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setMessage(value);
+      var value = new proto.Auth.AccountInfo;
+      reader.readMessage(value,proto.Auth.AccountInfo.deserializeBinaryFromReader);
+      msg.setAccount(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.Auth.SignUpErrorStatus} */ (reader.readEnum());
+      msg.setError(value);
       break;
     default:
       reader.skipField();
@@ -533,7 +570,201 @@ proto.Auth.SignUpResponse.prototype.serializeBinary = function() {
  */
 proto.Auth.SignUpResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getMessage();
+  f = message.getAccount();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.Auth.AccountInfo.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.Auth.SignUpErrorStatus} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional AccountInfo account = 1;
+ * @return {?proto.Auth.AccountInfo}
+ */
+proto.Auth.SignUpResponse.prototype.getAccount = function() {
+  return /** @type{?proto.Auth.AccountInfo} */ (
+    jspb.Message.getWrapperField(this, proto.Auth.AccountInfo, 1));
+};
+
+
+/** @param {?proto.Auth.AccountInfo|undefined} value */
+proto.Auth.SignUpResponse.prototype.setAccount = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.Auth.SignUpResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.SignUpResponse.prototype.clearAccount = function() {
+  this.setAccount(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.SignUpResponse.prototype.hasAccount = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional SignUpErrorStatus error = 2;
+ * @return {!proto.Auth.SignUpErrorStatus}
+ */
+proto.Auth.SignUpResponse.prototype.getError = function() {
+  return /** @type {!proto.Auth.SignUpErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.Auth.SignUpErrorStatus} value */
+proto.Auth.SignUpResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.Auth.SignUpResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.SignUpResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 2, proto.Auth.SignUpResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.SignUpResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Auth.DeleteAccountRequest = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.Auth.DeleteAccountRequest, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Auth.DeleteAccountRequest.displayName = 'proto.Auth.DeleteAccountRequest';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Auth.DeleteAccountRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.Auth.DeleteAccountRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Auth.DeleteAccountRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.DeleteAccountRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    accessToken: jspb.Message.getFieldWithDefault(msg, 1, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Auth.DeleteAccountRequest}
+ */
+proto.Auth.DeleteAccountRequest.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Auth.DeleteAccountRequest;
+  return proto.Auth.DeleteAccountRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Auth.DeleteAccountRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Auth.DeleteAccountRequest}
+ */
+proto.Auth.DeleteAccountRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAccessToken(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Auth.DeleteAccountRequest.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Auth.DeleteAccountRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Auth.DeleteAccountRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.DeleteAccountRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAccessToken();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -544,17 +775,466 @@ proto.Auth.SignUpResponse.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string message = 1;
+ * optional string access_token = 1;
  * @return {string}
  */
-proto.Auth.SignUpResponse.prototype.getMessage = function() {
+proto.Auth.DeleteAccountRequest.prototype.getAccessToken = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
-proto.Auth.SignUpResponse.prototype.setMessage = function(value) {
+proto.Auth.DeleteAccountRequest.prototype.setAccessToken = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Auth.DeleteAccountResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Auth.DeleteAccountResponse.oneofGroups_);
+};
+goog.inherits(proto.Auth.DeleteAccountResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Auth.DeleteAccountResponse.displayName = 'proto.Auth.DeleteAccountResponse';
+}
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.Auth.DeleteAccountResponse.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.Auth.DeleteAccountResponse.StatusCase = {
+  STATUS_NOT_SET: 0,
+  ID: 1,
+  ERROR: 2
+};
+
+/**
+ * @return {proto.Auth.DeleteAccountResponse.StatusCase}
+ */
+proto.Auth.DeleteAccountResponse.prototype.getStatusCase = function() {
+  return /** @type {proto.Auth.DeleteAccountResponse.StatusCase} */(jspb.Message.computeOneofCase(this, proto.Auth.DeleteAccountResponse.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Auth.DeleteAccountResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.Auth.DeleteAccountResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Auth.DeleteAccountResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.DeleteAccountResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Auth.DeleteAccountResponse}
+ */
+proto.Auth.DeleteAccountResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Auth.DeleteAccountResponse;
+  return proto.Auth.DeleteAccountResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Auth.DeleteAccountResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Auth.DeleteAccountResponse}
+ */
+proto.Auth.DeleteAccountResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.Auth.DeleteAccountErrorStatus} */ (reader.readEnum());
+      msg.setError(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Auth.DeleteAccountResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Auth.DeleteAccountResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Auth.DeleteAccountResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.DeleteAccountResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = /** @type {!proto.Auth.DeleteAccountErrorStatus} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string id = 1;
+ * @return {string}
+ */
+proto.Auth.DeleteAccountResponse.prototype.getId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.Auth.DeleteAccountResponse.prototype.setId = function(value) {
+  jspb.Message.setOneofField(this, 1, proto.Auth.DeleteAccountResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.DeleteAccountResponse.prototype.clearId = function() {
+  jspb.Message.setOneofField(this, 1, proto.Auth.DeleteAccountResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.DeleteAccountResponse.prototype.hasId = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional DeleteAccountErrorStatus error = 2;
+ * @return {!proto.Auth.DeleteAccountErrorStatus}
+ */
+proto.Auth.DeleteAccountResponse.prototype.getError = function() {
+  return /** @type {!proto.Auth.DeleteAccountErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.Auth.DeleteAccountErrorStatus} value */
+proto.Auth.DeleteAccountResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.Auth.DeleteAccountResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.DeleteAccountResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 2, proto.Auth.DeleteAccountResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.DeleteAccountResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.Auth.AccountResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.Auth.AccountResponse.oneofGroups_);
+};
+goog.inherits(proto.Auth.AccountResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.Auth.AccountResponse.displayName = 'proto.Auth.AccountResponse';
+}
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.Auth.AccountResponse.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.Auth.AccountResponse.StatusCase = {
+  STATUS_NOT_SET: 0,
+  ACCOUNT: 1,
+  ERROR: 2
+};
+
+/**
+ * @return {proto.Auth.AccountResponse.StatusCase}
+ */
+proto.Auth.AccountResponse.prototype.getStatusCase = function() {
+  return /** @type {proto.Auth.AccountResponse.StatusCase} */(jspb.Message.computeOneofCase(this, proto.Auth.AccountResponse.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.Auth.AccountResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.Auth.AccountResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.Auth.AccountResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.AccountResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    account: (f = msg.getAccount()) && proto.Auth.AccountInfo.toObject(includeInstance, f),
+    error: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.Auth.AccountResponse}
+ */
+proto.Auth.AccountResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.Auth.AccountResponse;
+  return proto.Auth.AccountResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.Auth.AccountResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.Auth.AccountResponse}
+ */
+proto.Auth.AccountResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.Auth.AccountInfo;
+      reader.readMessage(value,proto.Auth.AccountInfo.deserializeBinaryFromReader);
+      msg.setAccount(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.Auth.AuthErrorStatus} */ (reader.readEnum());
+      msg.setError(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.Auth.AccountResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.Auth.AccountResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.Auth.AccountResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.Auth.AccountResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAccount();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.Auth.AccountInfo.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.Auth.AuthErrorStatus} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional AccountInfo account = 1;
+ * @return {?proto.Auth.AccountInfo}
+ */
+proto.Auth.AccountResponse.prototype.getAccount = function() {
+  return /** @type{?proto.Auth.AccountInfo} */ (
+    jspb.Message.getWrapperField(this, proto.Auth.AccountInfo, 1));
+};
+
+
+/** @param {?proto.Auth.AccountInfo|undefined} value */
+proto.Auth.AccountResponse.prototype.setAccount = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.Auth.AccountResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.AccountResponse.prototype.clearAccount = function() {
+  this.setAccount(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.AccountResponse.prototype.hasAccount = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional AuthErrorStatus error = 2;
+ * @return {!proto.Auth.AuthErrorStatus}
+ */
+proto.Auth.AccountResponse.prototype.getError = function() {
+  return /** @type {!proto.Auth.AuthErrorStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.Auth.AuthErrorStatus} value */
+proto.Auth.AccountResponse.prototype.setError = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.Auth.AccountResponse.oneofGroups_[0], value);
+};
+
+
+proto.Auth.AccountResponse.prototype.clearError = function() {
+  jspb.Message.setOneofField(this, 2, proto.Auth.AccountResponse.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Auth.AccountResponse.prototype.hasError = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -1638,6 +2318,26 @@ proto.Auth.AuthErrorStatus = {
   BAD_CREDENTIALS: 2,
   INVALID_TOKEN: 3,
   EXPIRED_TOKEN: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.Auth.SignUpErrorStatus = {
+  USERNAME_IN_USE: 0,
+  SIGNUP_SERVER_ERROR: 1,
+  SIGNUP_INVALID_PASSWORD: 3,
+  SIGNUP_INVALID_USERNAME: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.Auth.DeleteAccountErrorStatus = {
+  DELETE_SERVER_ERROR: 0,
+  DELETE_NOT_FOUND: 1,
+  DELETE_INVALID_TOKEN: 2,
+  DELETE_TOKEN_EXPIRED: 3
 };
 
 goog.object.extend(exports, proto.Auth);
