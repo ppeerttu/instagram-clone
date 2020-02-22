@@ -1,8 +1,8 @@
 import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
-import { UserCredentials, AuthErrorStatus } from "../generated/auth_service_pb";
-import { IJWTTokens } from "../models";
+import { UserCredentials, AuthErrorStatus, AccountRequest } from "../generated/auth_service_pb";
+import { IJWTTokens, AccountWrapper } from "../models";
 import { AuthServiceError } from "./AuthServiceError";
 import { AuthService } from "./AuthService";
 import { config } from "../../config/grpc";
@@ -37,6 +37,20 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
         );
         this.currentEndpoint = endpoint;
         return;
+    }
+
+    /**
+     * Get the client instance in secure way.
+     *
+     * @throws {Error} No known gRPC endpoints available
+     */
+    protected getClient(): AuthClient {
+        this.updateClient();
+        const client = this.client;
+        if (!client) {
+            throw new Error(`No known endpoints for service ${this.serviceName}`);
+        }
+        return client;
     }
 
 
@@ -97,6 +111,25 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
                         accessToken: tokens.getAccessToken(),
                         refreshToken: tokens.getRefreshToken(),
                     });
+                }
+            });
+        });
+    }
+
+    /**
+     * Get account info.
+     *
+     * @param accessToken The access token
+     */
+    public getAccount = async (accessToken: string): Promise<AccountWrapper> => {
+        const client = this.getClient();
+        const req = new AccountRequest();
+        req.setAccessToken(accessToken);
+
+        return new Promise<AccountWrapper>((resolve, reject) => {
+            client.getAccount(req, (err, res) => {
+                if (err) {
+                    return reject(err);
                 }
             });
         });
