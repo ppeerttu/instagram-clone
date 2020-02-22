@@ -6,6 +6,7 @@ import { RequestError } from "../lib/RequestError";
 import { AuthServiceError } from "../client/auth/errors/AuthServiceError";
 import { AuthService } from "../client/auth";
 import { SignUpError } from "../client/auth/errors/SignUpError";
+import { AuthState, generateAuthMiddleware } from "../middleware/authenticate";
 
 /**
  * Authentication REST API controller.
@@ -60,6 +61,11 @@ export class AuthController implements IController {
             ...this.signUpValidation,
             this.signUp,
         );
+        router.get(
+            `${basePath}/me`,
+            generateAuthMiddleware(this.authService),
+            this.getMe,
+        );
     }
 
     /**
@@ -96,7 +102,6 @@ export class AuthController implements IController {
     private signUp = async (
         ctx: RouterContext<IValidationState>
     ) => {
-
         const results = validationResults(ctx);
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
@@ -116,5 +121,16 @@ export class AuthController implements IController {
             ctx.log.error(e);
             throw new RequestError(503);
         }
+    }
+
+    /**
+     * Get the user who is making the request.
+     */
+    private getMe = async (
+        ctx: RouterContext<AuthState>
+    ) => {
+        const account = ctx.state.account;
+        ctx.body = account;
+        ctx.status = 200;
     }
 }
