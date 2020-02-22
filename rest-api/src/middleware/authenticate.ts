@@ -35,7 +35,6 @@ export function generateAuthMiddleware(
         try {
             const account = await service.getAccount(token);
             ctx.state.account = account;
-            await next();
         } catch (e) {
             if (e instanceof AuthServiceError) {
                 throw new RequestError(401);
@@ -43,5 +42,6 @@ export function generateAuthMiddleware(
             ctx.log.error(e);
             throw new RequestError(503);
         }
+        return next();
     }
 }
