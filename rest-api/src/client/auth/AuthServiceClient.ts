@@ -2,7 +2,7 @@ import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
 import { UserCredentials, AuthErrorStatus, AccountRequest } from "../generated/auth_service_pb";
-import { IJWTTokens, AccountWrapper } from "../models";
+import { IJWTTokens, AccountWrapper, mapAccountInfo } from "../models";
 import { AuthServiceError } from "./AuthServiceError";
 import { AuthService } from "./AuthService";
 import { config } from "../../config/grpc";
@@ -131,7 +131,39 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
                 if (err) {
                     return reject(err);
                 }
+                const error = res.getError();
+                const account = res.getAccount();
+                if (error || !account) {
+                    return reject(
+                        new AuthServiceError(
+                            `Failed to get account: ${getAccountErrorReason(error)}`
+                        )
+                    );
+                }
+                return resolve(mapAccountInfo(account));
             });
         });
+    }
+}
+
+/**
+ * Stringify the `AuthErrorStatus`.
+ *
+ * @param status The status
+ */
+function getAccountErrorReason(status: AuthErrorStatus): string {
+    switch (status) {
+        case AuthErrorStatus.BAD_CREDENTIALS:
+            return "BAD_CREDENTIALS";
+        case AuthErrorStatus.EXPIRED_TOKEN:
+            return "EXPIRED_TOKEN";
+        case AuthErrorStatus.INVALID_TOKEN:
+            return "INVALID_TOKEN";
+        case AuthErrorStatus.NOT_FOUND:
+            return "NOT_FOUND";
+        case AuthErrorStatus.SERVER_ERROR:
+            return "SERVER_ERROR";
+        default:
+            return "UNKNOWN";
     }
 }
