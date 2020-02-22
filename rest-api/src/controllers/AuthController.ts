@@ -3,7 +3,7 @@ import Router, { RouterContext } from "@koa/router";
 
 import { IController } from "./Controller";
 import { RequestError } from "../lib/RequestError";
-import { AuthServiceError } from "../client/auth/AuthServiceError";
+import { AuthServiceError } from "../client/auth/errors/AuthServiceError";
 import { AuthService } from "../client/auth";
 
 /**

@@ -1,12 +1,13 @@
 import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
-import { UserCredentials, AuthErrorStatus, AccountRequest } from "../generated/auth_service_pb";
+import { UserCredentials, AuthErrorStatus, AccountRequest, NewAccount } from "../generated/auth_service_pb";
 import { IJWTTokens, AccountWrapper, mapAccountInfo } from "../models";
-import { AuthServiceError } from "./AuthServiceError";
+import { AuthServiceError } from "./errors/AuthServiceError";
 import { AuthService } from "./AuthService";
 import { config } from "../../config/grpc";
 import { GrpcClient } from "../GrpcClient";
+import { SignUpError } from "./errors/SignUpError";
 
 /**
  * A client for consuming the external authentication service.
@@ -138,6 +139,39 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
                         new AuthServiceError(
                             `Failed to get account: ${getAccountErrorReason(error)}`
                         )
+                    );
+                }
+                return resolve(mapAccountInfo(account));
+            });
+        });
+    }
+
+    /**
+     * Sign up.
+     *
+     * @param username The username
+     * @param password The password
+     */
+    public signUp = async (
+        username: string,
+        password: string
+    ): Promise<AccountWrapper> => {
+        const client = this.getClient();
+        const req = new NewAccount();
+        req.setUsername(username);
+        req.setPassword(password);
+
+        return new Promise<AccountWrapper>((resolve, reject) => {
+            client.signUp(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                const error = res.getError();
+                const account = res.getAccount();
+                if (error || !account) {
+                    return reject(
+                        new SignUpError("Signup failed", error)
                     );
                 }
                 return resolve(mapAccountInfo(account));
