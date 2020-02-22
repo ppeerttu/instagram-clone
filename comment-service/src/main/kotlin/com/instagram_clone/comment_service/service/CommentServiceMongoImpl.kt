@@ -2,20 +2,30 @@ package com.instagram_clone.comment_service.service
 
 import com.instagram_clone.comment_service.data.CommentWrapper
 import com.instagram_clone.comment_service.data.Outcome
+import com.instagram_clone.comment_service.data.Pageable
 import com.instagram_clone.comment_service.data.mapComment
 import com.instagram_clone.comment_service.exception.InvalidParameterException
 import com.instagram_clone.comment_service.exception.MongoDbException
 import com.instagram_clone.comment_service.exception.NotFoundException
+import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
 import io.vertx.core.Promise
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.LoggerFactory
+import io.vertx.ext.mongo.FindOptions
 import io.vertx.ext.mongo.MongoClient
+import io.vertx.kotlin.core.json.json
+import io.vertx.kotlin.core.json.obj
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 private const val COLLECTION_COMMENTS = "comments"
 private const val FIELD_ID = "_id"
 private const val FIELD_TAGS = "tags"
 private const val FIELD_USER_TAGS = "userTags"
+private const val FIELD_IMAGE_ID = "imageId"
+
+const val MAX_PAGE_SIZE = 100;
 
 class CommentServiceMongoImpl(private val client: MongoClient) : CommentService {
 
@@ -117,4 +127,100 @@ class CommentServiceMongoImpl(private val client: MongoClient) : CommentService 
     }
     return promise.future()
   }
+
+  override fun getComments(imageId: String, page: Int, count: Int): Future<Outcome<Pageable<List<CommentWrapper>>>> {
+    val promise: Promise<Outcome<Pageable<List<CommentWrapper>>>> = Promise.promise()
+    val query = JsonObject().put(FIELD_IMAGE_ID, imageId)
+
+    CompositeFuture.all(
+      paginatedQuery(COLLECTION_COMMENTS, query, page, count),
+      getCount(COLLECTION_COMMENTS, query)
+    ).onSuccess { ar ->
+      val pageResults = ar.resultAt<PaginatedQueryResults>(0)
+      val totalCount = ar.resultAt<Int>(1)
+      val mappedResults = pageResults.results.map { it.mapTo(CommentWrapper::class.java) }
+      val pagedResult = Pageable(mappedResults, pageResults.page, pageResults.size, totalCount)
+      promise.complete(Outcome.Success(pagedResult))
+    }
+      .onFailure { e ->
+        logger.error("Failed to retrieve comments for" +
+          " image $imageId, with page $page, count $count, cause: ${e.message}", e)
+        promise.complete(Outcome.Error("Failed to get comments", e))
+      }
+    return promise.future()
+  }
+
+  /**
+   * Issue a paginated request to given [collection] with [query]. Given
+   * [pageNum] is the page number (starting from 1) and [pageSize] is the page
+   * size (max value is [MAX_PAGE_SIZE]). Use [sort] for sorting the results,
+   * which defaults to "_id" field with desc order.
+   */
+  private fun paginatedQuery(
+    collection: String,
+    query: JsonObject,
+    pageNum: Int,
+    pageSize: Int,
+    sort: JsonObject = json {
+      obj(FIELD_ID to -1)
+    }
+  ): Future<PaginatedQueryResults> {
+    val promise = Promise.promise<PaginatedQueryResults>()
+    val page = if (pageNum < 1) 1 else pageNum // Anything between 1 and max Int value
+    val size = max(min(pageSize, MAX_PAGE_SIZE), 1) // Between 1 and MAX_PAGE_SIZE
+    val options = FindOptions().also {
+      it.limit = size
+      it.skip = (page - 1) * size
+      it.sort = sort
+    }
+    client.findWithOptions(collection, query, options) {
+      if (it.succeeded()) {
+        promise.complete(PaginatedQueryResults(
+          page,
+          size,
+          it.result()
+        ))
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
+
+  /**
+   * Get count of records within [collection] based on given [query].
+   */
+  private fun getCount(collection: String, query: JsonObject): Future<Int> {
+    val promise = Promise.promise<Int>()
+
+    client.count(collection, query) {
+      if (it.succeeded()) {
+        promise.complete(it.result().toInt())
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
+
+  /**
+   * Internal helper class for managing paginated query results.
+   */
+  private data class PaginatedQueryResults(
+
+    /**
+     * Effective page number (after sanitation)
+     */
+    val page: Int,
+
+    /**
+     * Effective page size (after sanitation)
+     */
+    val size: Int,
+
+    /**
+     * Actual list of results
+     */
+    val results: List<JsonObject>
+  )
 }

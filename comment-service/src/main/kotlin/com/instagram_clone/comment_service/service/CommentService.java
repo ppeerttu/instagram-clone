@@ -2,6 +2,7 @@ package com.instagram_clone.comment_service.service;
 
 import com.instagram_clone.comment_service.data.CommentWrapper;
 import com.instagram_clone.comment_service.data.Outcome;
+import com.instagram_clone.comment_service.data.Pageable;
 import io.vertx.core.Future;
 
 import java.util.List;
@@ -56,4 +57,12 @@ public interface CommentService {
    * @return list of the comments wrapped in a future outcome
    */
   public Future<Outcome<List<CommentWrapper>>> getCommentsByUserTag(String tag);
+
+  /**
+   * Return a paginated list of comments for an image
+   *
+   * @param imageId images id
+   * @return list of comments wrapped in a future outcome
+   */
+  public Future<Outcome<Pageable<List<CommentWrapper>>>> getComments(String imageId, int page, int count);
 }

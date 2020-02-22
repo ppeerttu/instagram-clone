@@ -4,6 +4,7 @@ import com.instagram_clone.comment_service.*
 import com.instagram_clone.comment_service.CommentsGrpc.CommentsImplBase
 import com.instagram_clone.comment_service.data.CommentWrapper
 import com.instagram_clone.comment_service.data.Outcome
+import com.instagram_clone.comment_service.data.Pageable
 import com.instagram_clone.comment_service.data.mapFromWrapper
 import com.instagram_clone.comment_service.exception.DbException
 import com.instagram_clone.comment_service.exception.InvalidParameterException
@@ -60,6 +61,16 @@ class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
     val tag = request.tag
     service.getCommentsByUserTag(tag).setHandler { ar: AsyncResult<Outcome<List<CommentWrapper>>> ->
       getCommentsByUserTagHandler(ar, responseObserver)
+    }
+  }
+
+  override fun getCommentsForImage(request: GetCommentsForImageRequest, responseObserver: StreamObserver<GetCommentsForImageResponse>) {
+    val imageId = request.id
+    val page = request.page
+    val size = request.size
+
+    service.getComments(imageId, page, size).setHandler { ar ->
+      getCommentsHandler(ar, responseObserver)
     }
   }
 
@@ -191,6 +202,31 @@ class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
       }
     } else {
       builder.error = GetCommentsByUserTagErrorStatus.GET_BY_USER_TAG_SERVER_ERROR
+    }
+    responseObserver.onNext(builder.build())
+    responseObserver.onCompleted()
+  }
+
+  private fun getCommentsHandler(ar: AsyncResult<Outcome<Pageable<List<CommentWrapper>>>>,
+    responseObserver: StreamObserver<GetCommentsForImageResponse>) {
+    val builder = GetCommentsForImageResponse.newBuilder()
+    if (ar.succeeded()) {
+      when (val outcome = ar.result()) {
+        is Outcome.Success -> {
+          val list = outcome.value
+          val mapped = list.data.map { comment -> mapFromWrapper(comment) }
+          val pagedList = PagedCommentList.newBuilder()
+            .addAllComments(mapped)
+            .setPage(list.page)
+            .setTotalCount(list.totalCount)
+            .setCount(list.count)
+            .build()
+          builder.comments = pagedList
+        }
+        is Outcome.Error -> {
+          builder.error = GetCommentErrorStatus.GET_SERVER_ERROR
+        }
+      }
     }
     responseObserver.onNext(builder.build())
     responseObserver.onCompleted()

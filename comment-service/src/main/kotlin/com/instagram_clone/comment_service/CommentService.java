@@ -15,6 +15,21 @@ public final class CommentService {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Comment_GetCommentsForImageRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Comment_GetCommentsForImageRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Comment_GetCommentsForImageResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Comment_GetCommentsForImageResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Comment_PagedCommentList_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Comment_PagedCommentList_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Comment_CreateCommentRequest_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -83,56 +98,66 @@ public final class CommentService {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025comment_service.proto\022\007Comment\"k\n\024Crea" +
-      "teCommentRequest\022\017\n\007comment\030\001 \001(\t\022\017\n\007use" +
-      "r_id\030\002 \001(\t\022\020\n\010image_id\030\003 \001(\t\022\014\n\004tags\030\004 \003" +
-      "(\t\022\021\n\tuser_tags\030\005 \003(\t\"z\n\025CreateCommentRe" +
-      "sponse\022#\n\007comment\030\001 \001(\0132\020.Comment.Commen" +
-      "tH\000\0222\n\005error\030\002 \001(\0162!.Comment.CreateComme" +
-      "ntErrorStatusH\000B\010\n\006status\"&\n\021GetCommentR" +
-      "equest\022\021\n\tcommentId\030\001 \001(\t\"t\n\022GetCommentR" +
-      "esponse\022#\n\007comment\030\001 \001(\0132\020.Comment.Comme" +
-      "ntH\000\022/\n\005error\030\002 \001(\0162\036.Comment.GetComment",
-      "ErrorStatusH\000B\010\n\006status\")\n\024DeleteComment" +
-      "Request\022\021\n\tcommentId\030\001 \001(\t\"j\n\025DeleteComm" +
-      "entResponse\022\023\n\tcommentId\030\001 \001(\tH\000\0222\n\005erro" +
-      "r\030\002 \001(\0162!.Comment.DeleteCommentErrorStat" +
-      "usH\000B\010\n\006status\"&\n\027GetCommentsByTagReques" +
-      "t\022\013\n\003tag\030\001 \001(\t\"\205\001\n\030GetCommentsByTagRespo" +
-      "nse\022(\n\010comments\030\001 \001(\0132\024.Comment.CommentL" +
-      "istH\000\0225\n\005error\030\002 \001(\0162$.Comment.GetCommen" +
-      "tsByTagErrorStatusH\000B\010\n\006status\"1\n\013Commen" +
-      "tList\022\"\n\010comments\030\001 \003(\0132\020.Comment.Commen",
-      "t\"*\n\033GetCommentsByUserTagRequest\022\013\n\003tag\030" +
-      "\001 \001(\t\"\215\001\n\034GetCommentsByUserTagResponse\022(" +
-      "\n\010comments\030\001 \001(\0132\024.Comment.CommentListH\000" +
-      "\0229\n\005error\030\002 \001(\0162(.Comment.GetCommentsByU" +
-      "serTagErrorStatusH\000B\010\n\006status\"}\n\007Comment" +
-      "\022\n\n\002id\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id" +
-      "\030\003 \001(\t\022\020\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030\005" +
-      " \001(\t\022\014\n\004tags\030\006 \003(\t\022\020\n\010userTags\030\007 \003(\t*:\n\033" +
-      "GetCommentsByTagErrorStatus\022\033\n\027GET_BY_TA" +
-      "G_SERVER_ERROR\020\000*C\n\037GetCommentsByUserTag",
-      "ErrorStatus\022 \n\034GET_BY_USER_TAG_SERVER_ER" +
-      "ROR\020\000*I\n\030DeleteCommentErrorStatus\022\024\n\020DEL" +
-      "ETE_NOT_FOUND\020\000\022\027\n\023DELETE_SERVER_ERROR\020\001" +
-      "*Q\n\030CreateCommentErrorStatus\022\027\n\023CREATE_S" +
-      "ERVER_ERROR\020\000\022\034\n\030CREATE_INVALID_PARAMETE" +
-      "R\020\001*@\n\025GetCommentErrorStatus\022\024\n\020GET_SERV" +
-      "ER_ERROR\020\000\022\021\n\rGET_NOT_FOUND\020\0012\271\003\n\010Commen" +
-      "ts\022P\n\rCreateComment\022\035.Comment.CreateComm" +
-      "entRequest\032\036.Comment.CreateCommentRespon" +
-      "se\"\000\022G\n\nGetComment\022\032.Comment.GetCommentR",
-      "equest\032\033.Comment.GetCommentResponse\"\000\022P\n" +
-      "\rDeleteComment\022\035.Comment.DeleteCommentRe" +
-      "quest\032\036.Comment.DeleteCommentResponse\"\000\022" +
-      "Y\n\020GetCommentsByTag\022 .Comment.GetComment" +
-      "sByTagRequest\032!.Comment.GetCommentsByTag" +
-      "Response\"\000\022e\n\024GetCommentsByUserTag\022$.Com" +
-      "ment.GetCommentsByUserTagRequest\032%.Comme" +
-      "nt.GetCommentsByUserTagResponse\"\000B7\n#com" +
-      ".instagram_clone.comment_serviceB\016Commen" +
-      "tServiceP\001b\006proto3"
+      "\n\025comment_service.proto\022\007Comment\"D\n\032GetC" +
+      "ommentsForImageRequest\022\n\n\002id\030\001 \001(\t\022\014\n\004pa" +
+      "ge\030\002 \001(\005\022\014\n\004size\030\003 \001(\005\"\207\001\n\033GetCommentsFo" +
+      "rImageResponse\022/\n\005error\030\001 \001(\0162\036.Comment." +
+      "GetCommentErrorStatusH\000\022-\n\010comments\030\002 \001(" +
+      "\0132\031.Comment.PagedCommentListH\000B\010\n\006Status" +
+      "\"g\n\020PagedCommentList\022\"\n\010comments\030\001 \003(\0132\020" +
+      ".Comment.Comment\022\014\n\004page\030\002 \001(\005\022\022\n\ntotalC" +
+      "ount\030\003 \001(\005\022\r\n\005count\030\004 \001(\005\"k\n\024CreateComme" +
+      "ntRequest\022\017\n\007comment\030\001 \001(\t\022\017\n\007user_id\030\002 ",
+      "\001(\t\022\020\n\010image_id\030\003 \001(\t\022\014\n\004tags\030\004 \003(\t\022\021\n\tu" +
+      "ser_tags\030\005 \003(\t\"z\n\025CreateCommentResponse\022" +
+      "#\n\007comment\030\001 \001(\0132\020.Comment.CommentH\000\0222\n\005" +
+      "error\030\002 \001(\0162!.Comment.CreateCommentError" +
+      "StatusH\000B\010\n\006status\"&\n\021GetCommentRequest\022" +
+      "\021\n\tcommentId\030\001 \001(\t\"t\n\022GetCommentResponse" +
+      "\022#\n\007comment\030\001 \001(\0132\020.Comment.CommentH\000\022/\n" +
+      "\005error\030\002 \001(\0162\036.Comment.GetCommentErrorSt" +
+      "atusH\000B\010\n\006status\")\n\024DeleteCommentRequest" +
+      "\022\021\n\tcommentId\030\001 \001(\t\"j\n\025DeleteCommentResp",
+      "onse\022\023\n\tcommentId\030\001 \001(\tH\000\0222\n\005error\030\002 \001(\016" +
+      "2!.Comment.DeleteCommentErrorStatusH\000B\010\n" +
+      "\006status\"&\n\027GetCommentsByTagRequest\022\013\n\003ta" +
+      "g\030\001 \001(\t\"\205\001\n\030GetCommentsByTagResponse\022(\n\010" +
+      "comments\030\001 \001(\0132\024.Comment.CommentListH\000\0225" +
+      "\n\005error\030\002 \001(\0162$.Comment.GetCommentsByTag" +
+      "ErrorStatusH\000B\010\n\006status\"1\n\013CommentList\022\"" +
+      "\n\010comments\030\001 \003(\0132\020.Comment.Comment\"*\n\033Ge" +
+      "tCommentsByUserTagRequest\022\013\n\003tag\030\001 \001(\t\"\215" +
+      "\001\n\034GetCommentsByUserTagResponse\022(\n\010comme",
+      "nts\030\001 \001(\0132\024.Comment.CommentListH\000\0229\n\005err" +
+      "or\030\002 \001(\0162(.Comment.GetCommentsByUserTagE" +
+      "rrorStatusH\000B\010\n\006status\"}\n\007Comment\022\n\n\002id\030" +
+      "\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\022" +
+      "\020\n\010image_id\030\004 \001(\t\022\022\n\ncreated_at\030\005 \001(\t\022\014\n" +
+      "\004tags\030\006 \003(\t\022\020\n\010userTags\030\007 \003(\t*:\n\033GetComm" +
+      "entsByTagErrorStatus\022\033\n\027GET_BY_TAG_SERVE" +
+      "R_ERROR\020\000*C\n\037GetCommentsByUserTagErrorSt" +
+      "atus\022 \n\034GET_BY_USER_TAG_SERVER_ERROR\020\000*I" +
+      "\n\030DeleteCommentErrorStatus\022\024\n\020DELETE_NOT",
+      "_FOUND\020\000\022\027\n\023DELETE_SERVER_ERROR\020\001*Q\n\030Cre" +
+      "ateCommentErrorStatus\022\027\n\023CREATE_SERVER_E" +
+      "RROR\020\000\022\034\n\030CREATE_INVALID_PARAMETER\020\001*@\n\025" +
+      "GetCommentErrorStatus\022\024\n\020GET_SERVER_ERRO" +
+      "R\020\000\022\021\n\rGET_NOT_FOUND\020\0012\235\004\n\010Comments\022P\n\rC" +
+      "reateComment\022\035.Comment.CreateCommentRequ" +
+      "est\032\036.Comment.CreateCommentResponse\"\000\022G\n" +
+      "\nGetComment\022\032.Comment.GetCommentRequest\032" +
+      "\033.Comment.GetCommentResponse\"\000\022P\n\rDelete" +
+      "Comment\022\035.Comment.DeleteCommentRequest\032\036",
+      ".Comment.DeleteCommentResponse\"\000\022Y\n\020GetC" +
+      "ommentsByTag\022 .Comment.GetCommentsByTagR" +
+      "equest\032!.Comment.GetCommentsByTagRespons" +
+      "e\"\000\022e\n\024GetCommentsByUserTag\022$.Comment.Ge" +
+      "tCommentsByUserTagRequest\032%.Comment.GetC" +
+      "ommentsByUserTagResponse\"\000\022b\n\023GetComment" +
+      "sForImage\022#.Comment.GetCommentsForImageR" +
+      "equest\032$.Comment.GetCommentsForImageResp" +
+      "onse\"\000B7\n#com.instagram_clone.comment_se" +
+      "rviceB\016CommentServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -146,74 +171,92 @@ public final class CommentService {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_Comment_CreateCommentRequest_descriptor =
+    internal_static_Comment_GetCommentsForImageRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
+    internal_static_Comment_GetCommentsForImageRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Comment_GetCommentsForImageRequest_descriptor,
+        new java.lang.String[] { "Id", "Page", "Size", });
+    internal_static_Comment_GetCommentsForImageResponse_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_Comment_GetCommentsForImageResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Comment_GetCommentsForImageResponse_descriptor,
+        new java.lang.String[] { "Error", "Comments", "Status", });
+    internal_static_Comment_PagedCommentList_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_Comment_PagedCommentList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Comment_PagedCommentList_descriptor,
+        new java.lang.String[] { "Comments", "Page", "TotalCount", "Count", });
+    internal_static_Comment_CreateCommentRequest_descriptor =
+      getDescriptor().getMessageTypes().get(3);
     internal_static_Comment_CreateCommentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_CreateCommentRequest_descriptor,
         new java.lang.String[] { "Comment", "UserId", "ImageId", "Tags", "UserTags", });
     internal_static_Comment_CreateCommentResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_Comment_CreateCommentResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_CreateCommentResponse_descriptor,
         new java.lang.String[] { "Comment", "Error", "Status", });
     internal_static_Comment_GetCommentRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_Comment_GetCommentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentRequest_descriptor,
         new java.lang.String[] { "CommentId", });
     internal_static_Comment_GetCommentResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_Comment_GetCommentResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentResponse_descriptor,
         new java.lang.String[] { "Comment", "Error", "Status", });
     internal_static_Comment_DeleteCommentRequest_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_Comment_DeleteCommentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_DeleteCommentRequest_descriptor,
         new java.lang.String[] { "CommentId", });
     internal_static_Comment_DeleteCommentResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_Comment_DeleteCommentResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_DeleteCommentResponse_descriptor,
         new java.lang.String[] { "CommentId", "Error", "Status", });
     internal_static_Comment_GetCommentsByTagRequest_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_Comment_GetCommentsByTagRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentsByTagRequest_descriptor,
         new java.lang.String[] { "Tag", });
     internal_static_Comment_GetCommentsByTagResponse_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_Comment_GetCommentsByTagResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentsByTagResponse_descriptor,
         new java.lang.String[] { "Comments", "Error", "Status", });
     internal_static_Comment_CommentList_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_Comment_CommentList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_CommentList_descriptor,
         new java.lang.String[] { "Comments", });
     internal_static_Comment_GetCommentsByUserTagRequest_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_Comment_GetCommentsByUserTagRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentsByUserTagRequest_descriptor,
         new java.lang.String[] { "Tag", });
     internal_static_Comment_GetCommentsByUserTagResponse_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_Comment_GetCommentsByUserTagResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_GetCommentsByUserTagResponse_descriptor,
         new java.lang.String[] { "Comments", "Error", "Status", });
     internal_static_Comment_Comment_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_Comment_Comment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Comment_Comment_descriptor,

@@ -20,3 +20,10 @@ sealed class Outcome<out T: Any> {
   data class Success<out T : Any>(val value: T) : Outcome<T>()
   data class Error(val message: String, val cause: Throwable? = null) : Outcome<Nothing>()
 }
+
+data class Pageable<T>(
+  val data: T,
+  val page: Int,
+  val count: Int,
+  val totalCount: Int
+)

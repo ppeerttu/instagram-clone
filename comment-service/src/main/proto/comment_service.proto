@@ -22,6 +22,28 @@ service Comments {
 
   // Find Comments by userTag
   rpc GetCommentsByUserTag(GetCommentsByUserTagRequest) returns (GetCommentsByUserTagResponse) {}
+
+  rpc GetCommentsForImage(GetCommentsForImageRequest) returns (GetCommentsForImageResponse) {}
+}
+
+message GetCommentsForImageRequest {
+  string id = 1;
+  int32 page = 2;
+  int32 size = 3;
+}
+
+message GetCommentsForImageResponse {
+  oneof Status {
+    GetCommentErrorStatus error = 1;
+    PagedCommentList comments = 2;
+  }
+}
+
+message PagedCommentList {
+  repeated Comment comments = 1;
+  int32 page = 2;
+  int32 totalCount = 3;
+  int32 count = 4;
 }
 
 message CreateCommentRequest {
