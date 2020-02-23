@@ -11,6 +11,7 @@ import { ImageService } from "./client/images/ImageService";
 import { ImageController } from "./controllers/ImageController";
 import { CommentService } from "./client/comments/CommentService";
 import { CommentController } from "./controllers/CommentController";
+import { generateAuthMiddleware } from "./middleware/authenticate";
 
 /**
  * Class containing the application server logic
@@ -25,7 +26,7 @@ export default class Server {
     /**
      * Router instance
      */
-    public readonly router: Router;
+    public readonly routers: Router[] = [];
 
     /**
      * Logger of the application server
@@ -34,7 +35,6 @@ export default class Server {
 
     constructor(logger: pino.Logger) {
         this.app = new Koa();
-        this.router = new Router();
         this.logger = logger;
     }
 
@@ -82,15 +82,24 @@ export default class Server {
         imageService: ImageService,
         commentService: CommentService
     ) {
-        const authController = new AuthController(authService);
-        authController.bind(this.router);
-        const imageController = new ImageController(imageService);
-        imageController.bind(this.router);
-        const commentController = new CommentController(commentService);
-        commentController.bind(this.router);
+        const publicRouter = new Router();
+        const protectedRouter = new Router(); // Routes that require access token
+        const authMw = generateAuthMiddleware(authService);
+        protectedRouter.use(authMw);
 
-        this.app
-            .use(this.router.routes())
-            .use(this.router.allowedMethods());
+        const authController = new AuthController(authService);
+        authController.bind(publicRouter);
+        const commentController = new CommentController(commentService);
+        commentController.bind(publicRouter);
+        const imageController = new ImageController(imageService);
+        imageController.bind(protectedRouter);
+
+        this.routers.push(publicRouter);
+        this.routers.push(protectedRouter);
+        this.routers.forEach((router) => {
+            this.app
+                .use(router.routes())
+                .use(router.allowedMethods());
+        });
     }
 }

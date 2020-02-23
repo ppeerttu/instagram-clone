@@ -4,17 +4,6 @@
 var grpc = require('grpc');
 var auth_service_pb = require('./auth_service_pb.js');
 
-function serialize_Auth_AccountInfo(arg) {
-  if (!(arg instanceof auth_service_pb.AccountInfo)) {
-    throw new Error('Expected argument of type Auth.AccountInfo');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_Auth_AccountInfo(buffer_arg) {
-  return auth_service_pb.AccountInfo.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_Auth_AccountRequest(arg) {
   if (!(arg instanceof auth_service_pb.AccountRequest)) {
     throw new Error('Expected argument of type Auth.AccountRequest');
@@ -24,6 +13,39 @@ function serialize_Auth_AccountRequest(arg) {
 
 function deserialize_Auth_AccountRequest(buffer_arg) {
   return auth_service_pb.AccountRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_Auth_AccountResponse(arg) {
+  if (!(arg instanceof auth_service_pb.AccountResponse)) {
+    throw new Error('Expected argument of type Auth.AccountResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Auth_AccountResponse(buffer_arg) {
+  return auth_service_pb.AccountResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_Auth_DeleteAccountRequest(arg) {
+  if (!(arg instanceof auth_service_pb.DeleteAccountRequest)) {
+    throw new Error('Expected argument of type Auth.DeleteAccountRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Auth_DeleteAccountRequest(buffer_arg) {
+  return auth_service_pb.DeleteAccountRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_Auth_DeleteAccountResponse(arg) {
+  if (!(arg instanceof auth_service_pb.DeleteAccountResponse)) {
+    throw new Error('Expected argument of type Auth.DeleteAccountResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Auth_DeleteAccountResponse(buffer_arg) {
+  return auth_service_pb.DeleteAccountResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_Auth_NewAccount(arg) {
@@ -137,11 +159,22 @@ getAccount: {
     requestStream: false,
     responseStream: false,
     requestType: auth_service_pb.AccountRequest,
-    responseType: auth_service_pb.AccountInfo,
+    responseType: auth_service_pb.AccountResponse,
     requestSerialize: serialize_Auth_AccountRequest,
     requestDeserialize: deserialize_Auth_AccountRequest,
-    responseSerialize: serialize_Auth_AccountInfo,
-    responseDeserialize: deserialize_Auth_AccountInfo,
+    responseSerialize: serialize_Auth_AccountResponse,
+    responseDeserialize: deserialize_Auth_AccountResponse,
+  },
+  deleteAccount: {
+    path: '/Auth.Auth/DeleteAccount',
+    requestStream: false,
+    responseStream: false,
+    requestType: auth_service_pb.DeleteAccountRequest,
+    responseType: auth_service_pb.DeleteAccountResponse,
+    requestSerialize: serialize_Auth_DeleteAccountRequest,
+    requestDeserialize: deserialize_Auth_DeleteAccountRequest,
+    responseSerialize: serialize_Auth_DeleteAccountResponse,
+    responseDeserialize: deserialize_Auth_DeleteAccountResponse,
   },
 };
 

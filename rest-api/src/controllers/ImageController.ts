@@ -17,6 +17,7 @@ import { TagType } from "../client/models";
 import { SearchImagesError } from "../client/images/errors/SearchImagesError";
 import { LikeImageError } from "../client/images/errors/LikeImageError";
 import { GetLikesError } from "../client/images/errors/GetLikesError";
+import { AuthState } from "../middleware/authenticate";
 
 const allowedFileTypes = [
     "image/png",
@@ -95,10 +96,6 @@ export class ImageController implements IController {
         param("imageId")
             .isUUID()
             .withMessage("The image ID has to be an UUID")
-            .run(),
-        body("userId") // TODO: This can be retrieved from the auth servce (access token)
-            .isUUID()
-            .withMessage("The user ID has to be an UUID")
             .run(),
         body("unlike")
             .optional()
@@ -352,18 +349,19 @@ export class ImageController implements IController {
      * Like about an image.
      */
     private likeImage = async (
-        ctx: RouterContext<IValidationState>
+        ctx: RouterContext<AuthState & IValidationState>
     ) => {
-        const results = validationResults(ctx);
+        const results = validationResults(ctx as any); // as any because of bad typings...
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
         }
 
-        const { imageId, userId, unlike: ulike } = results.passedData();
+        const { imageId, unlike: ulike } = results.passedData();
         const unlike = typeof ulike === "boolean" ? ulike : false;
+        const { id } = ctx.state.account;
 
         try {
-            await this.imageService.likeImage(imageId, userId, unlike);
+            await this.imageService.likeImage(imageId, id, unlike);
             ctx.status = 204;
         } catch (e) {
             if (e instanceof LikeImageError) {

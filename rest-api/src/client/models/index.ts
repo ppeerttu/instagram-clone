@@ -19,3 +19,4 @@ export * from "./mappers";
 export * from "./comment";
 export * from "./image";
 export * from "./pages";
+export * from "./account";

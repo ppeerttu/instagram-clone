@@ -3,8 +3,10 @@ import Router, { RouterContext } from "@koa/router";
 
 import { IController } from "./Controller";
 import { RequestError } from "../lib/RequestError";
-import { AuthServiceError } from "../client/auth/AuthServiceError";
+import { AuthServiceError } from "../client/auth/errors/AuthServiceError";
 import { AuthService } from "../client/auth";
+import { SignUpError } from "../client/auth/errors/SignUpError";
+import { AuthState, generateAuthMiddleware } from "../middleware/authenticate";
 
 /**
  * Authentication REST API controller.
@@ -26,6 +28,18 @@ export class AuthController implements IController {
             .run()
     ];
 
+    private signUpValidation = [
+        body("username")
+            .trim()
+            .isLength({ min: 4, max: 29 })
+            .withMessage("Username has to be between 4 and 29 characters long")
+            .run(),
+        body("password")
+            .isLength({ min: 4, max: 29 })
+            .withMessage("Password has to be between 4 and 29 characters long")
+            .run(),
+    ];
+
     /**
      * Auth service client
      */
@@ -41,6 +55,16 @@ export class AuthController implements IController {
             `${basePath}/sign-in`,
             ...this.signInValidation,
             this.signIn,
+        );
+        router.post(
+            `${basePath}/sign-up`,
+            ...this.signUpValidation,
+            this.signUp,
+        );
+        router.get(
+            `${basePath}/me`,
+            generateAuthMiddleware(this.authService),
+            this.getMe,
         );
     }
 
@@ -70,5 +94,43 @@ export class AuthController implements IController {
             ctx.log.error(e);
             throw new RequestError(503);
         }
+    }
+
+    /**
+     * Sign up an user.
+     */
+    private signUp = async (
+        ctx: RouterContext<IValidationState>
+    ) => {
+        const results = validationResults(ctx);
+        if (results.hasErrors()) {
+            throw new RequestError(422, { errors: results.array() });
+        }
+        const { username, password } = results.passedData();
+
+        try {
+            const response = await this.authService.signUp(username, password);
+            ctx.body = response;
+            ctx.status = 200;
+        } catch (e) {
+            if (e instanceof SignUpError) {
+                ctx.log.warn(e);
+                throw new RequestError(500);
+            }
+            // e is probably ServiceError, report that the service is not healthy
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    /**
+     * Get the user who is making the request.
+     */
+    private getMe = async (
+        ctx: RouterContext<AuthState>
+    ) => {
+        const account = ctx.state.account;
+        ctx.body = account;
+        ctx.status = 200;
     }
 }
