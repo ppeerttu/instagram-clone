@@ -2,6 +2,7 @@ package com.instagram_clone.comment_service.service
 
 import com.instagram_clone.comment_service.data.CommentWrapper
 import com.instagram_clone.comment_service.data.Outcome
+import com.instagram_clone.comment_service.data.Pageable
 import com.instagram_clone.comment_service.data.mapComment
 import com.instagram_clone.comment_service.exception.InvalidParameterException
 import com.instagram_clone.comment_service.exception.NotFoundException
@@ -10,7 +11,7 @@ import io.vertx.core.Promise
 import java.util.*
 
 class CommentServiceMockImpl : CommentService {
-  private val store: MutableMap<String, CommentWrapper?> = HashMap()
+  private val store: MutableMap<String, CommentWrapper> = HashMap()
 
   override fun createComment(content: String,
                              userId: String,
@@ -65,6 +66,12 @@ class CommentServiceMockImpl : CommentService {
   override fun getCommentsByUserTag(hashTag: String): Future<Outcome<List<CommentWrapper?>>> {
     val promise = Promise.promise<Outcome<List<CommentWrapper?>>>()
     promise.complete(Outcome.Success(ArrayList(store.values)))
+    return promise.future()
+  }
+
+  override fun getComments(imageId: String?, page: Int, count: Int): Future<Outcome<Pageable<List<CommentWrapper>>>> {
+    val promise = Promise.promise<Outcome<Pageable<List<CommentWrapper>>>>()
+    promise.complete(Outcome.Success(Pageable(store.values.toList(), page, count, 100)))
     return promise.future()
   }
 }
