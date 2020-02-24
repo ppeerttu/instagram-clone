@@ -4,6 +4,7 @@ import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.data.*
 import com.instagram_clone.image_service.exception.EmptySearchException
 import com.instagram_clone.image_service.exception.NotFoundException
+import com.instagram_clone.image_service.message_broker.*
 import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
 import io.vertx.core.Promise
@@ -17,7 +18,9 @@ import kotlin.math.min
 private const val FIELD_ID = "_id"
 private const val MAX_PAGE_SIZE = 100
 
-class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaService {
+class ImageMetaServiceMongoImpl(
+  private val client: MongoClient
+) : ImageMetaService {
 
   private val config = AppConfig.getInstance()
 
@@ -32,17 +35,7 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
    * Delete image metadata.
    */
   override fun deleteImage(imageId: String): Future<Nothing> {
-    val promise = Promise.promise<Nothing>()
-    val query = JsonObject().put(FIELD_ID, imageId)
-
-    client.findOneAndDelete(config.imagesCollection, query) {
-      if (it.succeeded()) {
-        promise.complete()
-      } else {
-        promise.fail(it.cause())
-      }
-    }
-    return promise.future()
+    return findAndDeleteImage(imageId)
   }
 
   /**
@@ -212,6 +205,23 @@ class ImageMetaServiceMongoImpl(private val client: MongoClient) : ImageMetaServ
           )
         )
       }
+  }
+
+  /**
+   * Find and delete metadata for given image. Returns the deleted document.
+   */
+  private fun findAndDeleteImage(imageId: String): Future<Nothing> {
+    val promise = Promise.promise<Nothing>()
+    val query = JsonObject().put(FIELD_ID, imageId)
+
+    client.findOneAndDelete(config.imagesCollection, query) {
+      if (it.succeeded()) {
+        promise.complete()
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
   }
 
   /**

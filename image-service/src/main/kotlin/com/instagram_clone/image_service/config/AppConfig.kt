@@ -79,6 +79,12 @@ class AppConfig private constructor(json: JsonObject) {
   var likesCollection: String
     private set
 
+  /**
+   * Kafka servers value in form of "<host>:<port>"
+   */
+  var kafkaServers: String
+    private set
+
   init {
     grpcHost = json.getString(ConfigConstants.GRPC_HOST)
     grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
@@ -92,6 +98,7 @@ class AppConfig private constructor(json: JsonObject) {
     mongoDatabase = json.getString(ConfigConstants.MONGO_DATABASE)
     imagesCollection = json.getString(ConfigConstants.IMAGES_COLLECTION, "image_meta")
     likesCollection = json.getString(ConfigConstants.LIKES_COLLECTION, "image_likes")
+    kafkaServers = json.getString(ConfigConstants.KAFKA_SERVERS)
   }
 
   companion object {

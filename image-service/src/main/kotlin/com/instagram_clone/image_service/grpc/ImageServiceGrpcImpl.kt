@@ -8,22 +8,28 @@ import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.EmptySearchException
 import com.instagram_clone.image_service.exception.InvalidDataException
 import com.instagram_clone.image_service.exception.NotFoundException
+import com.instagram_clone.image_service.message_broker.DomainEvent
+import com.instagram_clone.image_service.message_broker.DomainEventType
+import com.instagram_clone.image_service.message_broker.MessageBrokerService
 import com.instagram_clone.image_service.service.ImageFileService
 import com.instagram_clone.image_service.service.ImageMetaService
 import com.instagram_clone.image_service.util.ImageRecorder
 import io.grpc.stub.StreamObserver
+import io.vertx.core.CompositeFuture
 import io.vertx.core.logging.LoggerFactory
 import kotlin.math.min
 
 // Chunk size in bytes
 private const val CHUNK_SIZE = 1024 * 16
+private const val IMAGE_TOPIC = "images"
 
 /**
  * Class implementing the image_service.proto Image service interface.
  */
 class ImageServiceGrpcImpl(
   private val metaService: ImageMetaService,
-  private val fileService: ImageFileService
+  private val fileService: ImageFileService,
+  private val broker: MessageBrokerService
 ) : ImagesImplBase() {
 
   private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
@@ -72,6 +78,7 @@ class ImageServiceGrpcImpl(
           .onSuccess { meta ->
             fileService.saveImageFile(meta.id, bytes)
               .onSuccess {
+                publishEvent(DomainEventType.Created, meta)
                 builder.image = fromImageMeta(meta)
                 responseObserver.onNext(builder.build())
                 responseObserver.onCompleted()
@@ -144,9 +151,19 @@ class ImageServiceGrpcImpl(
   override fun deleteImage(request: DeleteImageRequest, responseObserver: StreamObserver<DeleteImageResponse>) {
     val imageId = request.id
     val builder = DeleteImageResponse.newBuilder()
-    metaService.deleteImage(imageId)
-      .compose { fileService.deleteImageFile(imageId) }
+    var deletedMeta: ImageMeta? = null
+    metaService.getImageMeta(imageId)
+      .compose { meta ->
+        deletedMeta = meta
+        CompositeFuture.all(
+          fileService.deleteImageFile(imageId),
+          metaService.deleteImage(imageId)
+        )
+      }
       .onSuccess {
+        deletedMeta?.also {
+          publishEvent(DomainEventType.Deleted, it)
+        }
         builder.status = DeleteImageStatus.OK
         responseObserver.onNext(builder.build())
         responseObserver.onCompleted()
@@ -240,6 +257,13 @@ class ImageServiceGrpcImpl(
     }
     future
       .onSuccess {
+        if (!unlike) {
+          publishEvent(
+            DomainEventType.Liked,
+            // Using just IDs as fetching other data would require an extra DB query
+            mapOf("userId" to userId, "imageId" to imageId)
+          )
+        }
         responseObserver.onNext(
           LikeImageResponse.newBuilder()
             .setStatus(LikeImageResponseStatus.LIKE_OK)
@@ -393,5 +417,18 @@ class ImageServiceGrpcImpl(
       list.add(bytes.substring(i, end))
     }
     return list.toList()
+  }
+
+  /**
+   * Publish an event to the message broker
+   */
+  private fun publishEvent(type: DomainEventType, data: Any) {
+    broker.publishEvent(
+      IMAGE_TOPIC,
+      DomainEvent(
+        type,
+        data
+      )
+    )
   }
 }

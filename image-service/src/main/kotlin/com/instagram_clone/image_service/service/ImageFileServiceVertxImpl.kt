@@ -40,6 +40,7 @@ class ImageFileServiceVertxImpl(
           promise.fail(
             when (it.cause()) {
               is FileSystemException -> NotFoundException("No image file found with id $id")
+              is NoSuchFileException -> NotFoundException("No image file found with id $id")
               else -> it.cause()
             }
           )

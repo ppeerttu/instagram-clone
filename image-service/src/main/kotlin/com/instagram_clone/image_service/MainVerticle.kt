@@ -3,6 +3,7 @@ package com.instagram_clone.image_service
 import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.service.ImageFileServiceVertxImpl
 import com.instagram_clone.image_service.grpc.ImageServiceGrpcImpl
+import com.instagram_clone.image_service.message_broker.KafkaService
 import com.instagram_clone.image_service.service.ImageMetaServiceMongoImpl
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
@@ -18,8 +19,10 @@ import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
+import io.vertx.kafka.client.producer.KafkaProducer
 import java.net.InetAddress
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.concurrent.fixedRateTimer
 
 const val SERVICE_NAME = "image-service"
@@ -45,12 +48,14 @@ class MainVerticle : AbstractVerticle() {
         val config = AppConfig.getInstance(json)
 
         val mongoClient = configureMongo(config)
-
+        val producer = configureKafkaProducer(config)
+        val messageBroker = KafkaService(producer)
         val imageMetaService = ImageMetaServiceMongoImpl(mongoClient)
         val imageFileService = ImageFileServiceVertxImpl(vertx)
         val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(
           imageMetaService,
-          imageFileService
+          imageFileService,
+          messageBroker
         )
 
         val rpcServer = VertxServerBuilder
@@ -117,6 +122,17 @@ class MainVerticle : AbstractVerticle() {
         .put("connection_string", conn)
         .put("db_name", db)
     )
+  }
+
+  private fun configureKafkaProducer(config: AppConfig): KafkaProducer<Nothing, String> {
+    val kafkaConf = HashMap<String, String>().also {
+      it["bootstrap.servers"] = config.kafkaServers
+      // These serializers could be JsonObjectSerializers, but we do serialization on service layer now
+      it["key.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
+      it["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
+      it["acks"] = "1"
+    }
+    return KafkaProducer.create(vertx, kafkaConf)
   }
 
   /**

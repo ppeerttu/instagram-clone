@@ -64,4 +64,9 @@ object ConfigConstants {
    * MongoDB port
    */
   const val MONGO_PORT = "MONGO_PORT"
+
+  /**
+   * Kafka servers value in form of "<host>:<port>"
+   */
+  const val KAFKA_SERVERS = "KAFKA_SERVERS"
 }

@@ -1,7 +1,7 @@
 {
   "GRPC_HOST": "0.0.0.0",
   "GRPC_PORT": 3000,
-  "IMAGE_DATA_DIR": "./data/images",
+  "IMAGE_DATA_DIR": "./data",
   "CONSUL_HOST": "127.0.0.1",
   "CONSUL_PORT": 8500,
   "MONGO_HOST": "127.0.0.1",
@@ -9,5 +9,6 @@
   "MONGO_DATABASE": "images",
   "MONGO_USER": "image-service",
   "MONGO_PASSWORD": "image-service",
-  "IMAGES_COLLECTION": "image_meta"
+  "IMAGES_COLLECTION": "image_meta",
+  "KAFKA_SERVERS": "localhost:29092"
 }
