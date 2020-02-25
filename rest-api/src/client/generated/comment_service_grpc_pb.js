@@ -114,6 +114,28 @@ function deserialize_Comment_GetCommentsByUserTagResponse(buffer_arg) {
   return comment_service_pb.GetCommentsByUserTagResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_Comment_GetCommentsForImageRequest(arg) {
+  if (!(arg instanceof comment_service_pb.GetCommentsForImageRequest)) {
+    throw new Error('Expected argument of type Comment.GetCommentsForImageRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Comment_GetCommentsForImageRequest(buffer_arg) {
+  return comment_service_pb.GetCommentsForImageRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_Comment_GetCommentsForImageResponse(arg) {
+  if (!(arg instanceof comment_service_pb.GetCommentsForImageResponse)) {
+    throw new Error('Expected argument of type Comment.GetCommentsForImageResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_Comment_GetCommentsForImageResponse(buffer_arg) {
+  return comment_service_pb.GetCommentsForImageResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 // Comment service definition
 var CommentsService = exports.CommentsService = {
@@ -176,6 +198,17 @@ getCommentsByUserTag: {
     requestDeserialize: deserialize_Comment_GetCommentsByUserTagRequest,
     responseSerialize: serialize_Comment_GetCommentsByUserTagResponse,
     responseDeserialize: deserialize_Comment_GetCommentsByUserTagResponse,
+  },
+  getCommentsForImage: {
+    path: '/Comment.Comments/GetCommentsForImage',
+    requestStream: false,
+    responseStream: false,
+    requestType: comment_service_pb.GetCommentsForImageRequest,
+    responseType: comment_service_pb.GetCommentsForImageResponse,
+    requestSerialize: serialize_Comment_GetCommentsForImageRequest,
+    requestDeserialize: deserialize_Comment_GetCommentsForImageRequest,
+    responseSerialize: serialize_Comment_GetCommentsForImageResponse,
+    responseDeserialize: deserialize_Comment_GetCommentsForImageResponse,
   },
 };
 

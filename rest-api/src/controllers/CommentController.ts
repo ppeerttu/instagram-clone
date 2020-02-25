@@ -2,13 +2,12 @@ import { CommentService } from "../client/comments/CommentService";
 import Router = require("@koa/router");
 import { IValidationState, validationResults } from "koa-req-validation";
 import { IController } from "./Controller";
-import { CreateCommentError } from "../client/comments/errors/CreateCommentError";
-import { CreateCommentErrorStatus, GetCommentErrorStatus, DeleteCommentErrorStatus } from "../client/generated/comment_service_pb";
 import { RequestError } from "../lib/RequestError";
 import { GetCommentError } from "../client/comments/errors/GetCommentError";
 import { DeleteCommentError } from "../client/comments/errors/DeleteCommentError";
 import { GetCommentsByTagError } from "../client/comments/errors/GetCommentsByTagError";
 import { GetCommentsByUserTagError } from "../client/comments/errors/GetCommentsByUserTagError";
+import { GetCommentErrorStatus, DeleteCommentErrorStatus } from "../client/generated/comment_service_pb";
 
 export class CommentController implements IController {
 
@@ -19,10 +18,6 @@ export class CommentController implements IController {
     }
 
     bind = (router: Router, basePath = "/comments"): void => {
-        router.post(
-            basePath,
-            this.postComment
-        );
         router.get(
             `${basePath}/:commentId`,
             this.getComment
@@ -39,38 +34,6 @@ export class CommentController implements IController {
             `${basePath}/userTag/:tag`,
             this.getCommentsByUserTag
         );
-    }
-
-    private postComment = async (ctx: Router.RouterContext<IValidationState>) =>  {
-        const results = validationResults(ctx);
-        if (results.hasErrors()) {
-            throw new RequestError(422, { errors: results.array() });
-        }
-        const { content, userId, imageId, tags, userTags }= ctx.request.body;
-        try {
-            const response = await this.commentService.createComment(
-                content,
-                userId,
-                imageId,
-                tags,
-                userTags
-                );
-            ctx.body = response;
-            ctx.status = 201;
-        } catch (e) {
-            if (e instanceof CreateCommentError) {
-                switch (e.status) {
-                    case CreateCommentErrorStatus.CREATE_INVALID_PARAMETER:
-                        throw new RequestError(400, "Inavild parameter");
-                    case CreateCommentErrorStatus.CREATE_SERVER_ERROR:
-                    default:
-                        ctx.log.warn(e);
-                        throw new RequestError(500);
-                }
-            }
-            ctx.log.error(e);
-            throw new RequestError(503);
-        }
     }
 
     private getComment = async (ctx: Router.RouterContext<IValidationState>) => {
@@ -100,7 +63,6 @@ export class CommentController implements IController {
 
     private deleteComment = async (ctx: Router.RouterContext<IValidationState>) => {
         const results = validationResults(ctx);
-        console.log("Get comments by tag");
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
         }
@@ -126,7 +88,6 @@ export class CommentController implements IController {
 
     private getCommentsByTag = async (ctx: Router.RouterContext<IValidationState>) => {
         const results = validationResults(ctx);
-        console.log("Get comments by tag");
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
         }

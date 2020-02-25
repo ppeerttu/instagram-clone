@@ -91,7 +91,7 @@ export default class Server {
         authController.bind(publicRouter);
         const commentController = new CommentController(commentService);
         commentController.bind(publicRouter);
-        const imageController = new ImageController(imageService);
+        const imageController = new ImageController(imageService, commentService);
         imageController.bind(protectedRouter);
 
         this.routers.push(publicRouter);

@@ -1,4 +1,4 @@
-import { CommentWrapper } from "../models";
+import { CommentWrapper, Page } from "../models";
 
 export interface CommentService {
 
@@ -19,4 +19,6 @@ export interface CommentService {
     getCommentsByHashTag(hashtag: string): Promise<CommentWrapper[]>
 
     getCommentsByUserTag(userTag: string): Promise<CommentWrapper[]>
+
+    getCommentsForImage(id: string, page: number, size: number): Promise<Page<CommentWrapper>
 }
