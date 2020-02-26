@@ -13,6 +13,7 @@ interface ICommentsService extends grpc.ServiceDefinition<grpc.UntypedServiceImp
     deleteComment: ICommentsService_IDeleteComment;
     getCommentsByTag: ICommentsService_IGetCommentsByTag;
     getCommentsByUserTag: ICommentsService_IGetCommentsByUserTag;
+    getCommentsForImage: ICommentsService_IGetCommentsForImage;
 }
 
 interface ICommentsService_ICreateComment extends grpc.MethodDefinition<comment_service_pb.CreateCommentRequest, comment_service_pb.CreateCommentResponse> {
@@ -60,6 +61,15 @@ interface ICommentsService_IGetCommentsByUserTag extends grpc.MethodDefinition<c
     responseSerialize: grpc.serialize<comment_service_pb.GetCommentsByUserTagResponse>;
     responseDeserialize: grpc.deserialize<comment_service_pb.GetCommentsByUserTagResponse>;
 }
+interface ICommentsService_IGetCommentsForImage extends grpc.MethodDefinition<comment_service_pb.GetCommentsForImageRequest, comment_service_pb.GetCommentsForImageResponse> {
+    path: string; // "/Comment.Comments/GetCommentsForImage"
+    requestStream: boolean; // false
+    responseStream: boolean; // false
+    requestSerialize: grpc.serialize<comment_service_pb.GetCommentsForImageRequest>;
+    requestDeserialize: grpc.deserialize<comment_service_pb.GetCommentsForImageRequest>;
+    responseSerialize: grpc.serialize<comment_service_pb.GetCommentsForImageResponse>;
+    responseDeserialize: grpc.deserialize<comment_service_pb.GetCommentsForImageResponse>;
+}
 
 export const CommentsService: ICommentsService;
 
@@ -69,6 +79,7 @@ export interface ICommentsServer {
     deleteComment: grpc.handleUnaryCall<comment_service_pb.DeleteCommentRequest, comment_service_pb.DeleteCommentResponse>;
     getCommentsByTag: grpc.handleUnaryCall<comment_service_pb.GetCommentsByTagRequest, comment_service_pb.GetCommentsByTagResponse>;
     getCommentsByUserTag: grpc.handleUnaryCall<comment_service_pb.GetCommentsByUserTagRequest, comment_service_pb.GetCommentsByUserTagResponse>;
+    getCommentsForImage: grpc.handleUnaryCall<comment_service_pb.GetCommentsForImageRequest, comment_service_pb.GetCommentsForImageResponse>;
 }
 
 export interface ICommentsClient {
@@ -87,6 +98,9 @@ export interface ICommentsClient {
     getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
     getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
     getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
+    getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
+    getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
+    getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class CommentsClient extends grpc.Client implements ICommentsClient {
@@ -106,4 +120,7 @@ export class CommentsClient extends grpc.Client implements ICommentsClient {
     public getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
     public getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
     public getCommentsByUserTag(request: comment_service_pb.GetCommentsByUserTagRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsByUserTagResponse) => void): grpc.ClientUnaryCall;
+    public getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
+    public getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
+    public getCommentsForImage(request: comment_service_pb.GetCommentsForImageRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: comment_service_pb.GetCommentsForImageResponse) => void): grpc.ClientUnaryCall;
 }

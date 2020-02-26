@@ -3,14 +3,15 @@ import { CommentService } from "./CommentService";
 import { config } from "../../config/grpc";
 import { CommentsClient } from "../generated/comment_service_grpc_pb";
 import { credentials } from "grpc";
-import { CreateCommentRequest, GetCommentRequest, DeleteCommentRequest, GetCommentsByTagRequest, GetCommentsByUserTagRequest } from "../generated/comment_service_pb";
+import { CreateCommentRequest, GetCommentRequest, DeleteCommentRequest, GetCommentsByTagRequest, GetCommentsByUserTagRequest, GetCommentsForImageRequest } from "../generated/comment_service_pb";
 import { CreateCommentError } from "./errors/CreateCommentError";
-import { mapComment, CommentWrapper } from "../models";
+import { mapComment, CommentWrapper, Page } from "../models";
 import { GetCommentError } from "./errors/GetCommentError";
 import { resolve, promises } from "dns";
 import { DeleteCommentError } from "./errors/DeleteCommentError";
 import { GetCommentsByTagError } from "./errors/GetCommentsByTagError";
 import { GetCommentsByUserTagError } from "./errors/GetCommentsByUserTagError";
+import { GetCommentsForImageError } from "./errors/GetCommentsForImageError";
 
 export class CommentServiceClient extends GrpcClient implements CommentService {
 
@@ -168,6 +169,41 @@ export class CommentServiceClient extends GrpcClient implements CommentService {
                 return resolve(comments.getCommentsList().map((i) => mapComment(i)));
             });
         });
+        return promise;
+    }
+
+    getCommentsForImage = (id: string, page: number, size: number) => {
+        const client = this.getClient();
+        const request = new GetCommentsForImageRequest();
+        request.setId(id);
+        request.setPage(page);
+        request.setSize(size);
+        const promise = new Promise<Page<CommentWrapper>>((resolve, reject) => {
+            client.getCommentsForImage(request, (error, response) => {
+                if (error) {
+                    return reject(error);
+                }
+                const e = response.getError();
+                const res = response.getComments();
+                if (!res || e) {
+                    return reject(
+                        new GetCommentsForImageError(
+                            `Failed to get images for id: ${id}`, e || null
+                        )
+                    );
+                }
+                const comments = res.getCommentsList().map(i => mapComment(i));
+                const returnPage = {
+                    size,
+                    page: res.getPage(),
+                    count: res.getCount(),
+                    totalCount: res.getTotalcount(),
+                    content: comments
+                }
+                return resolve(returnPage);
+            });
+        });
+
         return promise;
     }
 }

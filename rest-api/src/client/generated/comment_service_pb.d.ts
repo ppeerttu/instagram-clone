@@ -6,6 +6,113 @@
 
 import * as jspb from "google-protobuf";
 
+export class GetCommentsForImageRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): void;
+
+    getPage(): number;
+    setPage(value: number): void;
+
+    getSize(): number;
+    setSize(value: number): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetCommentsForImageRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetCommentsForImageRequest): GetCommentsForImageRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetCommentsForImageRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetCommentsForImageRequest;
+    static deserializeBinaryFromReader(message: GetCommentsForImageRequest, reader: jspb.BinaryReader): GetCommentsForImageRequest;
+}
+
+export namespace GetCommentsForImageRequest {
+    export type AsObject = {
+        id: string,
+        page: number,
+        size: number,
+    }
+}
+
+export class GetCommentsForImageResponse extends jspb.Message { 
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): GetCommentErrorStatus;
+    setError(value: GetCommentErrorStatus): void;
+
+
+    hasComments(): boolean;
+    clearComments(): void;
+    getComments(): PagedCommentList | undefined;
+    setComments(value?: PagedCommentList): void;
+
+
+    getStatusCase(): GetCommentsForImageResponse.StatusCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetCommentsForImageResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetCommentsForImageResponse): GetCommentsForImageResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetCommentsForImageResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetCommentsForImageResponse;
+    static deserializeBinaryFromReader(message: GetCommentsForImageResponse, reader: jspb.BinaryReader): GetCommentsForImageResponse;
+}
+
+export namespace GetCommentsForImageResponse {
+    export type AsObject = {
+        error: GetCommentErrorStatus,
+        comments?: PagedCommentList.AsObject,
+    }
+
+    export enum StatusCase {
+        STATUS_NOT_SET = 0,
+    
+    ERROR = 1,
+
+    COMMENTS = 2,
+
+    }
+
+}
+
+export class PagedCommentList extends jspb.Message { 
+    clearCommentsList(): void;
+    getCommentsList(): Array<Comment>;
+    setCommentsList(value: Array<Comment>): void;
+    addComments(value?: Comment, index?: number): Comment;
+
+    getPage(): number;
+    setPage(value: number): void;
+
+    getTotalcount(): number;
+    setTotalcount(value: number): void;
+
+    getCount(): number;
+    setCount(value: number): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): PagedCommentList.AsObject;
+    static toObject(includeInstance: boolean, msg: PagedCommentList): PagedCommentList.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: PagedCommentList, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PagedCommentList;
+    static deserializeBinaryFromReader(message: PagedCommentList, reader: jspb.BinaryReader): PagedCommentList;
+}
+
+export namespace PagedCommentList {
+    export type AsObject = {
+        commentsList: Array<Comment.AsObject>,
+        page: number,
+        totalcount: number,
+        count: number,
+    }
+}
+
 export class CreateCommentRequest extends jspb.Message { 
     getComment(): string;
     setComment(value: string): void;
