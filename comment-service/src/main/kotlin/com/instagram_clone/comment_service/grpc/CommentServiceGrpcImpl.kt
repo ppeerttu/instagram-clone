@@ -9,6 +9,9 @@ import com.instagram_clone.comment_service.data.mapFromWrapper
 import com.instagram_clone.comment_service.exception.DbException
 import com.instagram_clone.comment_service.exception.InvalidParameterException
 import com.instagram_clone.comment_service.exception.NotFoundException
+import com.instagram_clone.comment_service.message_broker.DomainEvent
+import com.instagram_clone.comment_service.message_broker.DomainEventType
+import com.instagram_clone.comment_service.message_broker.MessageBrokerService
 import com.instagram_clone.comment_service.service.CommentService
 import io.grpc.stub.StreamObserver
 import io.vertx.core.AsyncResult
@@ -16,11 +19,15 @@ import io.vertx.core.Handler
 import io.vertx.core.logging.LoggerFactory
 import java.util.stream.Collectors
 
+const val COMMENTS_TOPIC = "comments"
+
 /**
  * Implementation of the grpc defined comment-service.
  * Delegates logic to a passed [CommentService] instance.
  */
-class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
+class CommentServiceGrpcImpl(
+  val service: CommentService,
+  val broker: MessageBrokerService) : CommentsImplBase() {
 
   private val logger = LoggerFactory.getLogger("CommentServiceGrpcImpl")
 
@@ -87,6 +94,7 @@ class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
       when (val outcome = ar.result()) {
         is Outcome.Success -> {
           val comment = mapFromWrapper(outcome.value)
+          publishEvent(DomainEventType.Created, outcome.value)
           builder.comment = comment
         }
         is Outcome.Error -> {
@@ -141,11 +149,15 @@ class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
       when (val outcome = ar.result()) {
         is Outcome.Success -> {
           builder.commentId = outcome.value
+          publishEvent(DomainEventType.Deleted, mapOf("commentId" to outcome.value))
         }
         is Outcome.Error -> {
           when (outcome.cause) {
             is DbException -> {
               builder.error = DeleteCommentErrorStatus.DELETE_SERVER_ERROR
+            }
+            is NotFoundException -> {
+              builder.error = DeleteCommentErrorStatus.DELETE_NOT_FOUND
             }
           }
         }
@@ -230,5 +242,18 @@ class CommentServiceGrpcImpl(var service: CommentService) : CommentsImplBase() {
     }
     responseObserver.onNext(builder.build())
     responseObserver.onCompleted()
+  }
+
+  /**
+   * Publish an event to the message broker
+   */
+  private fun publishEvent(type: DomainEventType, data: Any) {
+    broker.publishEvent(
+      COMMENTS_TOPIC,
+      DomainEvent(
+        type,
+        data
+      )
+    )
   }
 }

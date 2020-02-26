@@ -3,6 +3,8 @@ package com.instagram_clone.comment_service.verticle
 import com.instagram_clone.comment_service.CommentsGrpc
 import com.instagram_clone.comment_service.data.Constants
 import com.instagram_clone.comment_service.grpc.CommentServiceGrpcImpl
+import com.instagram_clone.comment_service.message_broker.KafkaService
+import com.instagram_clone.comment_service.message_broker.MessageBrokerService
 import com.instagram_clone.comment_service.service.CommentServiceMockImpl
 import com.instagram_clone.comment_service.service.CommentServiceMongoImpl
 import com.instagram_clone.comment_service.util.retrieveProblematicString
@@ -20,6 +22,7 @@ import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
+import io.vertx.kafka.client.producer.KafkaProducer
 import java.lang.ClassCastException
 import java.net.InetAddress
 import java.util.*
@@ -33,6 +36,7 @@ class MainVerticle : AbstractVerticle() {
   private lateinit var logger: Logger
   private lateinit var mongoClient: MongoClient
   private lateinit var config: JsonObject
+  private lateinit var messageBroker: MessageBrokerService
   private var timer: Timer? = null
 
   override fun init(vertx: Vertx, context: Context) {
@@ -47,8 +51,10 @@ class MainVerticle : AbstractVerticle() {
         config = it.result()
         mongoClient = configureMongo(config)
         val commentService = CommentServiceMongoImpl(mongoClient)
-        val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService)
         val grpcPort = retrieveProblematicString(config, Constants.GRPC_KEY_PORT).toInt()
+        val producer = configureKafkaProducer(config)
+        val messageBroker = KafkaService(producer)
+        val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService, messageBroker)
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.getString(Constants.GRPC_KEY_HOST), grpcPort.toInt())
           .addService(service)
@@ -117,6 +123,17 @@ class MainVerticle : AbstractVerticle() {
     mongoConfig.put("db_name", mongoDb)
     mongoConfig.put("connection_string", connString)
     return MongoClient.createShared(vertx, mongoConfig)
+  }
+
+  private fun configureKafkaProducer(config: JsonObject): KafkaProducer<Nothing, String> {
+    val kafkaConf = HashMap<String, String>().also {
+      it["bootstrap.servers"] = config.getString(Constants.KAFKA_KEY_SERVERS)
+      // These serializers could be JsonObjectSerializers, but we do serialization on service layer now
+      it["key.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
+      it["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
+      it["acks"] = "1"
+    }
+    return KafkaProducer.create(vertx, kafkaConf)
   }
 
   /**

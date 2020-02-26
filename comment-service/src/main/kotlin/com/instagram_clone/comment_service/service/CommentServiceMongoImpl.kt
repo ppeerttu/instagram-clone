@@ -85,7 +85,11 @@ class CommentServiceMongoImpl(private val client: MongoClient) : CommentService 
     val query = JsonObject().put(FIELD_ID, id)
     client.removeDocument(COLLECTION_COMMENTS, query) {
       if (it.succeeded()) {
-        promise.complete(Outcome.Success(id))
+        if (it.result().removedCount == 0L) {
+          promise.complete(Outcome.Error("Message not found", NotFoundException("Message not found")))
+        } else {
+          promise.complete(Outcome.Success(id))
+        }
       } else {
         logger.error("Failure when deleting comment $id")
         promise.complete(Outcome.Error("Failure when deleting comment $id",
