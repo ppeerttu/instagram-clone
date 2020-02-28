@@ -15,4 +15,5 @@ public class Constants {
   public static String CONSUL_KEY_HOST = "CONSUL_HOST";
 
   public static String KAFKA_KEY_SERVERS = "KAFKA_SERVERS";
+  public static String KAFKA_KEY_CONSUMER_GROUP = "KAFKA_CONSUMER_GROUP";
 }

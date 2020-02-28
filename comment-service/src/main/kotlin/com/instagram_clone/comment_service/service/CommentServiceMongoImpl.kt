@@ -154,6 +154,23 @@ class CommentServiceMongoImpl(private val client: MongoClient) : CommentService 
     return promise.future()
   }
 
+  override fun deleteComments(imageId: String?): Future<Outcome<Long>> {
+    val promise = Promise.promise<Outcome<Long>>()
+    val query = JsonObject().put(FIELD_IMAGE_ID, imageId)
+
+    client.removeDocuments(COLLECTION_COMMENTS, query) {
+      if (it.succeeded()) {
+        val count = it.result().removedCount
+        promise.complete(Outcome.Success(count))
+      } else {
+        logger.error("Failure in deleting comments for image: $imageId")
+        promise.complete(Outcome.Error("Failed to delete comments for $imageId"))
+      }
+    }
+
+    return promise.future()
+  }
+
   /**
    * Issue a paginated request to given [collection] with [query]. Given
    * [pageNum] is the page number (starting from 1) and [pageSize] is the page

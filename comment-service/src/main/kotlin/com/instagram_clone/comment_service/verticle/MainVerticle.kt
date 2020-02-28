@@ -7,6 +7,7 @@ import com.instagram_clone.comment_service.message_broker.KafkaService
 import com.instagram_clone.comment_service.message_broker.MessageBrokerService
 import com.instagram_clone.comment_service.service.CommentServiceMockImpl
 import com.instagram_clone.comment_service.service.CommentServiceMongoImpl
+import com.instagram_clone.comment_service.service.MessageConsumerService
 import com.instagram_clone.comment_service.util.retrieveProblematicString
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
@@ -22,6 +23,7 @@ import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
+import io.vertx.kafka.client.consumer.KafkaConsumer
 import io.vertx.kafka.client.producer.KafkaProducer
 import java.lang.ClassCastException
 import java.net.InetAddress
@@ -36,7 +38,6 @@ class MainVerticle : AbstractVerticle() {
   private lateinit var logger: Logger
   private lateinit var mongoClient: MongoClient
   private lateinit var config: JsonObject
-  private lateinit var messageBroker: MessageBrokerService
   private var timer: Timer? = null
 
   override fun init(vertx: Vertx, context: Context) {
@@ -53,7 +54,10 @@ class MainVerticle : AbstractVerticle() {
         val commentService = CommentServiceMongoImpl(mongoClient)
         val grpcPort = retrieveProblematicString(config, Constants.GRPC_KEY_PORT).toInt()
         val producer = configureKafkaProducer(config)
-        val messageBroker = KafkaService(producer)
+        val consumer = configureKafkaConsumer(config)
+        val messageBroker = KafkaService(producer, consumer)
+//        messageBroker.subscribe("test", { logger.info("test result:: $it")})
+        val consumerService = MessageConsumerService(commentService, messageBroker)
         val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService, messageBroker)
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.getString(Constants.GRPC_KEY_HOST), grpcPort.toInt())
@@ -134,6 +138,19 @@ class MainVerticle : AbstractVerticle() {
       it["acks"] = "1"
     }
     return KafkaProducer.create(vertx, kafkaConf)
+  }
+
+  private fun configureKafkaConsumer(config: JsonObject): KafkaConsumer<Nothing, String> {
+    val kafkaConf = HashMap<String, String>().also {
+      it["bootstrap.servers"] = config.getString(Constants.KAFKA_KEY_SERVERS)
+      // These serializers could be JsonObjectSerializers, but we do serialization on service layer now
+      it["key.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
+      it["value.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
+      it["group.id"] = config.getString(Constants.KAFKA_KEY_CONSUMER_GROUP)
+      it["auto.offset.reset"] = "earliest"
+      it["enable.auto.commit"] = "false"
+    }
+    return KafkaConsumer.create(vertx, kafkaConf)
   }
 
   /**

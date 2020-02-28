@@ -65,4 +65,12 @@ public interface CommentService {
    * @return list of comments wrapped in a future outcome
    */
   public Future<Outcome<Pageable<List<CommentWrapper>>>> getComments(String imageId, int page, int count);
+
+  /**
+   * Delete all comments for image.
+   *
+   * @param imageId images id
+   * @return delete count wrapped in future outcome
+   */
+  public Future<Outcome<Long>> deleteComments(String imageId);
 }

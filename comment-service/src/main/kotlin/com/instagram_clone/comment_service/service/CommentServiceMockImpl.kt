@@ -74,4 +74,12 @@ class CommentServiceMockImpl : CommentService {
     promise.complete(Outcome.Success(Pageable(store.values.toList(), page, count, 100)))
     return promise.future()
   }
+
+  override fun deleteComments(imageId: String?): Future<Outcome<Long>> {
+    val promise = Promise.promise<Outcome<Long>>()
+    val currentCount = store.values.size
+    store.values.removeIf { it.imageId == imageId }
+    promise.complete(Outcome.Success((currentCount - store.values.size).toLong()))
+    return promise.future()
+  }
 }

@@ -23,6 +23,7 @@ services:
       CONSUL_HOST: consul-dev
       CONSUL_PORT: 8500
       KAFKA_SERVERS: kafka-dev:9092
+      KAFKA_CONSUMER_GROUP: comments
 
   mongodb:
     image: "mongo"
