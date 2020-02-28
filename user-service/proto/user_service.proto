@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+
+package User;
+
+service User {
+
+    // Create user
+    rpc Create(NewUser) returns (CreateUserResponse) {}
+    
+    // Update user (?)
+
+    // Delete user
+    rpc Delete(DeleteUserRequest) returns (DeleteUserResponse) {}
+
+    // Get user
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+    
+    // Follow user
+    // rpc FollowUser (FollowedName) returns (FollowResponse){}
+    
+    // Unfollow user
+    // rpc UnfollowUser (UnfollowedName) returns (UnfollowResponse){}
+    
+    // Get followers (?)
+    // rpc GetFollowers (GetName) returns (GetFollowerResponse){}
+    
+    // Get followees
+    // rpc GetFollowees (GetName) returns (GetFolloweeResponse){}
+}
+
+message NewUser {
+    string username = 1;
+    string account_id = 2;
+}
+
+message CreateUserResponse {
+    CreateUserStatus status = 1;
+}
+
+enum CreateUserStatus {
+    CREATE_USER_SERVER_ERROR = 0;
+    USERNAME_ALREADY_EXISTS = 1;
+    ACCOUNT_ID_ALREADY_EXISTS = 2;
+    USER_CREATED = 3;
+}
+
+message DeleteUserRequest {
+    string account_id = 1;
+}
+
+message DeleteUserResponse {
+    DeleteUserStatus status = 1;
+}
+
+enum DeleteUserStatus {
+    DELETE_USER_SERVER_ERROR = 0;
+    ACCOUNT_ID_NOT_EXIST = 1;
+    USER_DELETED = 2;
+}
+
+message GetUserRequest {
+    string account_id = 1;
+}
+
+message GetUserResponse {
+    oneof status {
+        UserInfo user = 1;
+        GetUserResponseError error = 2;
+    }
+}
+
+message UserInfo {
+    string id = 1;
+    string username = 2;
+    string created_at = 3;
+    string updated_at = 4;
+}
+
+enum GetUserResponseError {
+    GET_USER_SERVER_ERROR = 0;
+    ACCOUNT_ID_NOT_FOUND = 1;
+}

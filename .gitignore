@@ -38,4 +38,7 @@ log/
 .classpath
 .project
 .settings/
- 
+
+# Python
+env/
+*.pyc
