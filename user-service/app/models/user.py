@@ -8,8 +8,8 @@ class User(Base):
 
     id = Column(String, primary_key=True)
     username = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
         return "<User(id='{}', username='{}', created_at='{}', updated_at='{}')>".format(

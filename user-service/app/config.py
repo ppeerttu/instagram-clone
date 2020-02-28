@@ -16,3 +16,14 @@ database_config = {
     'port': os.getenv("POSTGRES_PORT", 5432),
     'database': os.getenv("POSTGRES_DB")
 }
+
+consul_config = {
+    'host': os.getenv("CONSUL_HOST", "localhost"),
+    'port': os.getenv("CONSUL_PORT", 8500),
+    'client_name': os.getenv("CONSUL_CLIENT_NAME", "user-service")
+}
+
+grpc_config = {
+    'port': os.getenv("GRPC_PORT", 8080),
+    'app_env': os.getenv("APP_ENV", "development")
+}

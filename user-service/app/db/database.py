@@ -29,6 +29,19 @@ class Database():
             )
         )
         self.connection = self.engine.connect()
+    
+    def authenticate(self) -> bool:
+        """Check whether the database connection and authentication is working.
+        
+        Returns:
+
+            bool -- True if success, False otherwise
+        """
+        try:
+            self.connection.execute(f"SELECT 1+1 as RESULT")
+            return True
+        except:
+            return False
 
     def findUserById(self, id: str) -> User:
         """Find user by ID.
