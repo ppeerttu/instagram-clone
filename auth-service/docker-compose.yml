@@ -20,7 +20,10 @@ services:
       CONSUL_HOST: consul-dev
       GRPC_PORT: 3000
       REDIS_PORT: 6379
-      REID_HOST: "redis"
+      REDIS_HOST: redis
+      KAFKA_SERVERS: kafka-dev:9092
+      KAFKA_ACCOUNT_TOPIC: accounts
+
     networks:
       - ig-clone-dev
     env_file:

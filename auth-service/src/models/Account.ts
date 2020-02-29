@@ -55,5 +55,17 @@ export class Account extends Model<Account> implements IAccount {
 
     @UpdatedAt
     public updatedAt!: Date;
+
+    /**
+     * Get the instance as "plain" JSON object without password.
+     */
+    public asPlainJSON() {
+        return {
+            id: this.id,
+            username: this.username,
+            createdAt: this.createdAt.toISOString(),
+            updatedAt: this.updatedAt.toISOString(),
+        };
+    }
 }
 

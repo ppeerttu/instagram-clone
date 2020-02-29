@@ -1,31 +1,36 @@
 import bcrypt from "bcrypt";
 import grpc from "grpc";
-import jwt from "jsonwebtoken";
+import pino from "pino";
 import { RedisClient } from "redis";
 
 import { config } from "../config/auth";
+import { kafkaProducerConfig } from "../config/kafka";
+import { KafkaProducer } from "../lib/kafka/KafkaProducer";
+import { DomainEventType } from "../lib/kafka/types";
 import { createAccessToken, createRefreshToken, verifyToken } from "../lib/tokens";
+import {
+    accountToAccountInfo,
+    getFromRedis,
+    validateCredential,
+} from "../lib/utils";
 import { Account } from "../models/Account";
 import { AuthService, IAuthServer } from "../proto/generated/auth_service_grpc_pb";
 import {
     AccountRequest,
+    AccountResponse,
     AuthErrorStatus,
+    DeleteAccountErrorStatus,
+    DeleteAccountRequest,
+    DeleteAccountResponse,
     JWTTokens,
     NewAccount,
     RenewRequest,
     RenewResponse,
     SignInResponse,
+    SignUpErrorStatus,
     SignUpResponse,
     UserCredentials,
-    DeleteAccountRequest,
-    AccountResponse,
-    DeleteAccountResponse,
-    DeleteAccountErrorStatus,
-    SignUpErrorStatus,
 } from "../proto/generated/auth_service_pb";
-import { accountToAccountInfo,
-    getFromRedis,
-    validateCredential } from "../lib/utils";
 
 /**
  * A handler for auth service.
@@ -34,12 +39,17 @@ class AuthHandler implements IAuthServer {
 
     private redisClient: RedisClient;
 
-    constructor(client: RedisClient) {
+    private kafkaProducer: KafkaProducer;
+
+    private logger = pino();
+
+    constructor(client: RedisClient, producer: KafkaProducer) {
         this.redisClient = client;
+        this.kafkaProducer = producer;
     }
 
     /**
-     * Sign an account in.
+     * Sign an account up.
      */
     public signUp = async (
         call: grpc.ServerUnaryCall<NewAccount>,
@@ -61,6 +71,14 @@ class AuthHandler implements IAuthServer {
                     const passwordHash = await bcrypt.hash(password, 12);
                     const newAccount = await Account.create({ username, passwordHash });
                     response.setAccount(accountToAccountInfo(newAccount));
+                    this.kafkaProducer.publish(
+                        kafkaProducerConfig.topic,
+                        {
+                            type: DomainEventType.Created,
+                            data: newAccount.asPlainJSON(),
+                        },
+                    )
+                        .catch((err) => this.logger.error(err));
                 }
             } catch (e) {
                 response.setError(SignUpErrorStatus.SIGNUP_SERVER_ERROR);
@@ -108,7 +126,7 @@ class AuthHandler implements IAuthServer {
                 callback(null, response);
             })
             .catch((err) => {
-                console.error(err);
+                this.logger.error(err);
                 response.setError(AuthErrorStatus.SERVER_ERROR);
                 return callback(null, response);
             });
@@ -154,7 +172,7 @@ class AuthHandler implements IAuthServer {
                     response.setError(AuthErrorStatus.EXPIRED_TOKEN);
                     break;
                 default:
-                    console.error("Error verifying refresh token, cause:", e);
+                    this.logger.error("Error verifying refresh token, cause:", e);
                     response.setError(AuthErrorStatus.SERVER_ERROR);
             }
         }
@@ -189,7 +207,7 @@ class AuthHandler implements IAuthServer {
                     response.setError(AuthErrorStatus.EXPIRED_TOKEN);
                     break;
                 default:
-                    console.error("Error verifying access token:", e);
+                    this.logger.error("Error verifying access token:", e);
                     response.setError(AuthErrorStatus.SERVER_ERROR);
             }
         }
@@ -210,6 +228,14 @@ class AuthHandler implements IAuthServer {
             } else {
                 await account.destroy();
                 response.setId(payload.sub);
+                this.kafkaProducer.publish(
+                    kafkaProducerConfig.topic,
+                    {
+                        type: DomainEventType.Deleted,
+                        data: account.asPlainJSON(),
+                    },
+                )
+                    .catch(this.logger.error);
             }
         } catch (e) {
             switch (e.name) {
@@ -220,7 +246,7 @@ class AuthHandler implements IAuthServer {
                     response.setError(DeleteAccountErrorStatus.DELETE_TOKEN_EXPIRED);
                     break;
                 default:
-                    console.error("Error verifying access token:", e);
+                    this.logger.error("Error verifying access token:", e);
                     response.setError(DeleteAccountErrorStatus.DELETE_SERVER_ERROR);
             }
         }
