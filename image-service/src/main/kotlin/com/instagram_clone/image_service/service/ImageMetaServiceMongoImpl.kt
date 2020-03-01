@@ -38,6 +38,26 @@ class ImageMetaServiceMongoImpl(
     return findAndDeleteImage(imageId)
   }
 
+  override fun deleteImages(imageIds: List<String>): Future<Int> {
+    val promise = Promise.promise<Int>()
+    val query = json {
+      obj(FIELD_ID to json {
+        obj("\$in" to imageIds)
+      })
+    }
+
+    client.removeDocuments(config.imagesCollection, query) {
+      if (it.succeeded()) {
+        val result = it.result()
+        promise.complete(result.removedCount.toInt())
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+
+    return promise.future()
+  }
+
   /**
    * Get image metadata.
    */
@@ -321,7 +341,7 @@ class ImageMetaServiceMongoImpl(
         if (r.docUpsertedId != null && r.docMatched == 0L) {
           promise.complete(true)
         } else {
-          promise.complete(false);
+          promise.complete(false)
         }
       } else {
         promise.fail(it.cause())

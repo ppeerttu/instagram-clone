@@ -47,4 +47,9 @@ interface ImageMetaService {
    * Get images based on search tag.
    */
   fun searchImagesByTag(tag: String, page: Int, size: Int, searchType: ImageSearchType): Future<ImageSearchPageWrapper>
+
+  /**
+   * Delete images based on given [imageIds].
+   */
+  fun deleteImages(imageIds: List<String>): Future<Int>
 }

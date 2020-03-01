@@ -149,4 +149,10 @@ class ImageMetaServiceMockImpl : ImageMetaService {
       )
     )
   }
+
+  override fun deleteImages(imageIds: List<String>): Future<Int> {
+    val deleted = images.filter { imageIds.contains(it.id) }
+    images.removeAll(deleted)
+    return Future.succeededFuture(deleted.size)
+  }
 }
