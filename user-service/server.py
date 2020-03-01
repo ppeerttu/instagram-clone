@@ -1,17 +1,21 @@
 from concurrent import futures
+from threading import Thread
 import time
 import grpc
 import platform
 import logging
-from app.codegen import user_service_pb2, user_service_pb2_grpc
+import json
+from app.codegen import user_service_pb2_grpc
 from app.db.database import Database
-from app.models.user import User
-from app.config import database_config, grpc_config
-from app.db import exceptions
+from app.config import database_config, grpc_config, kafka_consumer_config
 from app.service_discovery import ServiceDiscovery
 from app.utils import SignalDetector
+from app.user_servicer import UserServicer
+from app.user_service import UserService
+from app.user_producer import UserProducer
+from app.account_consumer import AccountConsumer
 
-log_level = logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
+log_level = logging.INFO #logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
 logging.basicConfig(format="%(asctime)s %(process)d %(levelname)s %(name)s - %(message)s", level=log_level)
 
 def get_error_handler(sd: ServiceDiscovery):
@@ -41,86 +45,23 @@ def get_error_handler(sd: ServiceDiscovery):
             logging.warn("Re-registration to Consul failed: {e}")
 
     return error_handler
-
-class UserServicer(user_service_pb2_grpc.UserServicer): 
-    """Class implementing the gRPC API"""
-
-    def __init__(self, database: Database):
-        self.db = database
-
-    def Create(self, request, context): 
-        """Creates a new user"""
-        username = request.username
-        account_id = request.account_id
-        user = User(id=account_id, username=username)
-        logging.info("Received account id to create: " + account_id + "\n" + "recieved username: " + username)
-        try:
-            self.db.createUser(user)
-            response = user_service_pb2.CreateUserResponse(
-                status = "USER_CREATED"
-            )
-        except exceptions.IdExistsError:
-            response = user_service_pb2.CreateUserResponse(
-                status = "ACCOUNT_ID_ALREADY_EXISTS"
-            )
-        except exceptions.UsernameExistsError:
-            response = user_service_pb2.CreateUserResponse(
-                status = "USERNAME_ALREADY_EXISTS"
-            )
-        return response
-
-    def Delete(self, request, context):
-        """Delete a user"""
-        account_id = request.account_id
-        logging.info("Received account id to delete: " + account_id) 
-        try:
-            self.db.deleteUserById(account_id)
-            response = user_service_pb2.DeleteUserResponse(
-                status = "USER_DELETED"
-            )
-        except exceptions.EntityNotFoundError:
-            response = user_service_pb2.DeleteUserResponse(
-                status = "ACCOUNT_ID_NOT_EXIST"
-            )
-        return response
-
-    def GetUser(self, request, context):
-        """Gets a user.
-           gRPC calls this method when clients call the GetUser rpc (method).
-        Arguments:
-            request (GetUserRequest): The incoming request.
-            context: The gRPC connection context.
-        
-        Returns:
-            user (User): A user.
-        """
-        account_id = request.account_id
-        logging.info("Received account id: " + account_id)
-        result= self.db.findUserById(account_id)
-        user = user_service_pb2.UserInfo()
-        user.id = result.id
-        user.username = result.username
-        user.created_at = result.created_at.isoformat()
-        user.updated_at = result.updated_at.isoformat()
-        response = user_service_pb2.GetUserResponse(
-            user = user
-        )
-        
-        return response
-            
+  
 
 if __name__ == "__main__":
-    # Run a gRPC server with one thread.
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     database = Database(database_config)
-    # Adds the servicer class to the server.
-    user_service_pb2_grpc.add_UserServicer_to_server(UserServicer(database), server)
+    producer = UserProducer()
+    consumer = AccountConsumer(database)
+    user_service = UserService(database, producer)
+
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+    user_service_pb2_grpc.add_UserServicer_to_server(UserServicer(user_service), server)
     host = "0.0.0.0"
     port = grpc_config["port"]
     address = "{}:{}".format(host, port)
     server.add_insecure_port(address)
     server.start()
-    logging.info("API server started, istening at {}".format(address))
+    logging.info("API server started, listening at {}".format(address))
+    consumer.start()
 
     # Register this service into Consul
     sd = ServiceDiscovery()
@@ -140,6 +81,9 @@ if __name__ == "__main__":
 
     server.stop(10).wait()
     logging.debug("Stopped gRPC server")
+
+    consumer.stop()
+    producer.clean_up()
 
     if database.authenticate():    
         database.connection.close()

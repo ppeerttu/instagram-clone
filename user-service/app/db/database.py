@@ -71,7 +71,7 @@ class Database():
         session = Session(bind=self.engine)
         return session.query(User).filter_by(username=username).first()
 
-    def createUser(self, user: User):
+    def createUser(self, user: User) -> User:
         """Create a new user into database.
         
         Arguments:
@@ -93,6 +93,7 @@ class Database():
 
         session.add(user)
         session.commit()
+        return user
 
     def getAllUsers(self, page: int = 1, size: int = 20) -> Page:
         """Find all users as paginated result set.
@@ -118,7 +119,7 @@ class Database():
         count = session.query(User).count()
         return Page(page, size, count, users)
 
-    def deleteUserById(self, user_id: str):
+    def deleteUserById(self, user_id: str) -> User:
         """Delete a user by ID.
         
         Arguments:
@@ -135,6 +136,7 @@ class Database():
             raise EntityNotFoundError
         session.delete(user)
         session.commit()
+        return user
 
 
 
