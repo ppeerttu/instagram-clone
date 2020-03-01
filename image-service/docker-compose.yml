@@ -27,6 +27,8 @@ services:
       IMAGES_COLLECTION: image_meta
       KAFKA_SERVERS: kafka-dev:9092
       IMAGES_TOPIC: images
+      USERS_TOPIC: users
+      KAFKA_CONSUMER_GROUP: image-service
 
   image-db:
     container_name: image-db-dev

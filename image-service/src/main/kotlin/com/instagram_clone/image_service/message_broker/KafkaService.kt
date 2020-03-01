@@ -42,6 +42,7 @@ class KafkaService(
             val valueAsJson = JsonObject(record.value())
             val event = valueAsJson.mapTo(DomainEvent::class.java)
             handler(event)
+            consumer.commit()
           } catch (e: DecodeException) {
             logger.warn("Kafka consumer event received in unexpected format, ${e.message}", e)
           } catch (e: Exception) {

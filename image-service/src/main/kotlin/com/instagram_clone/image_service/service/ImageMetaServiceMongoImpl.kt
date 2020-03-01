@@ -36,26 +36,22 @@ class ImageMetaServiceMongoImpl(
    */
   override fun deleteImage(imageId: String): Future<Nothing> {
     return findAndDeleteImage(imageId)
+      .compose { deleteLikesBulk(listOf(imageId)) }
   }
 
+  /**
+   * Delete images and all related metadata.
+   */
   override fun deleteImages(imageIds: List<String>): Future<Int> {
-    val promise = Promise.promise<Int>()
-    val query = json {
-      obj(FIELD_ID to json {
-        obj("\$in" to imageIds)
-      })
-    }
-
-    client.removeDocuments(config.imagesCollection, query) {
-      if (it.succeeded()) {
-        val result = it.result()
-        promise.complete(result.removedCount.toInt())
-      } else {
-        promise.fail(it.cause())
+    return CompositeFuture.all(
+      deleteImagesBulk(imageIds),
+      deleteLikesBulk(imageIds)
+    )
+      .compose { results ->
+        Future.succeededFuture(
+          results.resultAt<Int>(0)
+        )
       }
-    }
-
-    return promise.future()
   }
 
   /**
@@ -384,6 +380,49 @@ class ImageMetaServiceMongoImpl(
     client.insert(config.imagesCollection, asJson) {
       if (it.succeeded()) {
         promise.complete(meta)
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+    return promise.future()
+  }
+
+  /**
+   * Delete images in bulk by matching [imageIds].
+   */
+  fun deleteImagesBulk(imageIds: List<String>): Future<Int> {
+    val promise = Promise.promise<Int>()
+    val query = json {
+      obj(FIELD_ID to json {
+        obj("\$in" to imageIds)
+      })
+    }
+
+    client.removeDocuments(config.imagesCollection, query) {
+      if (it.succeeded()) {
+        val result = it.result()
+        promise.complete(result.removedCount.toInt())
+      } else {
+        promise.fail(it.cause())
+      }
+    }
+
+    return promise.future()
+  }
+
+  /**
+   * Remove image likes from images with given [imageIds].
+   */
+  private fun deleteLikesBulk(imageIds: List<String>): Future<Nothing> {
+    val promise = Promise.promise<Nothing>()
+    val query = json {
+      obj("imageId" to json {
+        obj("\$in" to imageIds)
+      })
+    }
+    client.removeDocuments(config.likesCollection, query) {
+      if (it.succeeded()) {
+        promise.complete()
       } else {
         promise.fail(it.cause())
       }

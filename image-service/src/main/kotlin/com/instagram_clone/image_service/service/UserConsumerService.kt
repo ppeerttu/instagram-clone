@@ -10,12 +10,17 @@ import io.vertx.core.logging.LoggerFactory
 
 class UserConsumerService(
   private val imageMetaService: ImageMetaService,
+  private val imageFileService: ImageFileService,
   private val messageBrokerService: MessageBrokerService
 ) {
 
   private val logger = LoggerFactory.getLogger("MessageConsumerService")
 
   private val config = AppConfig.getInstance()
+
+  init {
+      messageBrokerService.subscribe(config.usersTopic) { handleEvent(it) }
+  }
 
   private fun handleEvent(event: DomainEvent) {
     when (event.type) {
@@ -64,6 +69,12 @@ class UserConsumerService(
               "$count for user $userId at round $round"
           )
         }
+        // In case some of the files cannot be deleted, we just "ignore" it for now
+        imageFileService.deleteImageFiles(images.map { it.id })
+          .onSuccess { fileCount -> logger.debug("Deleted $fileCount image files") }
+          .onFailure { e ->
+            logger.error("Failed to delete some of the image files, ${e.message}", e)
+          }
         publishDeletedImages(images)
         if (nextPage) {
           deleteImages(userId, round + 1, deleteCount + count)

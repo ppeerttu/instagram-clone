@@ -91,6 +91,18 @@ class AppConfig private constructor(json: JsonObject) {
   var imagesTopic: String
     private set
 
+  /**
+   * Kafka topic for users
+   */
+  var usersTopic: String
+    private set
+
+  /**
+   * Name / ID of the Kafka consumer group
+   */
+  var consumerGroup: String
+    private set
+
   init {
     grpcHost = json.getString(ConfigConstants.GRPC_HOST)
     grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
@@ -106,6 +118,8 @@ class AppConfig private constructor(json: JsonObject) {
     likesCollection = json.getString(ConfigConstants.LIKES_COLLECTION, "image_likes")
     kafkaServers = json.getString(ConfigConstants.KAFKA_SERVERS)
     imagesTopic = json.getString(ConfigConstants.IMAGES_TOPIC, "images")
+    usersTopic = json.getString(ConfigConstants.USERS_TOPIC, "users")
+    consumerGroup = json.getString(ConfigConstants.KAFKA_CONSUMER_GROUP, "image-service")
   }
 
   companion object {
