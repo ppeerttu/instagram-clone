@@ -4,7 +4,7 @@ import json
 import logging
 
 from app.config import kafka_consumer_config
-from app.db.database import Database
+from app.user_service import UserService
 from app.models.user import User, map_from_json as user_from_json
 from app.domain_event import DomainEvent, DomainEventType
 
@@ -13,17 +13,17 @@ logger = logging.getLogger("app.account_consumer")
 class AccountConsumer():
     """Class consuming account events. Works with threads."""
 
-    def __init__(self, database: Database):
+    def __init__(self, user_service: UserService):
         super().__init__()
         self.consumer = KafkaConsumer(
             group_id=kafka_consumer_config["group_id"],
             bootstrap_servers=[kafka_consumer_config["bootstrap_servers"]],
             auto_offset_reset="earliest",
-            enable_auto_commit=True,
+            enable_auto_commit=True, # Commit messages automatically
             value_deserializer=AccountConsumer.decode_json,
             consumer_timeout_ms=2000 # Stop consuming after 2 seconds of idle
         )
-        self.db = database
+        self.user_service = user_service
         self.shutting_down = False
         self.main_thread = None #type: Thread
 
@@ -82,13 +82,13 @@ class AccountConsumer():
     def handle_create(self, data):
         try:
             user = user_from_json(data)
-            self.db.createUser(user)
+            self.user_service.createUser(user)
         except Exception as e:
             logger.error("Failed to create user from user event", e)
 
     def handle_delete(self, data):
         try:
             user = user_from_json(data)
-            self.db.deleteUserById(user.id)
+            self.user_service.deleteUserById(user.id)
         except Exception as e:
             logger.error("Failed to delete user from user event", e)

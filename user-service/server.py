@@ -11,6 +11,8 @@ from app.config import database_config, grpc_config, kafka_consumer_config
 from app.service_discovery import ServiceDiscovery
 from app.utils import SignalDetector
 from app.user_servicer import UserServicer
+from app.user_service import UserService
+from app.user_producer import UserProducer
 from app.account_consumer import AccountConsumer
 
 log_level = logging.INFO #logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
@@ -47,11 +49,12 @@ def get_error_handler(sd: ServiceDiscovery):
 
 if __name__ == "__main__":
     database = Database(database_config)
-
+    producer = UserProducer()
     consumer = AccountConsumer(database)
+    user_service = UserService(database, producer)
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
-    user_service_pb2_grpc.add_UserServicer_to_server(UserServicer(database), server)
+    user_service_pb2_grpc.add_UserServicer_to_server(UserServicer(user_service), server)
     host = "0.0.0.0"
     port = grpc_config["port"]
     address = "{}:{}".format(host, port)

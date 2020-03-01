@@ -3,13 +3,15 @@ from app.codegen import user_service_pb2, user_service_pb2_grpc
 from app.db.database import Database
 from app.models.user import User
 from app.db import exceptions
+from app.user_service import UserService
 
 
 class UserServicer(user_service_pb2_grpc.UserServicer): 
     """Class implementing the gRPC API"""
 
-    def __init__(self, database: Database):
-        self.db = database
+    def __init__(self, user_service: UserService):
+        self.user_service = user_service
+        self.db = user_service.db
 
     def Create(self, request, context): 
         """Creates a new user"""
@@ -18,7 +20,8 @@ class UserServicer(user_service_pb2_grpc.UserServicer):
         user = User(id=account_id, username=username)
         logging.info("Received account id to create: " + account_id + "\n" + "recieved username: " + username)
         try:
-            self.db.createUser(user)
+            # UserService uses database + publishes to Kafka
+            self.user_service.createUser(user)
             response = user_service_pb2.CreateUserResponse(
                 status = "USER_CREATED"
             )
@@ -37,7 +40,7 @@ class UserServicer(user_service_pb2_grpc.UserServicer):
         account_id = request.account_id
         logging.info("Received account id to delete: " + account_id) 
         try:
-            self.db.deleteUserById(account_id)
+            self.user_service.deleteUserById(account_id)
             response = user_service_pb2.DeleteUserResponse(
                 status = "USER_DELETED"
             )
