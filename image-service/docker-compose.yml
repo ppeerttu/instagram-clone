@@ -26,6 +26,7 @@ services:
       MONGO_DATABASE: images
       IMAGES_COLLECTION: image_meta
       KAFKA_SERVERS: kafka-dev:9092
+      IMAGES_TOPIC: images
 
   image-db:
     container_name: image-db-dev
