@@ -25,9 +25,18 @@ export interface AuthState {
  * @param service The auth service instance
  */
 export function generateAuthMiddleware(
-    service: AuthService
+    service: AuthService,
+    unless?: (string | RegExp)[],
 ): Middleware {
     return async (ctx: RouterContext, next: Next) => {
+        if (Array.isArray(unless)) {
+            for (const path of unless) {
+                if (new RegExp(path).test(ctx.URL.pathname)) {
+                    // Skip authentication
+                    return next();
+                }
+            }
+        }
         const token = getBearerToken(ctx);
         if (!token) {
             throw new RequestError(401);

@@ -84,7 +84,10 @@ export default class Server {
     ) {
         const publicRouter = new Router();
         const protectedRouter = new Router(); // Routes that require access token
-        const authMw = generateAuthMiddleware(authService);
+        const authMw = generateAuthMiddleware(
+            authService,
+            [/^\/images\/([a-f0-9-]{1,36})\/data$/]
+        );
         protectedRouter.use(authMw);
 
         const authController = new AuthController(authService);
