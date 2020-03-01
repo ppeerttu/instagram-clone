@@ -3,6 +3,7 @@ chardet==3.0.4
 grpcio==1.27.1
 grpcio-tools==1.27.1
 idna==2.9
+kafka-python==2.0.1
 protobuf==3.11.3
 psycopg2==2.8.4
 python-consul==1.1.0

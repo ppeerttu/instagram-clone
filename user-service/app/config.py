@@ -27,3 +27,9 @@ grpc_config = {
     'port': os.getenv("GRPC_PORT", 8080),
     'app_env': os.getenv("APP_ENV", "development")
 }
+
+kafka_consumer_config = {
+    'topic': os.getenv("KAFKA_ACCOUNTS_TOPIC", "accounts"),
+    'bootstrap_servers': os.getenv("KAFKA_SERVERS", "localhost:29092"),
+    'group_id': os.getenv("KAFKA_CONSUMER_GROUP", "user-service")
+}

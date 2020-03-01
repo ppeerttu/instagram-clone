@@ -1,16 +1,19 @@
 from concurrent import futures
+from threading import Thread
 import time
 import grpc
 import platform
 import logging
+import json
 from app.codegen import user_service_pb2_grpc
 from app.db.database import Database
-from app.config import database_config, grpc_config
+from app.config import database_config, grpc_config, kafka_consumer_config
 from app.service_discovery import ServiceDiscovery
 from app.utils import SignalDetector
 from app.user_servicer import UserServicer
+from app.account_consumer import AccountConsumer
 
-log_level = logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
+log_level = logging.INFO #logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
 logging.basicConfig(format="%(asctime)s %(process)d %(levelname)s %(name)s - %(message)s", level=log_level)
 
 def get_error_handler(sd: ServiceDiscovery):
@@ -43,17 +46,19 @@ def get_error_handler(sd: ServiceDiscovery):
   
 
 if __name__ == "__main__":
-    # Run a gRPC server with one thread.
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     database = Database(database_config)
-    # Adds the servicer class to the server.
+
+    consumer = AccountConsumer(database)
+
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     user_service_pb2_grpc.add_UserServicer_to_server(UserServicer(database), server)
     host = "0.0.0.0"
     port = grpc_config["port"]
     address = "{}:{}".format(host, port)
     server.add_insecure_port(address)
     server.start()
-    logging.info("API server started, istening at {}".format(address))
+    logging.info("API server started, listening at {}".format(address))
+    consumer.start()
 
     # Register this service into Consul
     sd = ServiceDiscovery()
@@ -73,6 +78,8 @@ if __name__ == "__main__":
 
     server.stop(10).wait()
     logging.debug("Stopped gRPC server")
+
+    consumer.stop()
 
     if database.authenticate():    
         database.connection.close()
