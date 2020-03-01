@@ -2,6 +2,7 @@ package com.instagram_clone.image_service.service
 
 import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.exception.NotFoundException
+import io.vertx.core.CompositeFuture
 import io.vertx.core.Future
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
@@ -61,6 +62,11 @@ class ImageFileServiceVertxImpl(
         }
       }
     return promise.future()
+  }
+
+  override fun deleteImageFiles(ids: List<String>): Future<Int> {
+    return CompositeFuture.join(ids.map { deleteImageFile(it) })
+      .compose { Future.succeededFuture(ids.size) }
   }
 
   /**

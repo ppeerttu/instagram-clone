@@ -69,4 +69,19 @@ object ConfigConstants {
    * Kafka servers value in form of "<host>:<port>"
    */
   const val KAFKA_SERVERS = "KAFKA_SERVERS"
+
+  /**
+   * Kafka topic for image events
+   */
+  const val IMAGES_TOPIC = "IMAGES_TOPIC"
+
+  /**
+   * Kafka topic for user events
+   */
+  const val USERS_TOPIC = "USERS_TOPIC"
+
+  /**
+   * Name / ID of the Kafka consumer group
+   */
+  const val KAFKA_CONSUMER_GROUP = "KAFKA_CONSUMER_GROUP"
 }

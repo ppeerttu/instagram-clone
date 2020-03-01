@@ -3,6 +3,7 @@ package com.instagram_clone.image_service.grpc
 import com.google.protobuf.ByteString
 import com.instagram_clone.image_service.*
 import com.instagram_clone.image_service.ImagesGrpc.ImagesImplBase
+import com.instagram_clone.image_service.config.AppConfig
 import com.instagram_clone.image_service.data.*
 import com.instagram_clone.image_service.exception.CaptionTooLongException
 import com.instagram_clone.image_service.exception.EmptySearchException
@@ -21,7 +22,6 @@ import kotlin.math.min
 
 // Chunk size in bytes
 private const val CHUNK_SIZE = 1024 * 16
-private const val IMAGE_TOPIC = "images"
 
 /**
  * Class implementing the image_service.proto Image service interface.
@@ -33,6 +33,8 @@ class ImageServiceGrpcImpl(
 ) : ImagesImplBase() {
 
   private val logger = LoggerFactory.getLogger("ImageServiceGrpcImpl")
+
+  private val config = AppConfig.getInstance()
 
   /**
    * Create an image based on client-streaming chunks.
@@ -75,16 +77,16 @@ class ImageServiceGrpcImpl(
 
         // TODO: Maybe check if user exists first
         metaService.saveImageMeta(meta)
-          .onSuccess { meta ->
-            fileService.saveImageFile(meta.id, bytes)
+          .onSuccess { savedMeta ->
+            fileService.saveImageFile(savedMeta.id, bytes)
               .onSuccess {
-                publishEvent(DomainEventType.Created, meta)
-                builder.image = fromImageMeta(meta)
+                publishEvent(DomainEventType.Created, savedMeta)
+                builder.image = fromImageMeta(savedMeta)
                 responseObserver.onNext(builder.build())
                 responseObserver.onCompleted()
               }
-              .onFailure { e ->
-                logger.error("Failed to persist the image on disk: ", e)
+              .onFailure { err ->
+                logger.error("Failed to persist the image on disk: ", err)
                 builder.error = CreateImageErrorStatus.CREATE_IMAGE_SERVER_ERROR
 
                 // We don't have to wait for this before returning response
@@ -92,8 +94,8 @@ class ImageServiceGrpcImpl(
                   .onSuccess {
                     logger.info("Removed metadata of image ${meta.id} as a result of failed file disk save")
                   }
-                  .onFailure {  e ->
-                    logger.error("Failed to remove metadata of image ${meta.id}:", e)
+                  .onFailure { error ->
+                    logger.error("Failed to remove metadata of image ${meta.id}:", error)
                   }
 
                 responseObserver.onNext(builder.build())
@@ -297,10 +299,10 @@ class ImageServiceGrpcImpl(
     val response = GetLikesResponse.newBuilder()
 
     metaService.getImageLikes(imageId, page, size)
-      .onSuccess { page ->
+      .onSuccess { wrapper ->
         responseObserver.onNext(
           response
-            .setPage(fromImageLikePage(page))
+            .setPage(fromImageLikePage(wrapper))
             .build()
         )
         responseObserver.onCompleted()
@@ -334,10 +336,10 @@ class ImageServiceGrpcImpl(
 
     // TODO: Maybe check if user exists first
     metaService.getUserImages(userId, page, size)
-      .onSuccess { page ->
+      .onSuccess { wrapper ->
         responseObserver.onNext(
           response
-            .setPage(fromUserImagesPage(page))
+            .setPage(fromUserImagesPage(wrapper))
             .build()
         )
         responseObserver.onCompleted()
@@ -424,7 +426,7 @@ class ImageServiceGrpcImpl(
    */
   private fun publishEvent(type: DomainEventType, data: Any) {
     broker.publishEvent(
-      IMAGE_TOPIC,
+      config.imagesTopic,
       DomainEvent(
         type,
         data

@@ -5,6 +5,7 @@ import com.instagram_clone.image_service.service.ImageFileServiceVertxImpl
 import com.instagram_clone.image_service.grpc.ImageServiceGrpcImpl
 import com.instagram_clone.image_service.message_broker.KafkaService
 import com.instagram_clone.image_service.service.ImageMetaServiceMongoImpl
+import com.instagram_clone.image_service.service.UserConsumerService
 import io.vertx.config.ConfigRetriever
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Context
@@ -19,6 +20,7 @@ import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.grpc.VertxServerBuilder
+import io.vertx.kafka.client.consumer.KafkaConsumer
 import io.vertx.kafka.client.producer.KafkaProducer
 import java.net.InetAddress
 import java.util.*
@@ -49,10 +51,16 @@ class MainVerticle : AbstractVerticle() {
 
         val mongoClient = configureMongo(config)
         val producer = configureKafkaProducer(config)
-        val messageBroker = KafkaService(producer)
+        val consumer = configureKafkaConsumer(config)
+        val messageBroker = KafkaService(producer, consumer)
         val imageMetaService = ImageMetaServiceMongoImpl(mongoClient)
         val imageFileService = ImageFileServiceVertxImpl(vertx)
         val grpcService: ImagesGrpc.ImagesImplBase = ImageServiceGrpcImpl(
+          imageMetaService,
+          imageFileService,
+          messageBroker
+        )
+        val userConsumerService = UserConsumerService(
           imageMetaService,
           imageFileService,
           messageBroker
@@ -133,6 +141,19 @@ class MainVerticle : AbstractVerticle() {
       it["acks"] = "1"
     }
     return KafkaProducer.create(vertx, kafkaConf)
+  }
+
+  private fun configureKafkaConsumer(config: AppConfig): KafkaConsumer<Nothing, String> {
+    val kafkaConf = HashMap<String, String>().also {
+      it["bootstrap.servers"] = config.kafkaServers
+      // These serializers could be JsonObjectSerializers, but we do serialization on service layer now
+      it["key.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
+      it["value.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
+      it["group.id"] = config.consumerGroup
+      it["auto.offset.reset"] = "earliest"
+      it["enable.auto.commit"] = "false"
+    }
+    return KafkaConsumer.create(vertx, kafkaConf)
   }
 
   /**

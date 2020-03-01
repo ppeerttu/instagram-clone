@@ -10,5 +10,8 @@
   "MONGO_USER": "image-service",
   "MONGO_PASSWORD": "image-service",
   "IMAGES_COLLECTION": "image_meta",
-  "KAFKA_SERVERS": "localhost:29092"
+  "KAFKA_SERVERS": "localhost:29092",
+  "IMAGES_TOPIC": "images",
+  "USERS_TOPIC": "users",
+  "KAFKA_CONSUMER_GROUP": "image-service"
 }

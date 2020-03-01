@@ -22,4 +22,9 @@ interface ImageFileService {
    * Get image file from disk.
    */
   fun getImageFile(id: String): Future<ByteArray>
+
+  /**
+   * Delete a batch of images from disk.
+   */
+  fun deleteImageFiles(ids: List<String>): Future<Int>
 }
