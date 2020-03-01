@@ -35,6 +35,7 @@ import { GetCommentError } from "../client/comments/errors/GetCommentError";
 const allowedFileTypes = ["image/png", "image/jpeg"];
 
 const MAX_IMAGE_SIZE_BYTES = 15728640; // 15MB
+const CACHE_CONTROL_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
 const upload = multer({
   /**
@@ -304,6 +305,7 @@ export class ImageController implements IController {
     try {
       const { type, data } = await this.imageService.getImageData(imageId);
       ctx.body = Buffer.from(data);
+      ctx.set("Cache-Control", `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}`);
       ctx.type = `image/${type}`;
       ctx.status = 200;
     } catch (e) {
