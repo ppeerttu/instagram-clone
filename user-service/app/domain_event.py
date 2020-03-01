@@ -14,11 +14,11 @@ class DomainEvent():
         self.type = event_type
         self.data = data
 
-    def json_serialize(self):
-        return json.dumps({
-            'type': self.type,
+    def to_dict(self) -> dict:
+        return {
+            'type': self.type.value,
             'data': self.data
-        })
+        }
 
     @staticmethod
     def map_from_json(json_object):

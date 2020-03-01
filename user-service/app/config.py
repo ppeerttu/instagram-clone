@@ -33,3 +33,8 @@ kafka_consumer_config = {
     'bootstrap_servers': os.getenv("KAFKA_SERVERS", "localhost:29092"),
     'group_id': os.getenv("KAFKA_CONSUMER_GROUP", "user-service")
 }
+
+kafka_producer_config = {
+    'bootstrap_servers': os.getenv("KAFKA_SERVERS", "localhost:29092"),
+    'topic': os.getenv("KAFKA_USERS_TOPIC", "users")
+}
