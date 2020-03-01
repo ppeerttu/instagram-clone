@@ -19,6 +19,10 @@ services:
       - .db.env
     environment:
       POSTGRES_HOST: user-db-dev
+      KAFKA_SERVERS: kafka-dev:9092
+      KAFKA_ACCOUNTS_TOPIC: accounts
+      KAFKA_USERS_TOPIC: users
+      KAFKA_CONSUMER_GROUP: user-service
 
   user-db:
     container_name: user-db-dev
