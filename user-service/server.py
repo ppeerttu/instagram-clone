@@ -83,6 +83,7 @@ if __name__ == "__main__":
     logging.debug("Stopped gRPC server")
 
     consumer.stop()
+    producer.clean_up()
 
     if database.authenticate():    
         database.connection.close()
