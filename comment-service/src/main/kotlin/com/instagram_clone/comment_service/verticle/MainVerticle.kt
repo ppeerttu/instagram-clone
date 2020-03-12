@@ -4,8 +4,6 @@ import com.instagram_clone.comment_service.CommentsGrpc
 import com.instagram_clone.comment_service.data.Constants
 import com.instagram_clone.comment_service.grpc.CommentServiceGrpcImpl
 import com.instagram_clone.comment_service.message_broker.KafkaService
-import com.instagram_clone.comment_service.message_broker.MessageBrokerService
-import com.instagram_clone.comment_service.service.CommentServiceMockImpl
 import com.instagram_clone.comment_service.service.CommentServiceMongoImpl
 import com.instagram_clone.comment_service.service.MessageConsumerService
 import com.instagram_clone.comment_service.util.retrieveProblematicString
@@ -14,6 +12,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Context
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
+import io.vertx.core.http.HttpServer
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
@@ -21,7 +20,11 @@ import io.vertx.ext.consul.CheckOptions
 import io.vertx.ext.consul.ConsulClient
 import io.vertx.ext.consul.ConsulClientOptions
 import io.vertx.ext.consul.ServiceOptions
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.HealthChecks
+import io.vertx.ext.healthchecks.Status
 import io.vertx.ext.mongo.MongoClient
+import io.vertx.ext.web.Router
 import io.vertx.grpc.VertxServerBuilder
 import io.vertx.kafka.client.consumer.KafkaConsumer
 import io.vertx.kafka.client.producer.KafkaProducer
@@ -40,6 +43,13 @@ class MainVerticle : AbstractVerticle() {
   private lateinit var config: JsonObject
   private var timer: Timer? = null
 
+  private var consulEnabled = true
+  private var webServerPort = 8080
+
+  private var consulHealthy = false
+  private var grpcStarted = false
+
+
   override fun init(vertx: Vertx, context: Context) {
     super.init(vertx, context)
     logger = LoggerFactory.getLogger("MainVerticle")
@@ -51,28 +61,78 @@ class MainVerticle : AbstractVerticle() {
       if (it.succeeded()) {
         config = it.result()
         mongoClient = configureMongo(config)
+
+        // Set some config values
+        consulEnabled = config.getBoolean(Constants.CONSUL_KEY_ENABLED, true)
+        webServerPort = config.getInteger(Constants.WEB_KEY_SERVER_PORT, webServerPort)
+
+        // Web server for reporting service liveness checks
+        val webServer = createHealthCheckServer()
+
         val commentService = CommentServiceMongoImpl(mongoClient)
         val grpcPort = retrieveProblematicString(config, Constants.GRPC_KEY_PORT).toInt()
         val producer = configureKafkaProducer(config)
         val consumer = configureKafkaConsumer(config)
         val messageBroker = KafkaService(producer, consumer)
-//        messageBroker.subscribe("test", { logger.info("test result:: $it")})
-        val consumerService = MessageConsumerService(commentService, messageBroker)
+        val consumerService = MessageConsumerService(commentService, messageBroker, config.getString(Constants.KAFKA_KEY_IMAGES_TOPIC, "images"))
         val service: CommentsGrpc.CommentsImplBase = CommentServiceGrpcImpl(commentService, messageBroker)
         val rpcServer = VertxServerBuilder
           .forAddress(vertx, config.getString(Constants.GRPC_KEY_HOST), grpcPort.toInt())
           .addService(service)
           .build()
         rpcServer.start {
+          grpcStarted = true
           logger.info("Grpc server started on port: $grpcPort")
+          if (consulEnabled) {
+            configureConsul(config)
+          } else {
+            logger.info("Consul is not enabled, skipping configuration for it")
+          }
+          startPromise.complete()
         }
-        configureConsul(config)
       } else {
         logger.error("Failed to retrieve configurations")
+        startPromise.fail("Failed to retrieve configurations")
       }
     }
+  }
 
-    startPromise.complete()
+  private fun createHealthCheckServer(): HttpServer = vertx.createHttpServer()
+          .requestHandler(registerHealthChecksEndpoints(configureHealthChecks()))
+          .listen(webServerPort) {
+            logger.info("HTTP Web server listening at $webServerPort")
+          }
+
+  private fun configureHealthChecks(): HealthChecks {
+    val hc = HealthChecks.create(vertx)
+
+    hc.register("grpc-service") { future ->
+      future.complete(
+              when (grpcStarted) {
+                true -> Status.OK()
+                false -> Status.KO()
+              }
+      )
+    }
+
+    if (consulEnabled) {
+      hc.register("consul-client") { future ->
+        future.complete(
+                when (consulHealthy) {
+                  true -> Status.OK()
+                  false -> Status.KO()
+                }
+        )
+      }
+    }
+    return hc
+  }
+
+  private fun registerHealthChecksEndpoints(hc: HealthChecks): Router {
+    val handler = HealthCheckHandler.createWithHealthChecks(hc)
+    val router = Router.router(vertx)
+    router.get("/health").handler(handler)
+    return router
   }
 
   private fun configureConsul(config: JsonObject) {
@@ -148,7 +208,7 @@ class MainVerticle : AbstractVerticle() {
       it["value.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
       it["group.id"] = config.getString(Constants.KAFKA_KEY_CONSUMER_GROUP)
       it["auto.offset.reset"] = "earliest"
-      it["enable.auto.commit"] = "false"
+      it["enable.auto.commit"] = "true"
     }
     return KafkaConsumer.create(vertx, kafkaConf)
   }

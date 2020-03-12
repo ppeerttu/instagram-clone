@@ -7,5 +7,9 @@
   "GRPC_HOST": "0.0.0.0",
   "GRPC_PORT": "3000",
   "CONSUL_HOST": "localhost",
-  "CONSUL_PORT": "8500"
+  "CONSUL_PORT": "8500",
+  "CONSUL_ENABLED": true,
+  "KAFKA_SERVERS": "localhost:29092",
+  "KAFKA_CONSUMER_GROUP": "comment-service",
+  "KAFKA_IMAGES_TOPIC": "images"
 }

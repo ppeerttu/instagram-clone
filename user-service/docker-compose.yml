@@ -5,7 +5,7 @@ services:
     container_name: user-service-dev
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     command: python -u server.py
     volumes:
       - .:/src

@@ -24,3 +24,5 @@ RUN chown -R node: /app
 
 # Run as user node
 USER node
+
+CMD ["npm", "run", "start:prod"]

@@ -21,9 +21,21 @@ export class KafkaProducer {
      */
     private topicsReady: string[] = [];
 
+    /**
+     * Is the client connected?
+     */
+    private connected: boolean = false;
+
     constructor(options: KafkaClientOptions) {
         this.client = new KafkaClient(options);
         this.producer = new Producer(this.client);
+        this.client.on("close", () => {
+            this.connected = false;
+        });
+    }
+
+    public isConnected(): boolean {
+        return this.connected;
     }
 
     /**
@@ -51,7 +63,10 @@ export class KafkaProducer {
      */
     private waitProducerReady(): Promise<void> {
         return new Promise<void>((resolve) =>  {
-            this.producer.on("ready", () => resolve());
+            this.producer.on("ready", () => {
+                this.connected = true;
+                resolve();
+            });
         });
     }
 

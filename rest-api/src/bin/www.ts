@@ -3,6 +3,7 @@ import http from "http";
 import pino from "pino";
 
 import { config } from "../config/server";
+import { config as grpcConfig } from "../config/grpc";
 import { ServiceDiscovery } from "../lib/ServiceDiscovery";
 import { delay } from "../lib/utils";
 import Server from "../Server";
@@ -15,12 +16,20 @@ const INITIAL_RE_REGISTER_INTERVAL = 5000;
 
 const serviceDiscovery = ServiceDiscovery.getInstance();
 const logger = pino();
-const authClient = new AuthServiceClient();
-const imageClient = new ImageServiceClient();
-const commentClient = new CommentServiceClient();
-authClient.bindWatch(serviceDiscovery);
-imageClient.bindWatch(serviceDiscovery);
-commentClient.bindWatch(serviceDiscovery);
+
+// When using Kubernetes, no need to use Consul for dynamic service discovery
+const kube = grpcConfig.useStaticEndpoints;
+const authClient = new AuthServiceClient(kube ? grpcConfig.authService : undefined);
+const imageClient = new ImageServiceClient(kube ? grpcConfig.imageService : undefined);
+const commentClient = new CommentServiceClient(
+    kube ? grpcConfig.commentService : undefined
+);
+
+if (!kube) {
+    authClient.bindWatch(serviceDiscovery);
+    imageClient.bindWatch(serviceDiscovery);
+    commentClient.bindWatch(serviceDiscovery);
+}
 
 const application = new Server(logger);
 application.configure();
@@ -59,15 +68,21 @@ server.on("listening", () => {
         : `port ${addr ? addr.port : "N/A"}`;
     logger.info(`Server listening on ${bind}`);
 
-    const name = serviceDiscovery.getServiceName();
-    const id = serviceDiscovery.getInstanceId();
-    serviceDiscovery.registerService(handleHeartbeatFailure)
-        .then(() => {
-            logger.info(`Instance registered to consul with name ${name} and id ${id}`);
-        })
-        .catch((err) => {
-            logger.error(err, "Service registration to consul failed");
-        });
+    if (!kube) {
+        const name = serviceDiscovery.getServiceName();
+        const id = serviceDiscovery.getInstanceId();
+        serviceDiscovery.registerService(handleHeartbeatFailure)
+            .then(() => {
+                logger.info(
+                    `Instance registered to Consul with name ${name} and id ${id}`
+                );
+            })
+            .catch((err) => {
+                logger.error(err, "Service registration to consul failed");
+            });
+    } else {
+        logger.info("Kubernetes environment configured, Consul client disabled")
+    }
 });
 
 // Terminus handles shutdowns grafecully
@@ -88,7 +103,7 @@ createTerminus(
         healthChecks: {
             "/health": () => {
                 const healthy = serviceDiscovery.isRegistered();
-                if (!healthy) {
+                if (!healthy && !kube) {
                     return Promise.reject(new Error("Not registered"));
                 }
                 return Promise.resolve();

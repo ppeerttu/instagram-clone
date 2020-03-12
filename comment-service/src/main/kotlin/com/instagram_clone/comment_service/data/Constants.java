@@ -13,7 +13,11 @@ public class Constants {
 
   public static String CONSUL_KEY_PORT = "CONSUL_PORT";
   public static String CONSUL_KEY_HOST = "CONSUL_HOST";
+  public static String CONSUL_KEY_ENABLED = "CONSUL_ENABLED";
 
   public static String KAFKA_KEY_SERVERS = "KAFKA_SERVERS";
   public static String KAFKA_KEY_CONSUMER_GROUP = "KAFKA_CONSUMER_GROUP";
+  public static String KAFKA_KEY_IMAGES_TOPIC = "IMAGES_TOPIC";
+
+  public static String WEB_KEY_SERVER_PORT = "WEB_SERVER_PORT";
 }

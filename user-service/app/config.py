@@ -20,11 +20,12 @@ database_config = {
 consul_config = {
     'host': os.getenv("CONSUL_HOST", "localhost"),
     'port': os.getenv("CONSUL_PORT", 8500),
-    'client_name': os.getenv("CONSUL_CLIENT_NAME", "user-service")
+    'client_name': os.getenv("CONSUL_CLIENT_NAME", "user-service"),
+    'enabled': os.getenv("CONSUL_ENABLED", "true") == "true"
 }
 
 grpc_config = {
-    'port': os.getenv("GRPC_PORT", 8080),
+    'port': os.getenv("GRPC_PORT", 3000),
     'app_env': os.getenv("APP_ENV", "development")
 }
 
@@ -37,4 +38,8 @@ kafka_consumer_config = {
 kafka_producer_config = {
     'bootstrap_servers': os.getenv("KAFKA_SERVERS", "localhost:29092"),
     'topic': os.getenv("KAFKA_USERS_TOPIC", "users")
+}
+
+server_config = {
+    'port': os.getenv("HTTP_PORT", 8080)
 }

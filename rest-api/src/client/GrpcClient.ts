@@ -27,6 +27,13 @@ export abstract class GrpcClient {
     protected watcher: consul.Watch | null = null;
 
     /**
+     * Create a new client.
+     *
+     * @param staticEndpoint Static endpoint when dynamic load balancing is done elsewhere
+     */
+    constructor(private readonly staticEndpoint?: string) {}
+
+    /**
      * Tear down the client
      */
     public tearDown() {
@@ -73,6 +80,9 @@ export abstract class GrpcClient {
      * Get new server endpoint for the client.
      */
     protected getNewEndpoint(): string | null {
+        if (this.staticEndpoint) { // Use static endpoint always if it's configured
+            return this.staticEndpoint;
+        }
         const endpoints = this.knownEndpoints;
         switch (endpoints.length) {
             case 0:

@@ -24,6 +24,7 @@ class AccountConsumer():
             consumer_timeout_ms=2000 # Stop consuming after 2 seconds of idle
         )
         self.user_service = user_service
+        self.healthy = False
         self.shutting_down = False
         self.main_thread = None #type: Thread
 
@@ -71,13 +72,15 @@ class AccountConsumer():
         logger.info("AccountConsumer subscribed to topic {}".format(topic))
         self.main_thread = Thread(target=self.launch_child_threads)
         self.main_thread.start()
+        self.healthy = True
 
     def stop(self):
         """Stop the consumer and wait for threads to finish."""
         self.shutting_down = True
-        if self.main_thread  is not None:
+        if self.main_thread is not None:
             self.main_thread.join()
             self.consumer.close()
+        self.healthy = False
 
     def handle_create(self, data):
         try:

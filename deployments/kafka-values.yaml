@@ -1,0 +1,15 @@
+## Kafka configuration
+##
+persistence:
+  size: 2Gi # Override the volume claim from 8Gi to 2Gi
+
+## Zookeeper chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+##
+zookeeper:
+  enabled: true
+
+  persistence:
+    size: 2Gi # Override the volume claim from 8Gi to 2Gi 
+  

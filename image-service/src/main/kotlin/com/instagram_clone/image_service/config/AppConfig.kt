@@ -103,6 +103,15 @@ class AppConfig private constructor(json: JsonObject) {
   var consumerGroup: String
     private set
 
+  /**
+   * Is Consul enabled?
+   */
+  var consulEnabled: Boolean
+    private set
+
+  var webServerPort: Int
+    private set
+
   init {
     grpcHost = json.getString(ConfigConstants.GRPC_HOST)
     grpcPort = json.getInteger(ConfigConstants.GRPC_PORT)
@@ -120,6 +129,8 @@ class AppConfig private constructor(json: JsonObject) {
     imagesTopic = json.getString(ConfigConstants.IMAGES_TOPIC, "images")
     usersTopic = json.getString(ConfigConstants.USERS_TOPIC, "users")
     consumerGroup = json.getString(ConfigConstants.KAFKA_CONSUMER_GROUP, "image-service")
+    consulEnabled = json.getBoolean(ConfigConstants.CONSUL_ENABLED, true)
+    webServerPort = json.getInteger(ConfigConstants.WEB_SERVER_PORT, 8080)
   }
 
   companion object {

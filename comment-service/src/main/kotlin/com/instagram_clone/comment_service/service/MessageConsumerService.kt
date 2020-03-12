@@ -11,18 +11,22 @@ import io.vertx.core.logging.LoggerFactory
  * Class for consuming message broker events.
  */
 class MessageConsumerService(private val service: CommentService,
-                             private val broker: MessageBrokerService) {
+                             private val broker: MessageBrokerService,
+                             private val topic: String) {
 
   private val logger = LoggerFactory.getLogger("MessageConsumerService")
 
   init {
-    broker.subscribe("messageTest") { handleEvent(it) }
+    broker.subscribe(topic) { handleEvent(it) }
   }
 
   private fun handleEvent(event: DomainEvent) {
     when (event.type) {
       DomainEventType.Created -> {
         logger.info("No implementation for Created event")
+      }
+      DomainEventType.Liked -> {
+        logger.info("No implementation for Liked event")
       }
       DomainEventType.Deleted -> {
         val eventData = event.data as LinkedHashMap<*, *>

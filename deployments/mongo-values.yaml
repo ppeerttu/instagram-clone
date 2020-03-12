@@ -1,0 +1,29 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+
+## Enable authentication
+## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+#
+usePassword: true
+# existingSecret: name-of-existing-secret
+
+## MongoDB admin password
+## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+##
+# mongodbRootPassword:
+
+## MongoDB custom user and database
+## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+##
+mongodbUsername: image-service
+mongodbPassword: image-service
+mongodbDatabase: images
+
+persistence:
+  size: 2Gi # Overridden from 8Gi
+
+replicaSet:
+  enabled: true
+

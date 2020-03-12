@@ -34,6 +34,7 @@ class KafkaService(
   override fun subscribe(queue: String, handler: (event: DomainEvent) -> Unit) {
     consumer.subscribe(queue) {
       if (it.succeeded()) {
+        logger.info("Subscribed to queue $queue")
         consumer.handler { record ->
           try {
             val valueAsJson = JsonObject(record.value())

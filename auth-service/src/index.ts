@@ -2,11 +2,13 @@ import grpc from "grpc";
 import pino from "pino";
 import redis from "redis";
 
+import { config as consulConfig } from "./config/consul";
 import { kafkaClientOptions } from "./config/kafka";
 import sequelize from "./config/sequelize";
 import { config } from "./config/server";
 import authHandler from "./handlers/AuthService";
 import { KafkaProducer } from "./lib/kafka/KafkaProducer";
+import { KubeLivenessManager, LivenessCheck } from "./lib/KubeLivenessManager";
 import { ServiceDiscovery } from "./lib/ServiceDiscovery";
 import { delay } from "./lib/utils";
 import { protoIndex } from "./proto";
@@ -17,15 +19,23 @@ const INITIAL_RE_REGISTER_INTERVAL = 5000;
 const MAX_RE_REGITER_COUNT = 5;
 const port = config.grpcPort;
 
-const logger = pino();
+let grpcReady = false;
+const { consulEnabled } = consulConfig;
+const logger = pino({ level: process.env.NODE_ENV === "development" ? "debug" : "info" });
 const server = new grpc.Server();
 const serviceDiscovery = ServiceDiscovery.getInstance();
+const livenessManager = new KubeLivenessManager(
+    config.healthCheckPort,
+    config.healthCheckPath,
+);
 
 const redisClient = redis.createClient(config.redisPort, config.redisHost);
 const producer = new KafkaProducer(kafkaClientOptions);
 
 producer.prepareClient()
-    .then(() => logger.info("Kafka producer ready"))
+    .then(() => {
+        logger.info("Kafka producer ready");
+    })
     .catch(logger.error);
 
 redisClient.on("connect", () => {
@@ -48,7 +58,12 @@ server.bindAsync(
             sequelize.close();
             return logger.error(err);
         }
+        grpcReady = true;
         logger.info(`auth-service gRPC listening on ${portNum}`);
+        if (!consulEnabled) {
+            logger.info("Consul has been disabled, not registering service");
+            return;
+        }
         serviceDiscovery.registerService(handleHeartbeatFailure)
             .then(() => {
                 const id = serviceDiscovery.instanceId;
@@ -63,12 +78,53 @@ server.bindAsync(
     },
 );
 
+const serverCheck: LivenessCheck = async () => {
+    if (!grpcReady) {
+        throw new Error("The gRPC server is not available");
+    }
+};
+const redisCheck: LivenessCheck = async () => {
+    if (!redisClient.connected) {
+        throw new Error("Redis client is not connected");
+    }
+};
+const databaseCheck: LivenessCheck = async () => {
+    try {
+        await sequelize.authenticate();
+    } catch (e) {
+        throw new Error("Database client is not connected");
+    }
+};
+const serviceDiscoveryCheck: LivenessCheck = async () => {
+    if (!serviceDiscovery.isRegistered()) {
+        throw new Error("Service discovery to Consul is not registered");
+    }
+};
+const kafkaCheck: LivenessCheck = async () => {
+    if (!producer.isConnected()) {
+        throw new Error("Kafka producer is not connected");
+    }
+};
+livenessManager.addChecks(
+    serverCheck,
+    redisCheck,
+    databaseCheck,
+    kafkaCheck,
+);
+if (consulEnabled) {
+    livenessManager.addChecks(serviceDiscoveryCheck);
+}
+livenessManager.start()
+    .then(() => logger.info("Liveness manager deployed"))
+    .catch((err) => logger.error(err));
+
 /**
  * Shutdown the GRPC server.
  */
 function shutdownServer() {
     return new Promise((resolve) => {
         server.tryShutdown(() => {
+            grpcReady = false;
             redisClient.quit(() => resolve());
         });
     });
@@ -83,6 +139,7 @@ function onSignal(signal: string) {
     logger.info(`Received ${signal}, cleaning up and shutting down...`);
     const promises = [
         shutdownServer(),
+        livenessManager.stop(),
     ];
     if (serviceDiscovery.isRegistered()) {
         promises.push(serviceDiscovery.deregister());

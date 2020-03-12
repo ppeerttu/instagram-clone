@@ -1,4 +1,4 @@
-import path from "path";
+import pino from "pino";
 import { Sequelize } from "sequelize-typescript";
 
 const env = process.env.NODE_ENV || "development";
@@ -7,6 +7,11 @@ const { host, port, username, password, database, dialect } = require("./databas
 
 import { Account } from "../models/Account";
 
+const logger = pino({ level: env === "development" ? "debug" : "infor "});
+
+const logging = env === "development"
+    ? (query: string) => logger.debug(query)
+    : false;
 
 const sequelize = new Sequelize({
     models: [Account],
@@ -16,6 +21,7 @@ const sequelize = new Sequelize({
     password,
     database,
     dialect,
+    logging,
 });
 
 export default sequelize;

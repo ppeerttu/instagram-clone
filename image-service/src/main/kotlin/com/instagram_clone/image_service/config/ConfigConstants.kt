@@ -22,8 +22,13 @@ object ConfigConstants {
 
   /**
    * Service discovery host
-    */
+   */
   const val CONSUL_HOST = "CONSUL_HOST"
+
+  /**
+   * Consul enabled flag
+   */
+  const val CONSUL_ENABLED = "CONSUL_ENABLED"
 
   /**
    * Service discovery port
@@ -84,4 +89,9 @@ object ConfigConstants {
    * Name / ID of the Kafka consumer group
    */
   const val KAFKA_CONSUMER_GROUP = "KAFKA_CONSUMER_GROUP"
+
+  /**
+   * Web server port (e.g. health check API)
+   */
+  const val WEB_SERVER_PORT = "WEB_SERVER_PORT"
 }

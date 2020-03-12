@@ -20,5 +20,5 @@ export interface CommentService {
 
     getCommentsByUserTag(userTag: string): Promise<CommentWrapper[]>
 
-    getCommentsForImage(id: string, page: number, size: number): Promise<Page<CommentWrapper>
+    getCommentsForImage(id: string, page: number, size: number): Promise<Page<CommentWrapper>>;
 }

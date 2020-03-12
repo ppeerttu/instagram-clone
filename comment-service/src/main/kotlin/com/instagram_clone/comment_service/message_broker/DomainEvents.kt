@@ -11,6 +11,8 @@ enum class DomainEventType(val stringValue: String) {
   Created("CREATED"),
   @JsonProperty("DELETED")
   Deleted("DELETED"),
+  @JsonProperty("LIKED")
+  Liked("LIKED")
 }
 
 data class DomainEvent(
