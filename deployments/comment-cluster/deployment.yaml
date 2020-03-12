@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment-service
+  labels:
+    app: comment-service
+spec:
+  ports:
+    - port: 3000
+  selector:
+    app: comment-service
+    tier: frontend
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-service
+  labels:
+    app: comment-service
+spec:
+  selector:
+    matchLabels:
+      app: comment-service
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: comment-service
+        tier: frontend
+    spec:
+      containers:
+      - image: ppeerttu/comment-service:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        name: comment-service
+        ports:
+        - containerPort: 3000
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          failureThreshold: 3
+        env:
+        - name: GRPC_HOST
+          value: 0.0.0.0
+        - name: GRPC_PORT
+          value: "3000"
+        - name: CONSUL_HOST
+          value: consul-server.default.svc.cluster.local
+        - name: CONSUL_PORT
+          value: "8500"
+        - name: CONSUL_ENABLED
+          value: "false"
+        - name: MONGO_HOST
+          value: mongodb.default.svc.cluster.local
+        - name: MONGO_PORT
+          value: "27017"
+        - name: MONGO_DB_NAME
+          value: images
+        - name: MONGO_USER
+          value: image-service
+        - name: MONGO_PASSWORD
+          value: image-service
+        - name: KAFKA_SERVERS
+          value: kafka.default.svc.cluster.local:9092
+        - name: IMAGES_TOPIC
+          value: images
+        - name: KAFKA_CONSUMER_GROUP
+          value: comment-service
+        - name: WEB_SERVER_PORT
+          value: "8080"

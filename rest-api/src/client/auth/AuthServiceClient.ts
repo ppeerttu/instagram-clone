@@ -1,13 +1,14 @@
 import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
-import { UserCredentials, AuthErrorStatus, AccountRequest, NewAccount } from "../generated/auth_service_pb";
+import { UserCredentials, AuthErrorStatus, AccountRequest, NewAccount, RenewRequest } from "../generated/auth_service_pb";
 import { IJWTTokens, AccountWrapper, mapAccountInfo } from "../models";
 import { AuthServiceError } from "./errors/AuthServiceError";
 import { AuthService } from "./AuthService";
 import { config } from "../../config/grpc";
 import { GrpcClient } from "../GrpcClient";
 import { SignUpError } from "./errors/SignUpError";
+import { RenewTokensError } from "./errors/RenewTokensError";
 
 /**
  * A client for consuming the external authentication service.
@@ -175,6 +176,34 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
                     );
                 }
                 return resolve(mapAccountInfo(account));
+            });
+        });
+    }
+
+    /**
+     * Renew tokens.
+     *
+     * @param refreshToken The refresh token
+     */
+    public renewToken = async (refreshToken: string): Promise<IJWTTokens> => {
+        const client = this.getClient();
+        const req = new RenewRequest();
+        req.setRefreshToken(refreshToken);
+
+        return new Promise<IJWTTokens>((resolve, reject) => {
+            client.renewToken(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                const error = res.getError();
+                const tokens = res.getTokens();
+                if (error || !tokens) {
+                    return reject(new RenewTokensError("Failed to renww tokens", error));
+                }
+                return resolve({
+                    refreshToken: tokens.getRefreshToken(),
+                    accessToken: tokens.getAccessToken(),
+                });
             });
         });
     }

@@ -27,4 +27,11 @@ export interface AuthService {
      * @param accessToken The access token
      */
     getAccount(accessToken: string): Promise<AccountWrapper>;
+
+    /**
+     * Get a new pair of tokens.
+     *
+     * @param refreshToken The refresh token
+     */
+    renewToken(refreshToken: string): Promise<IJWTTokens>;
 }

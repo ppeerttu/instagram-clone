@@ -7,6 +7,9 @@ import { AuthServiceError } from "../client/auth/errors/AuthServiceError";
 import { AuthService } from "../client/auth";
 import { SignUpError } from "../client/auth/errors/SignUpError";
 import { AuthState, generateAuthMiddleware } from "../middleware/authenticate";
+import { getBearerToken } from "../lib/utils";
+import { RenewTokensError } from "../client/auth/errors/RenewTokensError";
+import { AuthErrorStatus } from "../client/generated/auth_service_pb";
 
 /**
  * Authentication REST API controller.
@@ -65,6 +68,10 @@ export class AuthController implements IController {
             `${basePath}/me`,
             generateAuthMiddleware(this.authService),
             this.getMe,
+        );
+        router.get(
+            `${basePath}/renew`,
+            this.renewTokens
         );
     }
 
@@ -132,5 +139,34 @@ export class AuthController implements IController {
         const account = ctx.state.account;
         ctx.body = account;
         ctx.status = 200;
+    }
+
+    /**
+     * Renew tokens with refresh token.
+     */
+    private renewTokens = async (ctx: RouterContext) => {
+        const refreshToken = getBearerToken(ctx);
+        if (!refreshToken) {
+            throw new RequestError(401);
+        }
+        try {
+            const tokens = await this.authService.renewToken(refreshToken);
+            ctx.body = tokens;
+            ctx.status = 200;
+        } catch (e) {
+            if (e instanceof RenewTokensError) {
+                switch (e.reason) {
+                    case AuthErrorStatus.BAD_CREDENTIALS:
+                    case AuthErrorStatus.EXPIRED_TOKEN:
+                    case AuthErrorStatus.INVALID_TOKEN:
+                        throw new RequestError(401);
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
     }
 }
