@@ -3,7 +3,6 @@ from threading import Thread
 from typing import Callable, List
 import logging
 
-
 liveness_logger = logging.getLogger("app.liveness_handler")
 
 HEALTH_PATH = "/health"

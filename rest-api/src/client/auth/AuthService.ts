@@ -34,4 +34,13 @@ export interface AuthService {
      * @param refreshToken The refresh token
      */
     renewToken(refreshToken: string): Promise<IJWTTokens>;
+
+    /**
+     * Delete an account.
+     *
+     * @param accessToken The access token
+     *
+     * @return The ID of the deleted account
+     */
+    deleteAccount(accessToken: string): Promise<string>;
 }

@@ -16,6 +16,11 @@ export interface AuthState {
      * The account info
      */
     account: AccountWrapper;
+
+    /**
+     * The bearer token
+     */
+    token: string;
 }
 
 /**
@@ -44,6 +49,7 @@ export function generateAuthMiddleware(
         try {
             const account = await service.getAccount(token);
             ctx.state.account = account;
+            ctx.state.token = token;
         } catch (e) {
             if (e instanceof AuthServiceError) {
                 throw new RequestError(401);

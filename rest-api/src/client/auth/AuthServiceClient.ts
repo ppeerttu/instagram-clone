@@ -1,7 +1,7 @@
 import { credentials } from "grpc";
 
 import { AuthClient } from "../generated/auth_service_grpc_pb";
-import { UserCredentials, AuthErrorStatus, AccountRequest, NewAccount, RenewRequest } from "../generated/auth_service_pb";
+import { UserCredentials, AuthErrorStatus, AccountRequest, NewAccount, RenewRequest, DeleteAccountRequest } from "../generated/auth_service_pb";
 import { IJWTTokens, AccountWrapper, mapAccountInfo } from "../models";
 import { AuthServiceError } from "./errors/AuthServiceError";
 import { AuthService } from "./AuthService";
@@ -9,6 +9,8 @@ import { config } from "../../config/grpc";
 import { GrpcClient } from "../GrpcClient";
 import { SignUpError } from "./errors/SignUpError";
 import { RenewTokensError } from "./errors/RenewTokensError";
+import { DeleteAccountError } from "./errors/DeleteAccountError";
+
 
 /**
  * A client for consuming the external authentication service.
@@ -204,6 +206,29 @@ export class AuthServiceClient extends GrpcClient implements AuthService {
                     refreshToken: tokens.getRefreshToken(),
                     accessToken: tokens.getAccessToken(),
                 });
+            });
+        });
+    }
+
+    public deleteAccount = async (accessToken: string): Promise<string> => {
+        const client = this.getClient();
+        const req = new DeleteAccountRequest();
+        req.setAccessToken(accessToken);
+
+        return new Promise<string>((resolve, reject) => {
+            client.deleteAccount(req, (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                const error = res.getError();
+                const id = res.getId();
+
+                if (error || !id) {
+                    return reject(
+                        new DeleteAccountError("Failed to delete account", error)
+                    );
+                }
+                return resolve(id);
             });
         });
     }

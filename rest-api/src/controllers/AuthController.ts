@@ -9,7 +9,8 @@ import { SignUpError } from "../client/auth/errors/SignUpError";
 import { AuthState, generateAuthMiddleware } from "../middleware/authenticate";
 import { getBearerToken } from "../lib/utils";
 import { RenewTokensError } from "../client/auth/errors/RenewTokensError";
-import { AuthErrorStatus } from "../client/generated/auth_service_pb";
+import { AuthErrorStatus, DeleteAccountErrorStatus } from "../client/generated/auth_service_pb";
+import { DeleteAccountError } from "../client/auth/errors/DeleteAccountError";
 
 /**
  * Authentication REST API controller.
@@ -73,6 +74,12 @@ export class AuthController implements IController {
             `${basePath}/renew`,
             this.renewTokens
         );
+        router.delete(
+            `${basePath}/me`,
+            generateAuthMiddleware(this.authService),
+            this.deleteAccount,
+        );
+
     }
 
     /**
@@ -163,6 +170,28 @@ export class AuthController implements IController {
                     default:
                         ctx.log.warn(e);
                         throw new RequestError(500);
+                }
+            }
+            ctx.log.error(e);
+            throw new RequestError(503);
+        }
+    }
+
+    private deleteAccount = async (ctx: RouterContext<AuthState>) => {
+        const { token, account } = ctx.state;
+        ctx.log.info(`Deleting account with username ${account.username} and id ${account.id}`);
+        try {
+            const id = await this.authService.deleteAccount(token);
+            ctx.log.info(`Account ${id} deleted`);
+            ctx.status = 204;
+        } catch (e) {
+            if (e instanceof DeleteAccountError) {
+                switch (e.reason) {
+                    case DeleteAccountErrorStatus.DELETE_SERVER_ERROR:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);
+                    default:
+                        throw new RequestError(401);
                 }
             }
             ctx.log.error(e);

@@ -25,6 +25,8 @@ const imageClient = new ImageServiceClient(kube ? grpcConfig.imageService : unde
 const commentClient = new CommentServiceClient(
     kube ? grpcConfig.commentService : undefined
 );
+const userClient = new UserServiceClient(kube ? grpcConfig.userService : undefined);
+
 
 const userClient = new UserServiceClient(kube ? grpcConfig.userService : undefined);
 
