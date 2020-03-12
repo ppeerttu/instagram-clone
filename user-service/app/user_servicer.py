@@ -5,6 +5,7 @@ from app.models.user import User
 from app.db import exceptions
 from app.user_service import UserService
 
+logger = logging.getLogger("app.user_servicer")
 
 class UserServicer(user_service_pb2_grpc.UserServicer): 
     """Class implementing the gRPC API"""
@@ -18,7 +19,7 @@ class UserServicer(user_service_pb2_grpc.UserServicer):
         username = request.username
         account_id = request.account_id
         user = User(id=account_id, username=username)
-        logging.info("Received account id to create: " + account_id + "\n" + "recieved username: " + username)
+        logger.info("Received account id to create: " + account_id + "\n" + "recieved username: " + username)
         try:
             # UserService uses database + publishes to Kafka
             self.user_service.createUser(user)
@@ -38,7 +39,7 @@ class UserServicer(user_service_pb2_grpc.UserServicer):
     def Delete(self, request, context):
         """Delete a user"""
         account_id = request.account_id
-        logging.info("Received account id to delete: " + account_id) 
+        logger.info("Received account id to delete: " + account_id) 
         try:
             self.user_service.deleteUserById(account_id)
             response = user_service_pb2.DeleteUserResponse(
@@ -61,8 +62,21 @@ class UserServicer(user_service_pb2_grpc.UserServicer):
             user (User): A user.
         """
         account_id = request.account_id
-        logging.info("Received account id: " + account_id)
-        result= self.db.findUserById(account_id)
+        logger.info("Received account id: " + account_id)
+        result = None #type: User
+        try:    
+            result = self.db.findUserById(account_id)
+        except Exception as e:
+            logger.error(e)
+            return user_service_pb2.GetUserResponse(
+                error = user_service_pb2.GET_USER_SERVER_ERROR
+            )
+
+        if result is None:
+            return user_service_pb2.GetUserResponse(
+                error = user_service_pb2.ACCOUNT_ID_NOT_EXIST
+            )
+
         user = user_service_pb2.UserInfo()
         user.id = result.id
         user.username = result.username

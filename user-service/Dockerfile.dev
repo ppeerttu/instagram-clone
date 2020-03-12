@@ -1,20 +1,47 @@
-FROM python:3.7-alpine
+FROM python:3.7-alpine as base
 
-# Dependencies for grpc and postgresql
+FROM base as builder
+
+ENV APP_USER=app-user
+
+RUN adduser -D ${APP_USER}
+WORKDIR /home/${APP_USER}
+
+# Install dependencies so that Python requirements can be installed
 RUN apk add --no-cache \
     gcc \
-    linux-headers \
+    g++  \
     make \
+    linux-headers \
     musl-dev \
-    python-dev \
-    g++ \
+    python3-dev \
+    libc6-compat \
     postgresql-libs \
     postgresql-dev
 
+# Create a virtual environment for Python
+RUN python -m venv env
+
+# Install dependencies
+COPY requirements.txt ./
+RUN env/bin/pip install -r requirements.txt
+
+# Application image
+FROM base
+
+# NOTE: Production image uses ${APP_USER}, but this uses root user
 WORKDIR /src
 
-COPY requirements.txt ./
+ENV APP_USER=app-user
 
-RUN pip install -r requirements.txt
+# Install required run-time dependencies
+RUN apk add --no-cache \
+    g++ \
+    postgresql-libs
 
-CMD [ "python", "-u", "server.py" ]
+# Copy the virtual environment from builder
+COPY --from=builder /home/${APP_USER}/env env/
+
+# The application files should be mounted as volume
+CMD [ "env/bin/python", "-u", "server.py" ]
+

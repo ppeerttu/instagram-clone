@@ -12,6 +12,8 @@ import { ImageController } from "./controllers/ImageController";
 import { CommentService } from "./client/comments/CommentService";
 import { CommentController } from "./controllers/CommentController";
 import { generateAuthMiddleware } from "./middleware/authenticate";
+import { UserService } from "./client/users/UserService";
+import { UserController } from "./controllers/UserController";
 
 /**
  * Class containing the application server logic
@@ -80,7 +82,8 @@ export default class Server {
     public bindRoutes(
         authService: AuthService,
         imageService: ImageService,
-        commentService: CommentService
+        commentService: CommentService,
+        userService: UserService,
     ) {
         const publicRouter = new Router();
         const protectedRouter = new Router(); // Routes that require access token
@@ -96,6 +99,8 @@ export default class Server {
         commentController.bind(publicRouter);
         const imageController = new ImageController(imageService, commentService);
         imageController.bind(protectedRouter);
+        const userController = new UserController(userService);
+        userController.bind(protectedRouter);
 
         this.routers.push(publicRouter);
         this.routers.push(protectedRouter);

@@ -18,6 +18,12 @@ from app.liveness_handler import LivenessHandler
 
 log_level = logging.INFO #logging.DEBUG if grpc_config["app_env"] is "development" else logging.INFO
 logging.basicConfig(format="%(asctime)s %(process)d %(levelname)s %(name)s - %(message)s", level=log_level)
+logger = logging.getLogger("server")
+
+HTTP_PORT = int(server_config["port"])
+CONSUL_ENABLED = consul_config["enabled"]
+
+GRPC_SERVER_STARTED = False
 
 HTTP_PORT = int(server_config["port"])
 CONSUL_ENABLED = consul_config["enabled"]
@@ -42,13 +48,13 @@ def get_error_handler(sd: ServiceDiscovery):
 
             e {Exception} -- The exception that occurred
         """
-        logging.error(e)
+        logger.error(e)
 
         try:          
             sd.deregister()
             sd.register()
         except Exception as e:
-            logging.warn("Re-registration to Consul failed: {e}")
+            logger.warn("Re-registration to Consul failed: {e}")
 
     return error_handler
 
@@ -92,7 +98,7 @@ if __name__ == "__main__":
     server.add_insecure_port(address)
     server.start()
     GRPC_SERVER_STARTED = True
-    logging.info("API server started, listening at {}".format(address))
+    logger.info("API server started, listening at {}".format(address))
 
     # Start account consumer
     consumer.start()
@@ -102,30 +108,29 @@ if __name__ == "__main__":
         sd.failed_heartbeat_handler = get_error_handler(sd)
         sd.register()
     else:
-        logging.info("Consul not enabled, skipping config...")
+        logger.info("Consul not enabled, skipping config...")
 
     # Wait for shutdown/kill signal
     detector = SignalDetector()
     while not detector.signal_detected:
         time.sleep(1)
 
-    logging.info("Received a signal. Starting clean up...")
+    logger.info("Received a signal. Starting clean up...")
 
     if sd.registered:
         sd.deregister()
-        logging.debug("Deregistered from consul")
+        logger.debug("Deregistered from consul")
 
     server.stop(10).wait()
-    logging.debug("Stopped gRPC server")
+    logger.debug("Stopped gRPC server")
 
     consumer.stop()
     producer.clean_up()
 
     if database.authenticate():    
         database.connection.close()
-        logging.debug("Closed database connection")
+        logger.debug("Closed database connection")
 
     health_server.stop()
-    logging.info("Cleanup done, shutting down.")
-    logging.shutdown()
-
+    logger.info("Cleanup done, shutting down.")
+    logger.shutdown()

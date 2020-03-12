@@ -5,10 +5,10 @@ services:
     container_name: user-service-dev
     build:
       context: .
-      dockerfile: Dockerfile
-    command: python -u server.py
+      dockerfile: Dockerfile.dev
     volumes:
       - .:/src
+      - /src/env
     ports:
       - "8080:8080"
     depends_on:
@@ -23,6 +23,7 @@ services:
       KAFKA_ACCOUNTS_TOPIC: accounts
       KAFKA_USERS_TOPIC: users
       KAFKA_CONSUMER_GROUP: user-service
+      CONSUL_HOST: consul-dev
 
   user-db:
     container_name: user-db-dev

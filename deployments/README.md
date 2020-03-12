@@ -120,23 +120,24 @@ helm install kafka bitnami/kafka -f kafka-values.yaml
 
 ### Deploy auth-service
 
-
 The first step is to install the PostgreSQL Helm chart. There is a [custom values file](auth-service/postgres-values.yaml) that can be used to setup username, password and persistent volume claim size.
 
 ```bash
 helm install auth-db stable/postgresql -f auth-service/postgres-values.yaml
+
 ```
 
 The next step is to install the Redis with certain overridden parameters.
 
 ```bash
 helm install redis bitnami/redis -f auth-service/redis-values.yaml
-```
 
+```
 And lastly, deploy the actual application.
 
 ```bash
 kubectl apply -f auth-service/deployment.yaml
+
 ```
 
 ### Deploy rest-api
@@ -162,14 +163,13 @@ The `image-service` requires MongoDB to be set up. In this cluster, we're going 
 helm install mongodb stable/mongodb -f mongo-values.yaml
 ```
 
-
-The `image-service` requires a `PersistentVolumeClaim` with access mode `ReadWriteMany`. AWS doesn't provide that by default, hence we install `aws-efs-csi-driver` to the cluster. It also requires that you create a file system in AWS EFS, and create `image-service/volume.yaml` out of [volume.example.yaml](./image-service/volume.example.yaml) file accordingly (fill in proper `fs-12312312` value). Please also note that the created filesystem should be in the same subnet and share security groups with the cluster network. See the image below for reference.
+The `image-service` requires a `PersistentVolumeClaim` with access mode `ReadWriteMany`. AWS doesn't provide that by default, hence we install `aws-efs-csi-driver` to the cluster. It also requires that you create a file system in AWS EFS, and create `image-cluster/volume.yaml` out of [volume.example.yaml](./image-cluster/volume.example.yaml) file accordingly (fill in proper `fs-12312312` value). Please also note that the created filesystem should be in the same subnet and share security groups with the cluster network. See the image below for reference.
 
 ![AWS EFS Configuration](../docs/img/aws-efs-sg-example.png "AWS EFS Configuration")
 
 
+In case you're running the cluster in somewhere else, see [this](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for more information about supported access modes. Minikube allows local `PersistentVolume`s with `ReadWriteMany` access mode. Below is an example on how to specify a volume e.g. for Minikube. Use this to create the `image-cluster/volume.yaml` file instead of the [example](image-cluster/volume.example.yaml) file.
 
-In case you're running the cluster in somewhere else, see [this](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for more information about supported access modes. Minikube allows local `PersistentVolume`s with `ReadWriteMany` access mode. Below is an example on how to specify a volume e.g. for Minikube. Use this to create the `image-service/volume.yaml` file instead of the [example](image-service/volume.example.yaml) file.
 
 ```yaml
 apiVersion: v1
@@ -195,6 +195,7 @@ Now to the actual steps to deploy the `image-service`:
 kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
 # Deploy volume for image service data
+
 kubectl apply -f image-service/volume.yaml
 
 # Deploy image-service
@@ -207,7 +208,9 @@ The `comment-service` requires MongoDB as well. For the sake of simplicity, we a
 
 ```bash
 # Deploy the comment service
+
 kubectl apply -f comment-service/deployment.yaml
+
 ```
 
 ### Deploy user-service
@@ -216,6 +219,7 @@ The `user-service` relies on PostgreSQL as well, se we are gonna deploy that fir
 
 ```bash
 # Install separate PostgreSQL for user-service
+
 helm install user-db stable/postgresql -f user-service/postgres-values.yaml
 ```
 
@@ -224,6 +228,7 @@ Then we are going to install the actual application pod. Please note that the ap
 ```bash
 # Install user-service
 kubectl apply -f user-service/deployment.yaml
+
 ```
 
 ### Apply auto-scaling

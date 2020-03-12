@@ -7,7 +7,6 @@ import { CreateCommentRequest, GetCommentRequest, DeleteCommentRequest, GetComme
 import { CreateCommentError } from "./errors/CreateCommentError";
 import { mapComment, CommentWrapper, Page } from "../models";
 import { GetCommentError } from "./errors/GetCommentError";
-import { resolve, promises } from "dns";
 import { DeleteCommentError } from "./errors/DeleteCommentError";
 import { GetCommentsByTagError } from "./errors/GetCommentsByTagError";
 import { GetCommentsByUserTagError } from "./errors/GetCommentsByUserTagError";

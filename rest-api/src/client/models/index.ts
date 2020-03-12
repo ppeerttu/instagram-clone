@@ -20,3 +20,4 @@ export * from "./comment";
 export * from "./image";
 export * from "./pages";
 export * from "./account";
+export * from "./user";

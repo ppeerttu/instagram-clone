@@ -4,6 +4,8 @@ import { Comment } from "../generated/comment_service_pb";
 import { ImageSearchPageWrapper, TagType, ImageLikesPageWrapper } from "./pages";
 import { AccountInfo } from "../generated/auth_service_pb";
 import { AccountWrapper } from "./account";
+import { UserInfo } from "../generated/user_service_pb";
+import { UserWrapper } from "./user";
 
 /**
  * Map Image instance into object matching ImageMeta interface.
@@ -84,6 +86,20 @@ export function mapImageLikesPage(page: ImageLikesPage): ImageLikesPageWrapper {
  * @param info The gRPC account info message
  */
 export function mapAccountInfo(info: AccountInfo): AccountWrapper {
+    return {
+        id: info.getId(),
+        username: info.getUsername(),
+        updatedAt: info.getUpdatedAt(),
+        createdAt: info.getCreatedAt(),
+    };
+}
+
+/**
+ * Map gRPC user info into `UserWrapper`.
+ *
+ * @param info The gRPC user info message payload
+ */
+export function mapUserInfo(info: UserInfo): UserWrapper {
     return {
         id: info.getId(),
         username: info.getUsername(),

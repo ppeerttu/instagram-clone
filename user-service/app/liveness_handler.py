@@ -3,7 +3,9 @@ from threading import Thread
 from typing import Callable, List
 import logging
 
-liveness_logger = logging.getLogger("LivenessChecker")
+
+liveness_logger = logging.getLogger("app.liveness_handler")
+
 HEALTH_PATH = "/health"
 
 class LivenessHandler():
@@ -38,7 +40,7 @@ class LivenessHandler():
             do_DELETE = handle_check
 
         self.checks = checks
-        self.logger = logging.getLogger("LivenessHandler")
+        self.logger = liveness_logger
         self.port = port
         server_address = ("", port)
         self.server = ThreadingHTTPServer(server_address, LivenessChecker)

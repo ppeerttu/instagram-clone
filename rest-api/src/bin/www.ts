@@ -10,6 +10,7 @@ import Server from "../Server";
 import { AuthServiceClient } from "../client/auth";
 import { ImageServiceClient } from "../client/images/ImageServiceClient";
 import { CommentServiceClient } from "../client/comments/CommentServiceClient";
+import { UserServiceClient } from "../client/users/UserServiceClient";
 
 const MAX_RE_REGITER_COUNT = 5;
 const INITIAL_RE_REGISTER_INTERVAL = 5000;
@@ -25,15 +26,19 @@ const commentClient = new CommentServiceClient(
     kube ? grpcConfig.commentService : undefined
 );
 
+const userClient = new UserServiceClient(kube ? grpcConfig.userService : undefined);
+
+
 if (!kube) {
     authClient.bindWatch(serviceDiscovery);
     imageClient.bindWatch(serviceDiscovery);
     commentClient.bindWatch(serviceDiscovery);
+    userClient.bindWatch(serviceDiscovery);
 }
 
 const application = new Server(logger);
 application.configure();
-application.bindRoutes(authClient, imageClient, commentClient);
+application.bindRoutes(authClient, imageClient, commentClient, userClient);
 
 const server = http.createServer(application.app.callback());
 
