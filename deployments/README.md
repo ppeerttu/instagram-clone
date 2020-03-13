@@ -163,12 +163,12 @@ The `image-service` requires MongoDB to be set up. In this cluster, we're going 
 helm install mongodb stable/mongodb -f mongo-values.yaml
 ```
 
-The `image-service` requires a `PersistentVolumeClaim` with access mode `ReadWriteMany`. AWS doesn't provide that by default, hence we install `aws-efs-csi-driver` to the cluster. It also requires that you create a file system in AWS EFS, and create `image-cluster/volume.yaml` out of [volume.example.yaml](./image-cluster/volume.example.yaml) file accordingly (fill in proper `fs-12312312` value). Please also note that the created filesystem should be in the same subnet and share security groups with the cluster network. See the image below for reference.
+The `image-service` requires a `PersistentVolumeClaim` with access mode `ReadWriteMany`. AWS doesn't provide that by default, hence we install `aws-efs-csi-driver` to the cluster. It also requires that you create a file system in AWS EFS, and create `image-service/volume.yaml` out of [volume.example.yaml](./image-service/volume.example.yaml) file accordingly (fill in proper `fs-12312312` value). Please also note that the created filesystem should be in the same subnet and share security groups with the cluster network. See the image below for reference.
 
 ![AWS EFS Configuration](../docs/img/aws-efs-sg-example.png "AWS EFS Configuration")
 
 
-In case you're running the cluster in somewhere else, see [this](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for more information about supported access modes. Minikube allows local `PersistentVolume`s with `ReadWriteMany` access mode. Below is an example on how to specify a volume e.g. for Minikube. Use this to create the `image-cluster/volume.yaml` file instead of the [example](image-cluster/volume.example.yaml) file.
+In case you're running the cluster in somewhere else, see [this](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for more information about supported access modes. Minikube allows local `PersistentVolume`s with `ReadWriteMany` access mode. Below is an example on how to specify a volume e.g. for Minikube. Use this to create the `image-service/volume.yaml` file instead of the [example](image-service/volume.example.yaml) file.
 
 
 ```yaml

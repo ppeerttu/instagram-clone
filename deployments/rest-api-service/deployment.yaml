@@ -20,6 +20,7 @@ spec:
       containers:
         - name: rest-api
           image: ppeerttu/rest-api:latest
+          imagePullPolicy: Always
           resources:
             requests:
               cpu: "100m"
@@ -47,5 +48,7 @@ spec:
             value: image-service.default.svc.cluster.local:3000
           - name: COMMENT_SERVICE
             value: comment-service.default.svc.cluster.local:3000
+          - name: USER_SERVICE
+            value: user-service.default.svc.cluster.local:3000
           - name: USE_STATIC_ENDPOINTS
             value: "true"
