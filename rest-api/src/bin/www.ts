@@ -27,10 +27,6 @@ const commentClient = new CommentServiceClient(
 );
 const userClient = new UserServiceClient(kube ? grpcConfig.userService : undefined);
 
-
-const userClient = new UserServiceClient(kube ? grpcConfig.userService : undefined);
-
-
 if (!kube) {
     authClient.bindWatch(serviceDiscovery);
     imageClient.bindWatch(serviceDiscovery);
