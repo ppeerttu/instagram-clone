@@ -13,7 +13,52 @@ Each of the cases are briefly described below.
 
 ## Average time, 50 requests, random payload
 
-TODO
+The random payload test consisted of comment post/reads and a image post/read.
+The post and read is always done sequentally, e.g a comment is read with a GET request right after it's posted.
+The image was fixed size: the smallest test image(1mb), so the payload isn't exactly "random".
+The comments were more random: the comment itself was a random string of length 1-200, and the tag and userTag lists were of length 1-20, with the tags being a fixed size of 4 chars.
+
+The test itself does iterations of following sequence:
+* One image post/read: POST /images -> GET /images/:imageId (2 requests)
+* 6 random comment posts: POST /comments (6 requests) 
+* 2 list requests for the created 6 comments: GET /images/:imageId/comments (2 requests)
+Total measured requests in the sequence is 10
+
+Note: The test also does a sign-in, sign-up, account-clear sequence to setup and clear up the test, these requests aren't measured.
+
+### Test
+
+Running the script:
+```
+python3 random-payload-test.py
+```
+You can pass the wanted amount of test sequences, default is 5 (50 requests in total):
+```
+python3 random-payload-test.py 1
+```
+
+
+example log output:
+```
+2020-03-14 12:35:16,295 1070 INFO random-payload-test - Starting random payload testing with 5 seuqences
+2020-03-14 12:35:18,001 1070 INFO lib.account_session - Created account test-user-17 with id 6fc0f5c2-6bae-41b7-8206-ae9e21d76799
+2020-03-14 12:35:19,538 1070 INFO random-payload-test - iteration number 1
+2020-03-14 12:35:21,551 1070 INFO random-payload-test - iteration number 2
+2020-03-14 12:35:23,691 1070 INFO random-payload-test - iteration number 3
+2020-03-14 12:35:25,749 1070 INFO random-payload-test - iteration number 4
+2020-03-14 12:35:27,889 1070 INFO random-payload-test - iteration number 5
+2020-03-14 12:35:30,085 1070 INFO random-payload-test - Random payload testing ended, elapsed time 13.791
+2020-03-14 12:35:30,086 1070 INFO random-payload-test - Measured requests: 50
+2020-03-14 12:35:30,087 1070 INFO random-payload-test - Average request time: 0.210
+2020-03-14 12:35:30,191 1070 INFO lib.account_session - Deleted account test-user-17 with id 6fc0f5c2-6bae-41b7-8206-ae9e21d76799
+```
+
+### Conclusions:
+
+* The average request takes 0.2 - 0.25 seconds
+* The average request time starts to decrese as total iterations increase
+    * -> system starts to scale up
+* The image posts are noticably the requests that take the most time
 
 ## Three different fixed sized messages, average request time
 
