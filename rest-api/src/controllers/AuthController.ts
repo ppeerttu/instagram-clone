@@ -9,7 +9,7 @@ import { SignUpError } from "../client/auth/errors/SignUpError";
 import { AuthState, generateAuthMiddleware } from "../middleware/authenticate";
 import { getBearerToken } from "../lib/utils";
 import { RenewTokensError } from "../client/auth/errors/RenewTokensError";
-import { AuthErrorStatus, DeleteAccountErrorStatus } from "../client/generated/auth_service_pb";
+import { AuthErrorStatus, DeleteAccountErrorStatus, SignUpErrorStatus } from "../client/generated/auth_service_pb";
 import { DeleteAccountError } from "../client/auth/errors/DeleteAccountError";
 
 /**
@@ -89,7 +89,6 @@ export class AuthController implements IController {
     private signIn = async (
         ctx: RouterContext<IValidationState>
     ) => {
-
         const results = validationResults(ctx);
         if (results.hasErrors()) {
             throw new RequestError(422, { errors: results.array() });
@@ -128,8 +127,16 @@ export class AuthController implements IController {
             ctx.status = 200;
         } catch (e) {
             if (e instanceof SignUpError) {
-                ctx.log.warn(e);
-                throw new RequestError(500);
+                switch (e.reason) {
+                    case SignUpErrorStatus.USERNAME_IN_USE:
+                        throw new RequestError(409, "Username already in use");
+                    case SignUpErrorStatus.SIGNUP_INVALID_PASSWORD:
+                        throw new RequestError(400, "Username is invalid");
+                    case SignUpErrorStatus.SIGNUP_INVALID_PASSWORD:
+                        throw new RequestError(400, "Password is invalid");
+                    default:
+                        ctx.log.warn(e);
+                        throw new RequestError(500);                }
             }
             // e is probably ServiceError, report that the service is not healthy
             ctx.log.error(e);

@@ -1,6 +1,6 @@
 
 import sqlalchemy as db
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker
 import datetime
 from typing import List
 from sqlalchemy.exc import IntegrityError
@@ -16,6 +16,11 @@ MIN_PAGE_NUM = 1
 MAX_PAGE_NUM = 1000
 DEFAULT_PAGE_NUM = 1
 
+# Session is a class that we created with sessionmaker factory; we'll bind it to the
+# engine in Database __init__ method. Please note that only one instance of Database
+# can be running in the program due to this.
+Session = sessionmaker()
+
 class Database():
 
     def __init__(self, config):
@@ -26,9 +31,13 @@ class Database():
                 config['host'],
                 config['port'],
                 config['database']
-            )
+            ),
+            pool_size=5,        # How many connections we keep open to the database by default
+            max_overflow=20,    # How many connections we can "overflow" at peak times
+            pool_timeout=5,     # How long we keep waiting for a new connection in pool (seconds)
+            pool_recycle=1800   # Time (seconds) after which idle connection is replaced with a new one
         )
-        self.connection = self.engine.connect()
+        Session.configure(bind=self.engine)
     
     def authenticate(self) -> bool:
         """Check whether the database connection and authentication is working.
@@ -38,7 +47,9 @@ class Database():
             bool -- True if success, False otherwise
         """
         try:
-            self.connection.execute(f"SELECT 1+1 as RESULT")
+            connection = self.engine.connect()
+            connection.execute(f"SELECT 1+1 as RESULT")
+            connection.close()
             return True
         except:
             return False

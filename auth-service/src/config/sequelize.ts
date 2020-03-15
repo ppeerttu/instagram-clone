@@ -7,7 +7,7 @@ const { host, port, username, password, database, dialect } = require("./databas
 
 import { Account } from "../models/Account";
 
-const logger = pino({ level: env === "development" ? "debug" : "infor "});
+const logger = pino({ level: env === "development" ? "debug" : "info"});
 
 const logging = env === "development"
     ? (query: string) => logger.debug(query)

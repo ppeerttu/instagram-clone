@@ -1,0 +1,42 @@
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com (be patient)
+
+
+Server Software:        
+Server Hostname:        a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com
+Server Port:            80
+
+Document Path:          /images/3d277dc7-0762-469d-b079-3b8612f132d4/meta
+Document Length:        320 bytes
+
+Concurrency Level:      50
+Time taken for tests:   11.353 seconds
+Complete requests:      2500
+Failed requests:        0
+Total transferred:      1157500 bytes
+HTML transferred:       800000 bytes
+Requests per second:    220.21 [#/sec] (mean)
+Time per request:       227.059 [ms] (mean)
+Time per request:       4.541 [ms] (mean, across all concurrent requests)
+Transfer rate:          99.57 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   1.1      0      13
+Processing:    76  222  97.2    206     612
+Waiting:       76  220  96.8    204     612
+Total:         76  222  97.1    206     612
+
+Percentage of the requests served within a certain time (ms)
+  50%    206
+  66%    249
+  75%    279
+  80%    295
+  90%    348
+  95%    414
+  98%    494
+  99%    525
+ 100%    612 (longest request)

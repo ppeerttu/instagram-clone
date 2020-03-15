@@ -1,0 +1,6 @@
+# Ignore all
+*
+# Except me
+!.gitignore
+# And logs from 14th of March 2020
+!2020-03-14T*.log

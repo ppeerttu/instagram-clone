@@ -1,7 +1,7 @@
 import logging
 import time
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 from lib.account_session import AccountSession
+from lib.utis import create_image_form_data
 
 logging.basicConfig(format="%(asctime)s %(process)d %(levelname)s %(name)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger("main")
@@ -15,26 +15,6 @@ image_large = "./img/south_america_large.jpg"   # ~ 10MB
 mime_type_jpeg = "image/jpeg"
 mime_type_png = "image/png"
 
-def create_image_form_data(file: str, mime: str, user_id: str) -> MultipartEncoder:
-    """Create image form data for posting image.
-    
-    Arguments:
-
-        file {str} -- The file name from where to load the image file
-        mime {str} -- Image mime type ('image/png' / 'image/jpeg')
-        user_id {str} -- The user ID (account ID)
-    
-    Returns:
-
-        MultipartEncoder -- The multipart form encoder with the data
-    """
-    return MultipartEncoder(
-        fields={
-            'image': (file, open(file, 'rb'), mime),
-            'userId': user_id,
-            'caption': 'Just a sample image with @johndoe #distributed #systems'
-        }
-    )
 
 def test_upload_average(file: str, mime: str, session: AccountSession, iter: int = 25) -> float:
     """Test upload average time with given file and iterations.

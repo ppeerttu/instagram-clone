@@ -4,6 +4,7 @@ import json
 import string, random   
 import sys
 from lib.account_session import AccountSession
+from lib.utis import create_image_form_data
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 username = "test-user-17"
@@ -16,27 +17,6 @@ req_times = []
 
 logging.basicConfig(format="%(asctime)s %(process)d %(levelname)s %(name)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger("random-payload-test")
-
-def create_image_form_data(file: str, mime: str, user_id: str) -> MultipartEncoder:
-    """Create image form data for posting image.
-    
-    Arguments:
-
-        file {str} -- The file name from where to load the image file
-        mime {str} -- Image mime type ('image/png' / 'image/jpeg')
-        user_id {str} -- The user ID (account ID)
-    
-    Returns:
-
-        MultipartEncoder -- The multipart form encoder with the data
-    """
-    return MultipartEncoder(
-        fields={
-            'image': (file, open(file, 'rb'), mime),
-            'userId': user_id,
-            'caption': 'Just a sample image with @johndoe #distributed #systems'
-        }
-    )
 
 def post_and_read_image(file: str, mime: str, session: AccountSession) -> str:
     data = create_image_form_data(file, mime, session.account_id)

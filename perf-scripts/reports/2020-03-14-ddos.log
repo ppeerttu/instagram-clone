@@ -1,0 +1,229 @@
+2020-03-14 15:54:46,774 80004 INFO ddos_test - Starting DDoS test with id trdwutsnwmkcvhdxibgv
+2020-03-14 15:54:48,469 80004 INFO lib.account_session - Created account test-trdwutsnwmkcvhdxibgv with id cc3b71b4-5c1c-4e61-b9bf-8492872277ba
+2020-03-14 15:54:51,365 80004 INFO ddos_test - Running test get_user with -n 2500 and -c 100, logging output to ./reports/ddos/2020-03-14T13:54:51.365339-get_user-n2500-c100.log
+2020-03-14 15:54:51,365 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 100 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/users/cc3b71b4-5c1c-4e61-b9bf-8492872277ba" > ./reports/ddos/2020-03-14T13:54:51.365339-get_user-n2500-c100.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 15:55:49,451 80004 INFO ddos_test - Test get_user done
+2020-03-14 15:55:49,452 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 15:56:19,455 80004 INFO ddos_test - Running test get_user with -n 2500 and -c 50, logging output to ./reports/ddos/2020-03-14T13:56:19.455216-get_user-n2500-c50.log
+2020-03-14 15:56:19,455 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 50 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/users/cc3b71b4-5c1c-4e61-b9bf-8492872277ba" > ./reports/ddos/2020-03-14T13:56:19.455216-get_user-n2500-c50.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 15:57:58,779 80004 INFO ddos_test - Test get_user done
+2020-03-14 15:57:58,779 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 15:58:28,785 80004 INFO ddos_test - Running test get_user with -n 2500 and -c 10, logging output to ./reports/ddos/2020-03-14T13:58:28.785618-get_user-n2500-c10.log
+2020-03-14 15:58:28,785 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 10 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/users/cc3b71b4-5c1c-4e61-b9bf-8492872277ba" > ./reports/ddos/2020-03-14T13:58:28.785618-get_user-n2500-c10.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 15:59:44,924 80004 INFO ddos_test - Test get_user done
+2020-03-14 15:59:44,924 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:00:14,929 80004 INFO ddos_test - Running test get_image_data with -n 2500 and -c 100, logging output to ./reports/ddos/2020-03-14T14:00:14.929098-get_image_data-n2500-c100.log
+2020-03-14 16:00:14,929 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 100 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/data" > ./reports/ddos/2020-03-14T14:00:14.929098-get_image_data-n2500-c100.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:04:07,109 80004 INFO ddos_test - Test get_image_data done
+2020-03-14 16:04:07,110 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:04:37,115 80004 INFO ddos_test - Running test get_image_data with -n 2500 and -c 50, logging output to ./reports/ddos/2020-03-14T14:04:37.115500-get_image_data-n2500-c50.log
+2020-03-14 16:04:37,115 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 50 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/data" > ./reports/ddos/2020-03-14T14:04:37.115500-get_image_data-n2500-c50.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:08:09,951 80004 INFO ddos_test - Test get_image_data done
+2020-03-14 16:08:09,951 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:08:39,967 80004 INFO ddos_test - Running test get_image_data with -n 2500 and -c 10, logging output to ./reports/ddos/2020-03-14T14:08:39.967093-get_image_data-n2500-c10.log
+2020-03-14 16:08:39,967 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 10 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/data" > ./reports/ddos/2020-03-14T14:08:39.967093-get_image_data-n2500-c10.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:13:10,076 80004 INFO ddos_test - Test get_image_data done
+2020-03-14 16:13:10,076 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:13:40,085 80004 INFO ddos_test - Running test get_image_meta with -n 2500 and -c 100, logging output to ./reports/ddos/2020-03-14T14:13:40.085387-get_image_meta-n2500-c100.log
+2020-03-14 16:13:40,085 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 100 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/meta" > ./reports/ddos/2020-03-14T14:13:40.085387-get_image_meta-n2500-c100.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:13:54,183 80004 INFO ddos_test - Test get_image_meta done
+2020-03-14 16:13:54,183 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:14:24,189 80004 INFO ddos_test - Running test get_image_meta with -n 2500 and -c 50, logging output to ./reports/ddos/2020-03-14T14:14:24.189127-get_image_meta-n2500-c50.log
+2020-03-14 16:14:24,189 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 50 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/meta" > ./reports/ddos/2020-03-14T14:14:24.189127-get_image_meta-n2500-c50.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:14:35,594 80004 INFO ddos_test - Test get_image_meta done
+2020-03-14 16:14:35,594 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:15:05,596 80004 INFO ddos_test - Running test get_image_meta with -n 2500 and -c 10, logging output to ./reports/ddos/2020-03-14T14:15:05.596496-get_image_meta-n2500-c10.log
+2020-03-14 16:15:05,596 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 10 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/3d277dc7-0762-469d-b079-3b8612f132d4/meta" > ./reports/ddos/2020-03-14T14:15:05.596496-get_image_meta-n2500-c10.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:15:29,357 80004 INFO ddos_test - Test get_image_meta done
+2020-03-14 16:15:32,775 80004 INFO ddos_test - Created images for comments test: ['8ff88b5e-d1a0-431a-8cdd-1a82a1a9b1fb', '90d6a6e2-934c-4d28-b0e1-040d5c986fb3', '7f3a5726-3d82-4aff-acb8-e79a0e11a7dd']
+2020-03-14 16:15:32,777 80004 INFO ddos_test - Comment JSON dumped to ./tmp/comment_data.json
+2020-03-14 16:15:32,815 80004 INFO ddos_test - Running test post_comment with -n 2500 and -c 100, logging output to ./reports/ddos/2020-03-14T14:15:32.815570-post_comment-n2500-c100.log
+2020-03-14 16:15:32,815 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 100 -p ./tmp/comment_data.json -T application/json -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/8ff88b5e-d1a0-431a-8cdd-1a82a1a9b1fb/comments" > ./reports/ddos/2020-03-14T14:15:32.815570-post_comment-n2500-c100.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:15:52,069 80004 INFO ddos_test - Test post_comment done
+2020-03-14 16:15:52,069 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:16:22,075 80004 INFO ddos_test - Running test get_comments with -n 2500 and -c 100, logging output to ./reports/ddos/2020-03-14T14:16:22.075060-get_comments-n2500-c100.log
+2020-03-14 16:16:22,075 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 100 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/8ff88b5e-d1a0-431a-8cdd-1a82a1a9b1fb/comments?size=20" > ./reports/ddos/2020-03-14T14:16:22.075060-get_comments-n2500-c100.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:16:37,640 80004 INFO ddos_test - Test get_comments done
+2020-03-14 16:16:37,640 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:17:07,643 80004 INFO ddos_test - Running test post_comment with -n 2500 and -c 50, logging output to ./reports/ddos/2020-03-14T14:17:07.643900-post_comment-n2500-c50.log
+2020-03-14 16:17:07,644 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 50 -p ./tmp/comment_data.json -T application/json -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/90d6a6e2-934c-4d28-b0e1-040d5c986fb3/comments" > ./reports/ddos/2020-03-14T14:17:07.643900-post_comment-n2500-c50.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:17:20,088 80004 INFO ddos_test - Test post_comment done
+2020-03-14 16:17:20,089 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:17:50,095 80004 INFO ddos_test - Running test get_comments with -n 2500 and -c 50, logging output to ./reports/ddos/2020-03-14T14:17:50.095100-get_comments-n2500-c50.log
+2020-03-14 16:17:50,095 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 50 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/90d6a6e2-934c-4d28-b0e1-040d5c986fb3/comments?size=20" > ./reports/ddos/2020-03-14T14:17:50.095100-get_comments-n2500-c50.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:18:05,013 80004 INFO ddos_test - Test get_comments done
+2020-03-14 16:18:05,013 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:18:35,018 80004 INFO ddos_test - Running test post_comment with -n 2500 and -c 10, logging output to ./reports/ddos/2020-03-14T14:18:35.018727-post_comment-n2500-c10.log
+2020-03-14 16:18:35,019 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 10 -p ./tmp/comment_data.json -T application/json -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/7f3a5726-3d82-4aff-acb8-e79a0e11a7dd/comments" > ./reports/ddos/2020-03-14T14:18:35.018727-post_comment-n2500-c10.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:19:01,051 80004 INFO ddos_test - Test post_comment done
+2020-03-14 16:19:01,051 80004 INFO ddos_test - Delaying the next test for 30 seconds...
+2020-03-14 16:19:31,057 80004 INFO ddos_test - Running test get_comments with -n 2500 and -c 10, logging output to ./reports/ddos/2020-03-14T14:19:31.057157-get_comments-n2500-c10.log
+2020-03-14 16:19:31,057 80004 INFO ddos_test - Running command: ab -r -n 2500 -c 10 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbnN0YWdyYW0tY2xvbmUiLCJleHAiOjE1ODQxOTU4ODksImlhdCI6MTU4NDE5NDA4OSwiaXNzIjoiYXV0aC1zZXJ2aWNlIiwic3ViIjoiY2MzYjcxYjQtNWMxYy00ZTYxLWI5YmYtODQ5Mjg3MjI3N2JhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ0ZXN0LXRyZHd1dHNud21rY3ZoZHhpYmd2In0.N4GT2Gt8pj6J2gDQlr4kAJQWEhaEJnOYnN9DlCcmEQY" "http://a7ac0b2a18e3e4d5bb07861ca733b7c2-82784151.eu-central-1.elb.amazonaws.com/images/7f3a5726-3d82-4aff-acb8-e79a0e11a7dd/comments?size=20" > ./reports/ddos/2020-03-14T14:19:31.057157-get_comments-n2500-c10.log
+Completed 250 requests
+Completed 500 requests
+Completed 750 requests
+Completed 1000 requests
+Completed 1250 requests
+Completed 1500 requests
+Completed 1750 requests
+Completed 2000 requests
+Completed 2250 requests
+Completed 2500 requests
+Finished 2500 requests
+2020-03-14 16:19:58,532 80004 INFO ddos_test - Test get_comments done
+2020-03-14 16:19:58,624 80004 INFO lib.account_session - Deleted account test-trdwutsnwmkcvhdxibgv with id cc3b71b4-5c1c-4e61-b9bf-8492872277ba
+2020-03-14 16:19:58,624 80004 INFO ddos_test - Stopping DDoS test with id trdwutsnwmkcvhdxibgv

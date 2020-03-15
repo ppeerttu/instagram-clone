@@ -93,7 +93,7 @@ class AccountSession():
         if self.access_token:
             headers = headers if headers is not None else {}
             headers["Authorization"] = "Bearer {}".format(self.access_token)
-        args = { 'data': data, 'params': params, 'headers': headers, 'files': files }
+        args = { 'data': data, 'params': params, 'headers': headers, 'files': files, 'timeout': 10 }
         return requests.request(
             method,
             self.domain + path,
