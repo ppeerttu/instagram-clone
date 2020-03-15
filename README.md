@@ -72,6 +72,33 @@ The [REST API](rest-api/) component is exposing public HTTP REST APIs to be cons
 
 The [service discovery](service-discovery/) component is simply [Consul][consul-site], which enables service registration and discovery via HTTP endpoints.
 
+### Message broker
+
+The chosen message broker for this project was a distributed streaming platform called [Kafka][kafka-site]. While Kafka can be used for much more advanced scenarios, and some other alternative might be more lightweight for this project, we wanted to give it a shot as it's certainly very interesting technology in distributed systems world.
+
+The topics, consumer groups and publishers are as follows:
+
+| Topic | Consumer group(s)   | Publisher(s) | Event types |
+|-------|---------------------|--------------|-------------|
+| `accounts`| `user-service` | `auth-service` | `CREATED`, `DELETED` |
+| `users` | `image-service` | `user-service`  | `CREATED`, `DELETED` |
+| `images` | `comment-service` | `image-service` | `LIKED`, `CREATED`, `DELETED` |
+
+The messaging model is not tuned to perfect, and it's there just to give the idea of how the data can be managed in this kind of distributed system. Here is an example on what happens when an account gets deleted:
+
+1. Account `account-1` deleted 
+    * Published by `auth-service`
+    * Consumed by `user-service`
+2. User for `account-1` deleted
+    * Published by `user-service`
+    * Consumed by `image-service`
+3. Images `image-1`, `image-2`, `...` deleted (posted by `account-1`)
+    * Published by `image-service`
+    * Consumed by `comment-service`
+4. Comments for images `image-1`, `image-2`, `...` deleted
+    * This is not published event, but an action that `comment-service` does
+
+
 ### Data model and databases
 
 Each service has their own isolated database. The databases has been selected as follows:
@@ -94,3 +121,4 @@ The data of the system is being stored in following structure.
 [jwt-site]:https://jwt.io/
 [mongo-site]:https://www.mongodb.com/
 [psql-site]:https://www.postgresql.org/
+[kafka-site]:https://kafka.apache.org/

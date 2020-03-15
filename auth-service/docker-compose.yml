@@ -24,7 +24,6 @@ services:
       REDIS_HOST: redis
       KAFKA_SERVERS: kafka-dev:9092
       KAFKA_ACCOUNT_TOPIC: accounts
-
     networks:
       - ig-clone-dev
     env_file:

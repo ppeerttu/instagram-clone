@@ -25,7 +25,6 @@ services:
       KAFKA_USERS_TOPIC: users
       KAFKA_CONSUMER_GROUP: user-service
       CONSUL_HOST: consul-dev
-      # CONSUL_ENABLED: "false"
 
   user-db:
     container_name: user-db-dev

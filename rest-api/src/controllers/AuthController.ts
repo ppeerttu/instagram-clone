@@ -79,7 +79,6 @@ export class AuthController implements IController {
             generateAuthMiddleware(this.authService),
             this.deleteAccount,
         );
-
     }
 
     /**

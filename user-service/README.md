@@ -47,6 +47,30 @@ Useful `dbmate` commands:
 * `rollback` - Roll back the last migration
 * `new` - Generate a new migration file into [db/migrations](db/migrations) directory
 
+## Configuration
+
+The application can be configured with environment variables and `*.env` files. In case the `POSTGRES_USER` environment variable has not been set, the application tries to load environment variables from `.db.env` -file. See [config.py](./app/config.py) for the implementation details.
+
+
+| Name                | Example value | Default | Description                 |
+|---------------------|----------------|-------------|-----------------------------|
+| POSTGRES_HOST                 | `127.0.0.1`, `auth-db-dev` | `localhost` | PostgreSQL host  | PostgreSQL database hostname |
+| POSTGRES_PORT | `5432` | `5432` | PostgreSQL database port number |
+| POSTGRES_DB | `mydatabase` |        | PostgreSQL database name |
+| POSTGRES_USER | `myuser` |          | PostgreSQL database username |
+| POSTGRES_PASSWORD | `mypassword123` |         | PostgreSQL database password |
+| CONSUL_HOST  | `consul`  | `localhost`  | Consul hostname or IP addres |
+| CONSUL_PORT  | `8500` | `8500` | Consul port number |
+| CONSUL_CLIENT_NAME | `user-service` | `user-service` | Consul client name for this service |
+| CONSUL_ENABLED | `false`  | `true` | Whether to publish this service to Consul |
+| GRPC_PORT | `3000`| `3000` | The port to bind to the gRPC server |
+| APP_ENV | `production` | `development` | Application running environment |
+| KAFKA_ACCOUNS_TOPIC | `accounts` |  `accounts` | Kafka topic for account events (consume) |
+| KAFKA_USERS_TOPIC | `users` | `users` | Kafka topic for user events (publish) |
+| KAFKA_SERVERS |  `kafka:9092` | `localhost:29092` | Kafka server + port combo |
+| KAFKA_CONSUMER_GROUP | `user-service` | `user-service` | Kafka consumer group for this service |
+| HTTP_PORT | `8080` | `8080` | Port to which bind the health check server |
+
 [python-site]:https://www.python.org/
 [psql-site]:https://www.postgresql.org/
 [grpc-site]:https://grpc.io/

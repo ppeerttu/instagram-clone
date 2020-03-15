@@ -11,7 +11,6 @@ import { SignUpError } from "./errors/SignUpError";
 import { RenewTokensError } from "./errors/RenewTokensError";
 import { DeleteAccountError } from "./errors/DeleteAccountError";
 
-
 /**
  * A client for consuming the external authentication service.
  */
