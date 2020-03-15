@@ -11,6 +11,18 @@ Group project for Distributed Systems course at the University of Oulu.
 | Juho Kantola                    | 2519793         | [knatola](https://github.com/knatola)           |
 | Xin Shu                         | 2627520         | [Mr-Sushi](https://github.com/Mr-Sushi)         |
 
+## Running the system
+
+The system can be ran locally by using `docker-compose` with the following simple steps:
+
+1. Prepare `.env` file out of [example.env](example.env)
+2. Do similar things for the `example.*.env` -files at the following directories
+    * [auth-service](./auth-service): `.db.env`, `.auth.env`
+    * [user-service](./user-service): `.db.env`
+3. Run `sh run_docker_compose.sh` to create required network, volumes and finally launch containers
+    * Subsequent runs can be done by simple `docker-compose up`
+
+
 ## Project description
 
 This project is course work implementation for Distributed Systems course at the University of Oulu. The group members (and collaborators) are mentioned in [group members](#group-members) section.
@@ -19,7 +31,7 @@ This system is a naive clone of [Instagram](https://www.instagram.com/), contain
 
 1. Create and manage account
 2. Authentication and access control
-3. Follow users
+3. ~Follow users~
 4. Post, read and delete images
 5. Comment on images
 6. Like images
@@ -29,6 +41,8 @@ The aim of the project is mainly within the field of distributed systems: to mak
 ## System design
 
 The system consists of isolated loosely coupled components called **services**. The workload of the system has been divided to the services based on logical functionality areas of the system: images, comments, users etc. The communication between the services happens with [gRPC][grpc-site], and service discovery happens via [Consul][consul-site], which can be considered as one of component as well. The system exposes one public HTTP REST API for clients - all gRPC APIs and communication is supposed to be private.
+
+**NOTE**: The system can be ran without Consul as well, since e.g. Kubernetes does the same job for us (health checking, service discovery, load balancing).
 
 See the system architecture below.
 

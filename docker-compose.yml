@@ -1,30 +1,52 @@
 version: "3"
 
-# TODO: Use different network?
 networks:
-  ig-clone-dev:
+  ig-clone:
     external:
-      name: ig-clone-dev
+      name: ig-clone-net
 
-# TODO: Define separate data volumes for "production"?
 volumes:
-  auth-data-dev:
+  auth-data:
+    external: true
+  comment-data:
+    external: true
+  image-data:
+    external: true
+  user-data:
+    external: true
+  zookeeper-data:
+    external: true
+  kafka-data:
+    external: true
+  consul-data:
+    external: true
+  redis-data:
     external: true
 
 services:
   auth-service:
     container_name: auth-service
-    build:
-      context: ./auth-service
-      dockerfile: Dockerfile
+    image: ppeerttu/auth-service:latest
     command: npm run start:prod
+    restart: always
+    ports:
+      - "3000:3000"
+      - "4001:4000"
     depends_on:
       - auth-db
+      - consul
+      - kafka
     environment:
       NODE_ENV: production
       POSTGRES_HOST: auth-db
+      CONSUL_HOST: consul
+      GRPC_PORT: 3000
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
+      KAFKA_SERVERS: kafka:9092
+      KAFKA_ACCOUNT_TOPIC: accounts
     networks:
-      - ig-clone-dev
+      - ig-clone
     env_file:
       - ./auth-service/.db.env
       - ./auth-service/.auth.env
@@ -32,25 +54,227 @@ services:
   auth-db:
     container_name: auth-db
     image: postgres:11-alpine
+    restart: always
     volumes:
-      - auth-data-dev:/var/lib/postgresql/data
+      - auth-data:/var/lib/postgresql/data
     networks:
-      - ig-clone-dev
+      - ig-clone
     env_file:
       - ./auth-service/.db.env
 
+  redis:
+    container_name: auth-redis
+    image: redis:5.0.7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - ig-clone
+    # this line is needed when running redis with volume
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    volumes:
+      - redis-data:/data
+  
+  comment-service:
+    container_name: comment-service
+    image: ppeerttu/comment-service:1.0.0-SNAPSHOT
+    restart: always
+    depends_on:
+      - comment-db
+      - consul
+      - kafka
+    networks:
+      - ig-clone
+    ports:
+      - "3001:3000"
+    environment:
+      MONGO_USER: dev
+      MONGO_PASSWORD: dev
+      MONGO_HOST: comment-db
+      MONGO_DB_NAME: comments
+      MONGO_PORT: 27017
+      GRPC_HOST: 0.0.0.0
+      GRPC_PORT: 3000
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      KAFKA_SERVERS: kafka:9092
+      KAFKA_CONSUMER_GROUP: comments
+
+  comment-db:
+    image: mongo
+    container_name: comment-db
+    restart: always
+    networks:
+      - ig-clone
+    environment:
+      - MONGO_INITDB_DATABASE=comments
+      - MONGO_INITDB_ROOT_USERNAME=dev
+      - MONGO_INITDB_ROOT_PASSWORD=dev
+    volumes:
+      - ./comment-service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - comment-data:/data/db
+    ports:
+      - "27017:27017"
+
+  image-service:
+    container_name: image-service
+    image: ppeerttu/image-service:1.0.0-SNAPSHOT
+    restart: always
+    ports:
+      - "3002:3000"
+    volumes:
+      - "./image-service/data:/app/image-data"
+    networks:
+      - ig-clone
+    depends_on:
+      - image-db
+      - consul
+      - kafka
+    environment:
+      GRPC_HOST: 0.0.0.0
+      GRPC_PORT: 3000
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_HOST: image-db
+      MONGO_PORT: 27017
+      MONGO_DATABASE: images
+      IMAGES_COLLECTION: image_meta
+      KAFKA_SERVERS: kafka:9092
+      IMAGES_TOPIC: images
+      USERS_TOPIC: users
+      KAFKA_CONSUMER_GROUP: image-service
+
+  image-db:
+    container_name: image-db
+    restart: always
+    image: mongo
+    ports:
+      - "27018:27017"
+    networks:
+      - ig-clone
+    volumes:
+      - ./image-service/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - image-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: images
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+
+  user-service:
+    container_name: user-service
+    image: ppeerttu/user-service:latest
+    restart: always
+    ports:
+      - "8080:8080"
+      - "3003:3000"
+    depends_on:
+      - user-db
+      - consul
+      - kafka
+    networks:
+      - ig-clone
+    env_file:
+      - ./user-service/.db.env
+    environment:
+      POSTGRES_HOST: user-db
+      KAFKA_SERVERS: kafka:9092
+      KAFKA_ACCOUNTS_TOPIC: accounts
+      KAFKA_USERS_TOPIC: users
+      KAFKA_CONSUMER_GROUP: user-service
+      CONSUL_HOST: consul
+
+  user-db:
+    container_name: user-db
+    image: postgres:11-alpine
+    restart: always
+    volumes:
+      - user-data:/var/lib/postgresql/data
+    networks:
+      - ig-clone
+    env_file:
+      - ./user-service/.db.env
+
+  user-migrations:
+    container_name: user-migrations
+    image: ppeerttu/user-service-migrations
+    command: dbmate migrate
+    networks:
+      - ig-clone
+    depends_on:
+      - user-db
+    environment:
+      DATABASE_URL: ${USER_SERVICE_DB_URL}
+
   rest-api:
     container_name: rest-api
-    build:
-      context: ./rest-api
-      dockerfile: Dockerfile
+    image: ppeerttu/rest-api:latest
     command: npm run start:prod
+    restart: always
     ports:
       - "4000:3000"
     networks:
-      - ig-clone-dev
+      - ig-clone
+    depends_on:
+      - image-service
+      - user-service
+      - comment-service
+      - auth-service
     environment:
       NODE_ENV: production
       SERVER_PORT: 3000
-      AUTH_SERVICE: "auth-service:3000"
+      AUTH_SERVICE: auth-service
+      CONSUL_HOST: consul
+      IMAGE_SERVICE: image-service
+      COMMENT_SERVICE: comments-service
+      USER_SERVICE: user-service
 
+  zookeeper:
+    image: bitnami/zookeeper:3
+    container_name: zookeeper
+    restart: always
+    networks:
+      - ig-clone
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper-data:/bitnami
+
+  kafka:
+    image: bitnami/kafka:2
+    restart: always
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    container_name: kafka
+    networks:
+      - ig-clone
+    volumes:
+      - kafka-data:/bitnami
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+    depends_on:
+      - zookeeper
+
+  consul:
+    container_name: consul
+    image: consul:latest
+    restart: always
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    volumes:
+      - "consul-data:/consul/data"
+    ports:
+      - "8300:8300/udp"
+      - "8500:8500"
+    networks:
+      - ig-clone
